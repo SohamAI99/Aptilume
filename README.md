@@ -58,35 +58,38 @@ Aptilume revolutionizes technical aptitude testing by combining the power of AI 
 | **Deployment** | Firebase Hosting | Scalable, global CDN |
 
 ## 📁 Project Structure
+
+```
 aptilume/
-├── public/ # Static assets
+├── public/                 # Static assets
 ├── src/
-│ ├── components/ # Reusable UI components
-│ │ ├── ui/ # Generic UI components
-│ │ ├── ai/ # AI components
-│ │ └── ... # Other component categories
-│ ├── pages/ # Page components
-│ │ ├── landing-page/ # Marketing landing page
-│ │ ├── authentication-login-register/ # Auth flows
-│ │ ├── student-dashboard/ # Student interface
-│ │ ├── teacher-dashboard/ # Teacher interface
-│ │ ├── admin-dashboard/ # Admin panel
-│ │ ├── exam-interface/ # Test-taking UI
-│ │ ├── quiz-rules-instructions/ # Pre-test info
-│ │ ├── results-review/ # Results display
-│ │ └── ... # Other pages
-│ ├── utils/ # Utility functions
-│ │ ├── authService.js # Authentication logic
-│ │ ├── dbService.js # Database operations
-│ │ ├── firebase.js # Firebase config
-│ │ ├── aiService.js # AI service
-│ │ └── ... # Other utilities
-│ └── styles/ # Global styles
-├── server/ # Backend API
-│ ├── routes/ # API endpoints
-│ ├── config/ # Configuration files
-│ └── ... # Other backend files
-└── ... # Config files
+│   ├── components/         # Reusable UI components
+│   │   ├── ui/             # Generic UI components
+│   │   ├── ai/             # AI components
+│   │   └── ...             # Other component categories
+│   ├── pages/              # Page components
+│   │   ├── landing-page/   # Marketing landing page
+│   │   ├── authentication-login-register/ # Auth flows
+│   │   ├── student-dashboard/ # Student interface
+│   │   ├── teacher-dashboard/ # Teacher interface
+│   │   ├── admin-dashboard/   # Admin panel
+│   │   ├── exam-interface/    # Test-taking UI
+│   │   ├── quiz-rules-instructions/ # Pre-test info
+│   │   ├── results-review/    # Results display
+│   │   └── ...                # Other pages
+│   ├── utils/              # Utility functions
+│   │   ├── authService.js  # Authentication logic
+│   │   ├── dbService.js    # Database operations
+│   │   ├── firebase.js     # Firebase config
+│   │   ├── aiService.js    # AI service
+│   │   └── ...             # Other utilities
+│   └── styles/             # Global styles
+├── server/                 # Backend API
+│   ├── routes/             # API endpoints
+│   ├── config/             # Configuration files
+│   └── ...                 # Other backend files
+└── ...                     # Config files
+```
 
 ## 🚀 Getting Started
 
@@ -101,59 +104,91 @@ aptilume/
    ```bash
    git clone https://github.com/SohamAI99/Aptilume.git
    cd aptilume
-Install dependencies
-bash
-npm install
-Set up environment variables
-bash
-cp .env.example .env
-# Edit .env with your configuration
-Start development servers
-bash
-# Frontend
-npm run dev
+   ```
 
-# Backend (in a new terminal)
-cd server
-npm start
-Open your browser
-Frontend: http://localhost:4030
-Backend API: http://localhost:5001
-🎯 Use Cases
-🏫 Educational Institutions
-Standardized testing
-Student assessment
-Progress monitoring
-🏢 Corporate Training
-Employee skill evaluation
-Certification programs
-Recruitment screening
-👨‍💻 Individual Learners
-Self-assessment
-Skill development
-Aptitude preparation
-🔐 Security Features
-End-to-end encryption
-Secure authentication
-Role-based access control
-Input validation and sanitization
-Real-time threat monitoring
-📱 Responsive Design
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
+
+3. **Set up environment variables**
+   ```bash
+   cp .env.example .env
+   # Edit .env with your configuration
+   ```
+
+4. **Start development servers**
+   ```bash
+   # Frontend
+   npm run dev
+   
+   # Backend (in a new terminal)
+   cd server
+   npm start
+   ```
+
+5. **Open your browser**
+   - Frontend: http://localhost:4030
+   - Backend API: http://localhost:5001
+
+## 🎯 Use Cases
+
+### 🏫 Educational Institutions
+- Standardized testing
+- Student assessment
+- Progress monitoring
+
+### 🏢 Corporate Training
+- Employee skill evaluation
+- Certification programs
+- Recruitment screening
+
+### 👨‍💻 Individual Learners
+- Self-assessment
+- Skill development
+- Aptitude preparation
+
+## 🔐 Security Features
+
+- End-to-end encryption
+- Secure authentication
+- Role-based access control
+- Input validation and sanitization
+- Real-time threat monitoring
+
+## 📱 Responsive Design
+
 Aptilume works seamlessly across all devices:
-🖥️ Desktop browsers
-💻 Tablet devices
-📱 Mobile phones
-🤝 Contributing
+- 🖥️ Desktop browsers
+- 💻 Tablet devices
+- 📱 Mobile phones
+
+## 🤝 Contributing
+
 We love contributions! Here's how you can help:
-Fork the repository
-Create your feature branch (git checkout -b feature/AmazingFeature)
-Commit your changes (git commit -m 'Add some AmazingFeature')
-Push to the branch (git push origin feature/AmazingFeature)
-Open a pull request
-📄 License
-This project is licensed under the MIT License - see the LICENSE file for details.
-🙏 Acknowledgments
-Thanks to all contributors who have helped shape Aptilume
-Inspired by modern assessment platforms and educational technology
-Built with ❤️ for the developer community
-<div align="center">Made with ❤️ by developers, for developersReport Bug · Request Feature</div>
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a pull request
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🙏 Acknowledgments
+
+- Thanks to all contributors who have helped shape Aptilume
+- Inspired by modern assessment platforms and educational technology
+- Built with ❤️ for the developer community
+
+---
+
+<div align="center">
+  
+**Made with ❤️ by developers, for developers**
+
+[Report Bug](https://github.com/SohamAI99/Aptilume/issues) · [Request Feature](https://github.com/SohamAI99/Aptilume/issues)
+
+</div>
