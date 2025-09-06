@@ -1,0 +1,78 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Helper functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    function isUser() {
+      return isAuthenticated() && request.auth.token.userType == 'student';
+    }
+    
+    function isTeacher() {
+      return isAuthenticated() && (request.auth.token.userType == 'teacher' || request.auth.token.userType == 'admin');
+    }
+    
+    function isAdmin() {
+      return isAuthenticated() && request.auth.token.userType == 'admin';
+    }
+    
+    function isOwner(userId) {
+      return request.auth.uid == userId;
+    }
+    
+    // Validate file types
+    function isValidImageType() {
+      return request.resource.contentType.matches('image/.*');
+    }
+    
+    function isValidFileSize() {
+      return request.resource.size < 5 * 1024 * 1024; // 5MB limit
+    }
+    
+    function isValidFile() {
+      return isValidImageType() && isValidFileSize();
+    }
+    
+    // Profile pictures
+    match /profile_pictures/{pictureId} {
+      // Users can read all profile pictures
+      allow read: if isAuthenticated();
+      
+      // Users can create/update their own profile pictures
+      allow create, update: if (isUser() || isTeacher() || isAdmin()) && 
+        isValidFile() &&
+        request.resource.name.matches('profile_pictures/' + request.auth.uid + '_.*');
+      
+      // Users can delete their own profile pictures
+      allow delete: if isOwner(pictureId.split('_')[0]);
+    }
+    
+    // Company logos
+    match /company_logos/{logoId} {
+      // Users can read all company logos
+      allow read: if isAuthenticated();
+      
+      // Teachers and admins can create/update company logos
+      allow create, update: if (isTeacher() || isAdmin()) && 
+        isValidFile();
+      
+      // Teachers and admins can delete company logos
+      allow delete: if isTeacher() || isAdmin();
+    }
+    
+    // Quiz assets
+    match /quiz_assets/{quizId}/{assetId} {
+      // Users can read quiz assets
+      allow read: if isAuthenticated();
+      
+      // Teachers and admins can create/update quiz assets
+      allow create, update: if (isTeacher() || isAdmin()) && 
+        isValidFile();
+      
+      // Teachers and admins can delete quiz assets
+      allow delete: if isTeacher() || isAdmin();
+    }
+  }
+}

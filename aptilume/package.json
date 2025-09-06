@@ -1,0 +1,37 @@
+{
+  "name": "aptilume",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "start": "vite dev",
+    "build": "vite build",
+    "test": "vite test",
+    "eject": "vite eject"
+  },
+  "dependencies": {
+    "@radix-ui/react-slot": "^1.2.3",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "firebase": "^12.1.0",
+    "framer-motion": "^12.23.12",
+    "lucide-react": "^0.541.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-helmet": "^6.1.0",
+    "react-router-dom": "^6.4.4",
+    "recharts": "^3.1.2",
+    "tailwind-merge": "^3.3.1"
+  },
+  "devDependencies": {
+    "@dhiwise/component-tagger": "^1.0.10",
+    "@vitejs/plugin-react": "^5.0.0",
+    "autoprefixer": "^10.4.21",
+    "tailwindcss": "^3.4.17",
+    "tailwindcss-animate": "^1.0.7",
+    "vite": "^7.1.2",
+    "vite-tsconfig-paths": "^5.1.4"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
