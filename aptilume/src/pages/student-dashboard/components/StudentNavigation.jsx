@@ -1,7 +1,6 @@
 import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import Icon from '../../../components/AppIcon';
-import Button from '../../../components/ui/Button';
 
 const StudentNavigation = ({ currentUser, onLogout }) => {
   const navigate = useNavigate();
@@ -19,20 +18,8 @@ const StudentNavigation = ({ currentUser, onLogout }) => {
     return location.pathname === path;
   };
 
-  const handleProfile = () => {
-    navigate('/student/profile');
-  };
-
-  const handleSettings = () => {
-    navigate('/student/settings');
-  };
-
-  const handleAttemptHistory = () => {
-    navigate('/attempt-history');
-  };
-
   return (
-    <div className="border-r border-border bg-background w-64 flex flex-col">
+    <div className="border-r border-border bg-background w-64 flex flex-col sticky top-0 h-screen">
       {/* Logo */}
       <div className="p-6 border-b border-border">
         <div className="flex items-center gap-3">
@@ -47,7 +34,7 @@ const StudentNavigation = ({ currentUser, onLogout }) => {
       </div>
 
       {/* Navigation Menu */}
-      <nav className="flex-1 p-4">
+      <nav className="flex-1 p-4 overflow-y-auto">
         <ul className="space-y-1">
           {menuItems.map((item) => (
             <li key={item.path}>
@@ -66,51 +53,6 @@ const StudentNavigation = ({ currentUser, onLogout }) => {
           ))}
         </ul>
       </nav>
-
-      {/* User Profile */}
-      <div className="p-4 border-t border-border">
-        <div className="flex items-center gap-3 mb-4">
-          <img
-            src={currentUser?.photoURL || "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face"}
-            alt="Profile"
-            className="w-10 h-10 rounded-full object-cover"
-          />
-          <div className="flex-1 min-w-0">
-            <p className="font-medium truncate">{currentUser?.name || 'Student'}</p>
-            <p className="text-xs text-muted-foreground truncate">Student</p>
-          </div>
-        </div>
-        
-        <div className="flex gap-2">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={handleProfile}
-            className="flex-1"
-            iconName="User"
-          >
-            Profile
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={handleSettings}
-            className="flex-1"
-            iconName="Settings"
-          >
-            Settings
-          </Button>
-        </div>
-        
-        <Button
-          variant="outline"
-          className="w-full mt-3"
-          onClick={onLogout}
-          iconName="LogOut"
-        >
-          Logout
-        </Button>
-      </div>
     </div>
   );
 };

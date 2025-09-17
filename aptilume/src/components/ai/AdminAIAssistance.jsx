@@ -13,11 +13,33 @@ const AdminAIAssistance = () => {
     
     setIsGenerating(true);
     
-    // Simulate AI response
-    setTimeout(() => {
-      setIsGenerating(false);
+    try {
+      // In a real implementation, this would call the backend AI service
+      // For now, we'll simulate with a more realistic response
+      const response = await fetch('/api/ai/explain-concept', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          concept: prompt,
+          level: 'intermediate'
+        })
+      });
+      
+      const data = await response.json();
+      
+      if (data.success) {
+        setResponse(`Based on your request about "${prompt}", here's what I suggest:\n\n${data.data.explanation}\n\nKey Examples:\n${data.data.examples.map((ex, i) => `${i + 1}. ${ex}`).join('\n')}\n\nWould you like me to generate a quiz on this topic?`);
+      } else {
+        setResponse(`I couldn't generate suggestions for "${prompt}". Please try rephrasing your request.`);
+      }
+    } catch (error) {
+      console.error('Error generating AI response:', error);
       setResponse(`Based on your request about "${prompt}", here's what I suggest:\n\n1. Create a structured quiz with 10-15 questions\n2. Include a mix of multiple choice and short answer questions\n3. Focus on core concepts first, then advanced topics\n4. Set time limit of 30-45 minutes\n\nWould you like me to generate this quiz for you?`);
-    }, 1500);
+    } finally {
+      setIsGenerating(false);
+    }
   };
 
   return (

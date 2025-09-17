@@ -14,6 +14,7 @@ app.use('/api/users', require('./routes/users'));
 app.use('/api/quizzes', require('./routes/quizzes'));
 app.use('/api/attempts', require('./routes/attempts'));
 app.use('/api/results', require('./routes/results'));
+app.use('/api/ai', require('./routes/ai'));
 
 // Basic route
 app.get('/', (req, res) => {

@@ -32,6 +32,17 @@ export const getUser = async (userId) => {
   }
 };
 
+export const getUsers = async () => {
+  try {
+    const q = query(collection(db, 'users'));
+    const querySnapshot = await getDocs(q);
+    return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+  } catch (error) {
+    console.error('Error fetching users:', error);
+    throw error;
+  }
+};
+
 export const updateUser = async (userId, data) => {
   try {
     await updateDoc(doc(db, 'users', userId), {
@@ -304,6 +315,14 @@ export const listenToUser = (userId, callback) => {
   });
 };
 
+export const listenToUsers = (callback) => {
+  const q = query(collection(db, 'users'));
+  return onSnapshot(q, (querySnapshot) => {
+    const users = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    callback(users);
+  });
+};
+
 export const listenToQuiz = (quizId, callback) => {
   return onSnapshot(doc(db, 'quizzes', quizId), (doc) => {
     callback(doc.exists() ? { id: doc.id, ...doc.data() } : null);
@@ -331,8 +350,75 @@ export const listenToQuizzes = (callback, filters = {}) => {
   });
 };
 
+// User Management Functions
+export const activateUser = async (userId) => {
+  try {
+    await updateDoc(doc(db, 'users', userId), {
+      isActive: true,
+      status: 'active',
+      updatedAt: serverTimestamp()
+    });
+  } catch (error) {
+    console.error('Error activating user:', error);
+    throw error;
+  }
+};
+
+export const deactivateUser = async (userId) => {
+  try {
+    await updateDoc(doc(db, 'users', userId), {
+      isActive: false,
+      status: 'inactive',
+      updatedAt: serverTimestamp()
+    });
+  } catch (error) {
+    console.error('Error deactivating user:', error);
+    throw error;
+  }
+};
+
+export const suspendUser = async (userId) => {
+  try {
+    await updateDoc(doc(db, 'users', userId), {
+      isActive: false,
+      status: 'suspended',
+      updatedAt: serverTimestamp()
+    });
+  } catch (error) {
+    console.error('Error suspending user:', error);
+    throw error;
+  }
+};
+
+// Quiz Management Functions
+export const publishQuiz = async (quizId) => {
+  try {
+    await updateDoc(doc(db, 'quizzes', quizId), {
+      isPublished: true,
+      updatedAt: serverTimestamp()
+    });
+  } catch (error) {
+    console.error('Error publishing quiz:', error);
+    throw error;
+  }
+};
+
+export const archiveQuiz = async (quizId) => {
+  try {
+    await updateDoc(doc(db, 'quizzes', quizId), {
+      isPublished: false,
+      status: 'archived',
+      updatedAt: serverTimestamp()
+    });
+  } catch (error) {
+    console.error('Error archiving quiz:', error);
+    throw error;
+  }
+};
+
 export default {
   getUser,
+  getUsers,
   updateUser,
   createUserProfile,
   getQuiz,
@@ -352,6 +438,12 @@ export default {
   createResult,
   getResultsByUser,
   listenToUser,
+  listenToUsers,
   listenToQuiz,
-  listenToQuizzes
+  listenToQuizzes,
+  activateUser,
+  deactivateUser,
+  suspendUser,
+  publishQuiz,
+  archiveQuiz
 };

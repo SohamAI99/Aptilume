@@ -38,18 +38,25 @@ const NavigationGuard = ({
     '/teacher-dashboard': [authService.USER_ROLES.TEACHER, authService.USER_ROLES.ADMIN],
     '/student-dashboard': [authService.USER_ROLES.STUDENT, authService.USER_ROLES.TEACHER, authService.USER_ROLES.ADMIN],
     // Admin specific routes
+    '/admin-dashboard': [authService.USER_ROLES.ADMIN],
     '/admin/profile': [authService.USER_ROLES.ADMIN],
     '/admin/settings': [authService.USER_ROLES.ADMIN],
     '/admin/users': [authService.USER_ROLES.ADMIN],
     '/admin/quizzes': [authService.USER_ROLES.ADMIN],
     '/admin/reports': [authService.USER_ROLES.ADMIN],
+    '/admin/ai-assistance': [authService.USER_ROLES.ADMIN],
     // Teacher specific routes
     '/teacher/profile': [authService.USER_ROLES.TEACHER, authService.USER_ROLES.ADMIN],
     '/teacher/settings': [authService.USER_ROLES.TEACHER, authService.USER_ROLES.ADMIN],
     '/teacher/create-quiz': [authService.USER_ROLES.TEACHER, authService.USER_ROLES.ADMIN],
+    '/teacher/quizzes': [authService.USER_ROLES.TEACHER, authService.USER_ROLES.ADMIN],
+    '/teacher/students': [authService.USER_ROLES.TEACHER, authService.USER_ROLES.ADMIN],
+    '/teacher/analytics': [authService.USER_ROLES.TEACHER, authService.USER_ROLES.ADMIN],
+    '/teacher/ai-assistance': [authService.USER_ROLES.TEACHER, authService.USER_ROLES.ADMIN],
     // Student specific routes
-    '/student/profile': [authService.USER_ROLES.STUDENT, authService.USER_ROLES.TEACHER, authService.USER_ROLES.ADMIN],
-    '/student/settings': [authService.USER_ROLES.STUDENT, authService.USER_ROLES.TEACHER, authService.USER_ROLES.ADMIN],
+    '/student/quizzes': [authService.USER_ROLES.STUDENT, authService.USER_ROLES.TEACHER, authService.USER_ROLES.ADMIN],
+    '/student/analytics': [authService.USER_ROLES.STUDENT, authService.USER_ROLES.TEACHER, authService.USER_ROLES.ADMIN],
+    '/student/resources': [authService.USER_ROLES.STUDENT, authService.USER_ROLES.TEACHER, authService.USER_ROLES.ADMIN],
     '/attempt-history': [authService.USER_ROLES.STUDENT] // Only students can access attempt history
   };
 

@@ -31,6 +31,24 @@ import StudentSettings from './pages/student-dashboard/components/StudentSetting
 import AttemptHistoryPage from './pages/attempt-history';
 import AttemptHistory from './pages/student-dashboard/components/AttemptHistory';
 
+// Teacher dashboard pages
+import CreateQuiz from './pages/teacher-dashboard/create-quiz';
+import MyQuizzes from './pages/teacher-dashboard/my-quizzes';
+import Students from './pages/teacher-dashboard/students';
+import Analytics from './pages/teacher-dashboard/analytics';
+import AIAssistance from './pages/teacher-dashboard/ai-assistance';
+
+// Student dashboard pages
+import StudentQuizzes from './pages/student-dashboard/quizzes';
+import StudentAnalytics from './pages/student-dashboard/analytics';
+import StudentResources from './pages/student-dashboard/resources';
+
+// Admin dashboard pages
+import AdminUsersPage from './pages/admin-dashboard/users';
+import AdminQuizzesPage from './pages/admin-dashboard/quizzes';
+import AdminReportsPage from './pages/admin-dashboard/reports';
+import AdminAIAssistancePage from './pages/admin-dashboard/ai-assistance';
+
 const Routes = () => {
   return (
     <BrowserRouter>
@@ -52,6 +70,18 @@ const Routes = () => {
           <Route path="/submit-confirmation-modal" element={<NavigationGuard><SubmitConfirmationModal /></NavigationGuard>} />
           <Route path="/results-review" element={<NavigationGuard><ResultsReview /></NavigationGuard>} />
           
+          {/* Student dashboard routes */}
+          <Route path="/student/quizzes" element={<NavigationGuard><StudentQuizzes /></NavigationGuard>} />
+          <Route path="/student/analytics" element={<NavigationGuard><StudentAnalytics /></NavigationGuard>} />
+          <Route path="/student/resources" element={<NavigationGuard><StudentResources /></NavigationGuard>} />
+          
+          {/* Teacher dashboard routes */}
+          <Route path="/teacher/create-quiz" element={<NavigationGuard><CreateQuiz /></NavigationGuard>} />
+          <Route path="/teacher/quizzes" element={<NavigationGuard><MyQuizzes /></NavigationGuard>} />
+          <Route path="/teacher/students" element={<NavigationGuard><Students /></NavigationGuard>} />
+          <Route path="/teacher/analytics" element={<NavigationGuard><Analytics /></NavigationGuard>} />
+          <Route path="/teacher/ai-assistance" element={<NavigationGuard><AIAssistance /></NavigationGuard>} />
+          
           {/* Profile routes */}
           <Route path="/profile" element={<NavigationGuard><ProfilePage /></NavigationGuard>} />
           <Route path="/admin/profile" element={<NavigationGuard><AdminProfile /></NavigationGuard>} />
@@ -66,6 +96,12 @@ const Routes = () => {
           
           {/* Attempt history routes - only for students */}
           <Route path="/attempt-history" element={<NavigationGuard><AttemptHistory /></NavigationGuard>} />
+          
+          {/* Admin dashboard routes */}
+          <Route path="/admin/users" element={<NavigationGuard><AdminUsersPage /></NavigationGuard>} />
+          <Route path="/admin/quizzes" element={<NavigationGuard><AdminQuizzesPage /></NavigationGuard>} />
+          <Route path="/admin/reports" element={<NavigationGuard><AdminReportsPage /></NavigationGuard>} />
+          <Route path="/admin/ai-assistance" element={<NavigationGuard><AdminAIAssistancePage /></NavigationGuard>} />
 
           <Route path="*" element={<NotFound />} />
         </RouterRoutes>

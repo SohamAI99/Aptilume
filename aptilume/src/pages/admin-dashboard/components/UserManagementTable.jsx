@@ -4,6 +4,7 @@ import Button from '../../../components/ui/Button';
 import Input from '../../../components/ui/Input';
 import Select from '../../../components/ui/Select';
 import { cn } from '../../../utils/cn';
+import { activateUser, deactivateUser, suspendUser } from '../../../utils/dbService';
 
 const UserManagementTable = ({ users }) => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -34,48 +35,58 @@ const UserManagementTable = ({ users }) => {
     return matchesSearch && matchesRole && matchesStatus;
   });
 
-  const handleUserAction = (userId, action) => {
-    console.log(`Performing ${action} on user ${userId}`);
-    // Here would be the actual PostgreSQL query calls
-    switch (action) {
-      case 'activate': console.log('UPDATE users SET status = "active" WHERE id = ?', userId);
-        break;
-      case 'deactivate': console.log('UPDATE users SET status = "inactive" WHERE id = ?', userId);
-        break;
-      case 'suspend': console.log('UPDATE users SET status = "suspended" WHERE id = ?', userId);
-        break;
-      case 'delete':
-        if (window.confirm('Are you sure you want to delete this user?')) {
-          console.log('DELETE FROM users WHERE id = ?', userId);
-        }
-        break;
-      default:
-        break;
+  const handleUserAction = async (userId, action) => {
+    try {
+      switch (action) {
+        case 'activate':
+          await activateUser(userId);
+          break;
+        case 'deactivate':
+          await deactivateUser(userId);
+          break;
+        case 'suspend':
+          await suspendUser(userId);
+          break;
+        case 'delete':
+          if (window.confirm('Are you sure you want to delete this user?')) {
+            // In a real app, you would implement user deletion here
+            console.log('DELETE user', userId);
+          }
+          break;
+        default:
+          break;
+      }
+    } catch (error) {
+      console.error(`Error performing ${action} on user ${userId}:`, error);
     }
   };
 
-  const handleBulkAction = (action) => {
+  const handleBulkAction = async (action) => {
     if (selectedUsers?.length === 0) {
       alert('Please select users first');
       return;
     }
     
-    const userIds = selectedUsers?.join(',');
-    console.log(`Performing bulk ${action} on users: ${userIds}`);
-    
-    switch (action) {
-      case 'activate': console.log('UPDATE users SET status = "active" WHERE id IN (?)', userIds);
-        break;
-      case 'deactivate': console.log('UPDATE users SET status = "inactive" WHERE id IN (?)', userIds);
-        break;
-      case 'export':
-        console.log('SELECT * FROM users WHERE id IN (?) ORDER BY created_at DESC', userIds);
-        break;
-      default:
-        break;
+    try {
+      switch (action) {
+        case 'activate':
+          await Promise.all(selectedUsers.map(userId => activateUser(userId)));
+          break;
+        case 'deactivate':
+          await Promise.all(selectedUsers.map(userId => deactivateUser(userId)));
+          break;
+        case 'export':
+          // In a real app, you would implement export functionality here
+          console.log('Export users:', selectedUsers);
+          break;
+        default:
+          break;
+      }
+      
+      setSelectedUsers([]);
+    } catch (error) {
+      console.error(`Error performing bulk ${action}:`, error);
     }
-    
-    setSelectedUsers([]);
   };
 
   const toggleUserSelection = (userId) => {
@@ -134,22 +145,6 @@ const UserManagementTable = ({ users }) => {
 
   return (
     <div className="space-y-6">
-      {/* PostgreSQL Queries Documentation */}
-      <div className="glass-card rounded-xl p-6 bg-blue-50 border border-blue-200">
-        <h3 className="text-lg font-semibold text-blue-900 mb-3 flex items-center">
-          <Icon name="Database" size={20} className="mr-2" />
-          PostgreSQL Queries for User Management
-        </h3>
-        <div className="space-y-2 text-sm text-blue-800 font-mono">
-          <p><strong>Get All Users:</strong> SELECT * FROM users ORDER BY created_at DESC;</p>
-          <p><strong>Search Users:</strong> SELECT * FROM users WHERE name ILIKE '%search%' OR email ILIKE '%search%';</p>
-          <p><strong>Filter by Role:</strong> SELECT * FROM users WHERE role = 'student' AND status = 'active';</p>
-          <p><strong>User Statistics:</strong> SELECT role, status, COUNT(*) as count FROM users GROUP BY role, status;</p>
-          <p><strong>Update User Status:</strong> UPDATE users SET status = 'active' WHERE id = $1;</p>
-          <p><strong>Bulk Operations:</strong> UPDATE users SET status = 'inactive' WHERE id = ANY($1);</p>
-        </div>
-      </div>
-
       {/* Header and Controls */}
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
         <div>
@@ -282,10 +277,10 @@ const UserManagementTable = ({ users }) => {
                       </div>
                       <div>
                         <div className="text-sm font-medium text-foreground">
-                          {user?.name}
+                          {user?.name || 'Unknown User'}
                         </div>
                         <div className="text-sm text-muted-foreground">
-                          {user?.email}
+                          {user?.email || 'No email'}
                         </div>
                       </div>
                     </div>
@@ -297,16 +292,16 @@ const UserManagementTable = ({ users }) => {
                     {getStatusBadge(user?.status)}
                   </td>
                   <td className="px-6 py-4 text-sm text-muted-foreground">
-                    {user?.joinDate}
+                    {user?.joinDate || 'N/A'}
                   </td>
                   <td className="px-6 py-4 text-sm text-muted-foreground">
-                    {user?.lastActivity}
+                    {user?.lastActivity || 'N/A'}
                   </td>
                   <td className="px-6 py-4 text-sm text-foreground">
-                    {user?.testsCompleted}
+                    {user?.testsCompleted || 0}
                   </td>
                   <td className="px-6 py-4 text-sm text-foreground">
-                    {user?.averageScore}%
+                    {user?.averageScore ? `${user?.averageScore}%` : 'N/A'}
                   </td>
                   <td className="px-6 py-4">
                     <div className="flex items-center space-x-2">

@@ -4,6 +4,7 @@ import Button from '../../../components/ui/Button';
 import Input from '../../../components/ui/Input';
 import Select from '../../../components/ui/Select';
 import { cn } from '../../../utils/cn';
+import { publishQuiz, archiveQuiz } from '../../../utils/dbService';
 
 const TestManagementPanel = ({ tests }) => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -34,25 +35,33 @@ const TestManagementPanel = ({ tests }) => {
     return matchesSearch && matchesStatus && matchesDifficulty;
   });
 
-  const handleTestAction = (testId, action) => {
-    console.log(`Performing ${action} on test ${testId}`);
-    // PostgreSQL queries for test actions
-    switch (action) {
-      case 'publish': console.log('UPDATE tests SET status = "published", updated_at = NOW() WHERE id = ?', testId);
-        break;
-      case 'archive': console.log('UPDATE tests SET status = "archived", updated_at = NOW() WHERE id = ?', testId);
-        break;
-      case 'approve': console.log('UPDATE tests SET status = "published", approved_at = NOW(), approved_by = ? WHERE id = ?', testId);
-        break;
-      case 'reject': console.log('UPDATE tests SET status = "draft", rejected_at = NOW(), rejected_by = ? WHERE id = ?', testId);
-        break;
-      case 'delete':
-        if (window.confirm('Are you sure you want to delete this test? This action cannot be undone.')) {
-          console.log('DELETE FROM tests WHERE id = ?', testId);
-        }
-        break;
-      default:
-        break;
+  const handleTestAction = async (testId, action) => {
+    try {
+      switch (action) {
+        case 'publish':
+          await publishQuiz(testId);
+          break;
+        case 'archive':
+          await archiveQuiz(testId);
+          break;
+        case 'approve':
+          await publishQuiz(testId);
+          break;
+        case 'reject':
+          // In a real app, you might want to implement rejection logic
+          console.log('Reject test', testId);
+          break;
+        case 'delete':
+          if (window.confirm('Are you sure you want to delete this test? This action cannot be undone.')) {
+            // In a real app, you would implement test deletion here
+            console.log('DELETE test', testId);
+          }
+          break;
+        default:
+          break;
+      }
+    } catch (error) {
+      console.error(`Error performing ${action} on test ${testId}:`, error);
     }
   };
 
@@ -97,22 +106,6 @@ const TestManagementPanel = ({ tests }) => {
 
   return (
     <div className="space-y-6">
-      {/* PostgreSQL Queries Documentation */}
-      <div className="glass-card rounded-xl p-6 bg-purple-50 border border-purple-200">
-        <h3 className="text-lg font-semibold text-purple-900 mb-3 flex items-center">
-          <Icon name="Database" size={20} className="mr-2" />
-          PostgreSQL Queries for Test Management
-        </h3>
-        <div className="space-y-2 text-sm text-purple-800 font-mono">
-          <p><strong>Get All Tests:</strong> SELECT t.*, u.name as creator_name FROM tests t JOIN users u ON t.created_by = u.id ORDER BY t.updated_at DESC;</p>
-          <p><strong>Test Analytics:</strong> SELECT t.id, t.title, COUNT(ta.id) as attempts, AVG(ta.score) as avg_score FROM tests t LEFT JOIN test_attempts ta ON t.id = ta.test_id GROUP BY t.id;</p>
-          <p><strong>Pending Reviews:</strong> SELECT * FROM tests WHERE status = 'review_pending' ORDER BY created_at ASC;</p>
-          <p><strong>Test Performance:</strong> SELECT difficulty, COUNT(*) as total_tests, AVG(attempts) as avg_attempts FROM tests GROUP BY difficulty;</p>
-          <p><strong>Update Test Status:</strong> UPDATE tests SET status = $1, updated_at = NOW() WHERE id = $2;</p>
-          <p><strong>Test Questions:</strong> SELECT q.* FROM questions q WHERE q.test_id = $1 ORDER BY q.order_index;</p>
-        </div>
-      </div>
-
       {/* Header and Controls */}
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
         <div>
@@ -177,7 +170,7 @@ const TestManagementPanel = ({ tests }) => {
             <div className="flex items-start justify-between mb-4">
               <div className="flex-1">
                 <h3 className="text-lg font-semibold text-foreground mb-2">
-                  {test?.title}
+                  {test?.title || 'Untitled Test'}
                 </h3>
                 <div className="flex items-center gap-2 mb-3">
                   {getStatusBadge(test?.status)}
@@ -213,19 +206,19 @@ const TestManagementPanel = ({ tests }) => {
             <div className="grid grid-cols-3 gap-4 mb-4">
               <div className="text-center p-3 bg-muted/30 rounded-lg">
                 <div className="text-lg font-semibold text-foreground">
-                  {test?.questions}
+                  {test?.questions || 0}
                 </div>
                 <div className="text-xs text-muted-foreground">Questions</div>
               </div>
               <div className="text-center p-3 bg-muted/30 rounded-lg">
                 <div className="text-lg font-semibold text-foreground">
-                  {test?.attempts?.toLocaleString()}
+                  {test?.attempts?.toLocaleString() || 0}
                 </div>
                 <div className="text-xs text-muted-foreground">Attempts</div>
               </div>
               <div className="text-center p-3 bg-muted/30 rounded-lg">
                 <div className="text-lg font-semibold text-foreground">
-                  {test?.avgScore}%
+                  {test?.avgScore ? `${test?.avgScore}%` : 'N/A'}
                 </div>
                 <div className="text-xs text-muted-foreground">Avg Score</div>
               </div>
@@ -233,8 +226,8 @@ const TestManagementPanel = ({ tests }) => {
 
             {/* Test Metadata */}
             <div className="flex items-center justify-between text-sm text-muted-foreground mb-4">
-              <span>Created: {test?.createdAt}</span>
-              <span>Updated: {test?.updatedAt}</span>
+              <span>Created: {test?.createdAt || 'N/A'}</span>
+              <span>Updated: {test?.updatedAt || 'N/A'}</span>
             </div>
 
             {/* Action Buttons */}
