@@ -1,0 +1,176 @@
+[1mdiff --git a/aptilume/.env.example b/.env.example[m
+[1msimilarity index 100%[m
+[1mrename from aptilume/.env.example[m
+[1mrename to .env.example[m
+[1mdiff --git a/aptilume/.gitignore b/.gitignore[m
+[1msimilarity index 100%[m
+[1mrename from aptilume/.gitignore[m
+[1mrename to .gitignore[m
+[1mdiff --git a/README.md b/README.md[m
+[1mindex 6c0c93a..15dbb93 100644[m
+[1m--- a/README.md[m
+[1m+++ b/README.md[m
+[36m@@ -27,12 +27,14 @@[m [mAptilume revolutionizes technical aptitude testing by combining the power of AI[m
+ - Multi-provider OAuth (Google, GitHub) + Email/Password[m
+ - Role-based access control (Student, Teacher, Admin)[m
+ - Session management with automatic timeout[m
+[32m+[m[32m- Proper role-based redirection after login[m
+ [m
+ ### 📝 **Smart Quiz Management**[m
+ - Create, edit, and publish quizzes in seconds[m
+ - Multiple question types (MCQ, Coding Challenges, Subjective)[m
+ - Time-bound assessments with auto-submission[m
+ - Real-time proctoring with camera/microphone monitoring[m
+[32m+[m[32m- Comprehensive quiz analytics and performance tracking[m
+ [m
+ ### 🤖 **AI-Powered Intelligence**[m
+ - **Personalized Quiz Generator** - Create custom quizzes based on topics and difficulty[m
+[36m@@ -44,6 +46,14 @@[m [mAptilume revolutionizes technical aptitude testing by combining the power of AI[m
+ - Progress tracking over time[m
+ - Comparative statistics and benchmarking[m
+ - Exportable reports for stakeholders[m
+[32m+[m[32m- Real-time leaderboard with ranking algorithms[m
+[32m+[m[32m- Teacher-specific quiz performance analytics[m
+[32m+[m
+[32m+[m[32m### 🎯 **Real-Time Functionality**[m
+[32m+[m[32m- All data updates automatically without page refresh[m
+[32m+[m[32m- Real-time leaderboard with live ranking[m
+[32m+[m[32m- Instant quiz results and performance feedback[m
+[32m+[m[32m- Live progress tracking for students and teachers[m
+ [m
+ ## 🛠 Tech Stack[m
+ [m
+[36m@@ -137,16 +147,19 @@[m [maptilume/[m
+ - Standardized testing[m
+ - Student assessment[m
+ - Progress monitoring[m
+[32m+[m[32m- Teacher performance analytics[m
+ [m
+ ### 🏢 Corporate Training[m
+ - Employee skill evaluation[m
+ - Certification programs[m
+ - Recruitment screening[m
+[32m+[m[32m- Team performance tracking[m
+ [m
+ ### 👨‍💻 Individual Learners[m
+ - Self-assessment[m
+ - Skill development[m
+ - Aptitude preparation[m
+[32m+[m[32m- Progress tracking over time[m
+ [m
+ ## 🔐 Security Features[m
+ [m
+[36m@@ -155,6 +168,7 @@[m [maptilume/[m
+ - Role-based access control[m
+ - Input validation and sanitization[m
+ - Real-time threat monitoring[m
+[32m+[m[32m- Data validation for all user inputs[m
+ [m
+ ## 📱 Responsive Design[m
+ [m
+[36m@@ -163,6 +177,14 @@[m [mAptilume works seamlessly across all devices:[m
+ - 💻 Tablet devices[m
+ - 📱 Mobile phones[m
+ [m
+[32m+[m[32m## 📚 Documentation[m
+[32m+[m
+[32m+[m[32mFor detailed information about the implementation, please refer to:[m
+[32m+[m[32m- [FINAL_IMPLEMENTATION_SUMMARY.md](FINAL_IMPLEMENTATION_SUMMARY.md) - Complete implementation details[m
+[32m+[m[32m- [KEY_IMPROVEMENTS.md](KEY_IMPROVEMENTS.md) - Summary of key improvements[m
+[32m+[m[32m- [ENHANCEMENTS_SUMMARY.md](ENHANCEMENTS_SUMMARY.md) - Technical enhancements overview[m
+[32m+[m[32m- [RUNNING_INSTRUCTIONS.md](RUNNING_INSTRUCTIONS.md) - Instructions for running and testing[m
+[32m+[m
+ ## 🤝 Contributing[m
+ [m
+ We love contributions! Here's how you can help:[m
+[36m@@ -191,4 +213,4 @@[m [mThis project is licensed under the MIT License - see the [LICENSE](LICENSE) file[m
+ [m
+ [Report Bug](https://github.com/SohamAI99/Aptilume/issues) · [Request Feature](https://github.com/SohamAI99/Aptilume/issues)[m
+ [m
+[31m-</div>[m
+[32m+[m[32m</div>[m
+\ No newline at end of file[m
+[1mdiff --git a/aptilume/README.md b/aptilume/README.md[m
+[1mdeleted file mode 100644[m
+[1mindex 15dbb93..0000000[m
+[1m--- a/aptilume/README.md[m
+[1m+++ /dev/null[m
+[36m@@ -1,216 +0,0 @@[m
+[31m-<!-- markdownlint-disable MD033 MD041 -->[m
+[31m-<div align="center">[m
+[31m-[m
+[31m-# Aptilume[m
+[31m-[m
+[31m-**AI-Powered Aptitude Testing Platform**[m
+[31m-[m
+[31m-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)[m
+[31m-[![React](https://img.shields.io/badge/React-18+-61DAFB?logo=react&logoColor=white)](https://reactjs.org/)[m
+[31m-[![Firebase](https://img.shields.io/badge/Firebase-Realtime-orange?logo=firebase&logoColor=white)](https://firebase.google.com/)[m
+[31m-[![Vite](https://img.shields.io/badge/Vite-Blazing--Fast-646CFF?logo=vite&logoColor=white)](https://vitejs.dev/)[m
+[31m-[![Node.js](https://img.shields.io/badge/Node.js-Server-339933?logo=node.js&logoColor=white)](https://nodejs.org/)[m
+[31m-[m
+[31m-**Transform the way you assess technical aptitude with our cutting-edge platform**[m
+[31m-[m
+[31m-[Key Features](#-key-features) • [Tech Stack](#-tech-stack) • [Getting Started](#-getting-started) • [Contributing](#-contributing)[m
+[31m-[m
+[31m-</div>[m
+[31m-[m
+[31m-## 🌟 Why Aptilume?[m
+[31m-[m
+[31m-Aptilume revolutionizes technical aptitude testing by combining the power of AI with real-time assessment capabilities. Whether you're an educational institution, corporate trainer, or individual learner, Aptilume provides the tools to create, administer, and analyze assessments with unprecedented efficiency.[m
+[31m-[m
+[31m-## 🚀 Key Features[m
+[31m-[m
+[31m-### 🔐 **Secure Authentication**[m
+[31m-- Multi-provider OAuth (Google, GitHub) + Email/Password[m
+[31m-- Role-based access control (Student, Teacher, Admin)[m
+[31m-- Session management with automatic timeout[m
+[31m-- Proper role-based redirection after login[m
+[31m-[m
+[31m-### 📝 **Smart Quiz Management**[m
+[31m-- Create, edit, and publish quizzes in seconds[m
+[31m-- Multiple question types (MCQ, Coding Challenges, Subjective)[m
+[31m-- Time-bound assessments with auto-submission[m
+[31m-- Real-time proctoring with camera/microphone monitoring[m
+[31m-- Comprehensive quiz analytics and performance tracking[m
+[31m-[m
+[31m-### 🤖 **AI-Powered Intelligence**[m
+[31m-- **Personalized Quiz Generator** - Create custom quizzes based on topics and difficulty[m
+[31m-- **Performance Analytics** - AI-driven insights into strengths and weaknesses[m
+[31m-- **Admin Assistance** - AI tools for content creation and management[m
+[31m-[m
+[31m-### 📊 **Comprehensive Analytics**[m
+[31m-- Detailed result analysis with visual dashboards[m
+[31m-- Progress tracking over time[m
+[31m-- Comparative statistics and benchmarking[m
+[31m-- Exportable reports for stakeholders[m
+[31m-- Real-time leaderboard with ranking algorithms[m
+[31m-- Teacher-specific quiz performance analytics[m
+[31m-[m
+[31m-### 🎯 **Real-Time Functionality**[m
+[31m-- All data updates automatically without page refresh[m
+[31m-- Real-time leaderboard with live ranking[m
+[31m-- Instant quiz results and performance feedback[m
+[31m-- Live progress tracking for students and teachers[m
+[31m-[m
+[31m-## 🛠 Tech Stack[m
+[31m-[m
+[31m-| Layer | Technology | Purpose |[m
+[31m-|-------|------------|---------|[m
+[31m-| **Frontend** | React 18, Vite | Blazing-fast UI with modern components |[m
+[31m-| **Styling** | TailwindCSS | Responsive, utility-first design |[m
+[31m-| **Backend** | Node.js, Express | RESTful API and server logic |[m
+[31m-| **Database** | Firebase Firestore | Real-time NoSQL data storage |[m
+[31m-| **Auth** | Firebase Authentication | Secure user management |[m
+[31m-| **AI** | OpenAI API | Intelligent quiz generation and analytics |[m
+[31m-| **Deployment** | Firebase Hosting | Scalable, global CDN |[m
+[31m-[m
+[31m-## 📁 Project Structure[m
+[31m-[m
+[31m-```[m
+[31m-aptilume/[m
+[31m-├── public/                 # Static assets[m
+[31m-├── src/[m
+[31m-│   ├── components/         # Reusable UI components[m
+[31m-│   │   ├── ui/             # Generic UI components[m
+[31m-│   │   ├── ai/         
