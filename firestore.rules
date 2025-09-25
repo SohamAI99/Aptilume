@@ -1,0 +1,169 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Helper functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    function isUser() {
+      return isAuthenticated() && request.auth.token.userType == 'student';
+    }
+    
+    function isTeacher() {
+      return isAuthenticated() && (request.auth.token.userType == 'teacher' || request.auth.token.userType == 'admin');
+    }
+    
+    function isAdmin() {
+      return isAuthenticated() && request.auth.token.userType == 'admin';
+    }
+    
+    function isOwner(userId) {
+      return request.auth.uid == userId;
+    }
+    
+    function isValidQuizData() {
+      return request.resource.data.keys().hasAll(['title', 'description', 'difficulty', 'questionCount']) &&
+             request.resource.data.title is string &&
+             request.resource.data.description is string &&
+             request.resource.data.difficulty is string &&
+             request.resource.data.questionCount is number;
+    }
+    
+    function isValidQuestionData() {
+      return request.resource.data.keys().hasAll(['type', 'question', 'options', 'correctAnswer']) &&
+             request.resource.data.type is string &&
+             request.resource.data.question is string &&
+             request.resource.data.options is list &&
+             request.resource.data.correctAnswer is string;
+    }
+    
+    // Users collection
+    match /users/{userId} {
+      // Anyone can read their own user document
+      allow read: if isAuthenticated() && isOwner(userId);
+      
+      // Users can update their own document (with validation)
+      allow update: if isAuthenticated() && isOwner(userId) &&
+        // Only allow updating specific fields
+        request.resource.data.keys().hasOnly([
+          'name', 'photoURL', 'studentDetails', 'teacherDetails', 
+          'preferences', 'stats', 'lastLoginAt'
+        ]);
+      
+      // Only server can create user documents (during registration)
+      allow create: if false;
+    }
+    
+    // Quizzes collection
+    match /quizzes/{quizId} {
+      // Students can read published quizzes
+      allow read: if isUser() && resource.data.isPublished == true;
+      
+      // Teachers can read all quizzes
+      allow read: if isTeacher();
+      
+      // Teachers can create quizzes (with validation)
+      allow create: if isTeacher() && isValidQuizData();
+      
+      // Teachers can update their own quizzes (with validation)
+      allow update: if isTeacher() && isOwner(resource.data.createdBy) &&
+        // Validate data on update
+        (!request.resource.data.keys().hasAny(['createdBy', 'createdAt']) ||
+         request.resource.data.createdBy == resource.data.createdBy);
+      
+      // Admins can delete any quiz
+      allow delete: if isAdmin();
+    }
+    
+    // Questions subcollection
+    match /quizzes/{quizId}/questions/{questionId} {
+      // Students can read questions only during an active quiz attempt
+      // This would need to be implemented with additional logic for quiz sessions
+      
+      // Teachers can read questions for their own quizzes
+      allow read: if isTeacher() && isOwner(get(/databases/$(database)/documents/quizzes/$(quizId)).data.createdBy);
+      
+      // Teachers can create questions for their own quizzes (with validation)
+      allow create: if isTeacher() && 
+        isOwner(get(/databases/$(database)/documents/quizzes/$(quizId)).data.createdBy) &&
+        isValidQuestionData();
+      
+      // Teachers can update questions for their own quizzes (with validation)
+      allow update: if isTeacher() && 
+        isOwner(get(/databases/$(database)/documents/quizzes/$(quizId)).data.createdBy) &&
+        isValidQuestionData();
+      
+      // Admins can delete any questions
+      allow delete: if isAdmin();
+    }
+    
+    // Attempts collection
+    match /attempts/{attemptId} {
+      // Users can read their own attempts
+      allow read: if isUser() && isOwner(resource.data.userId);
+      
+      // Users can create their own attempts
+      allow create: if isUser() && isOwner(request.resource.data.userId);
+      
+      // Users can update their own attempts
+      allow update: if isUser() && isOwner(resource.data.userId) &&
+        // Only allow updating specific fields
+        request.resource.data.keys().hasOnly([
+          'status', 'lastUpdatedAt', 'currentQuestionIndex', 'answers', 'timeSpent'
+        ]);
+      
+      // Teachers and admins can read all attempts
+      allow read: if isTeacher();
+    }
+    
+    // Results collection
+    match /results/{resultId} {
+      // Users can read their own results
+      allow read: if isUser() && isOwner(resource.data.userId);
+      
+      // System can create results (when quiz is submitted)
+      allow create: if false;
+      
+      // No one can update or delete results
+      allow update, delete: if false;
+    }
+    
+    // User stats
+    match /user_stats/{userId} {
+      // Users can read their own stats
+      allow read: if isUser() && isOwner(userId);
+      
+      // System can update stats
+      allow update, create: if false;
+    }
+    
+    // Activity logs
+    match /activity_logs/{logId} {
+      // Only admins and system can read/write
+      allow read, write: if isAdmin() || request.auth.token.admin == true;
+    }
+    
+    // AI content
+    match /ai_content/{contentId} {
+      // Only admins and system can read/write
+      allow read, write: if isAdmin() || request.auth.token.admin == true;
+    }
+    
+    // Notifications
+    match /notifications/{notificationId} {
+      // Users can read their own notifications
+      allow read: if isAuthenticated() && isOwner(resource.data.userId);
+      
+      // System can create notifications
+      allow create: if false;
+      
+      // Users can update their own notifications (mark as read)
+      allow update: if isAuthenticated() && isOwner(resource.data.userId) &&
+        request.resource.data.keys().hasOnly(['isRead']);
+      
+      // No one can delete notifications
+      allow delete: if false;
+    }
+  }
+}
