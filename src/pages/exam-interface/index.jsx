@@ -604,20 +604,13 @@ const ExamInterface = () => {
   }
 
   // Additional check to ensure we have valid questions
-  const validQuestions = examData.questions.filter(q => q && q.text && Array.isArray(q.options) && q.options.length > 0);
-  if (validQuestions.length === 0) {
-    return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="text-center max-w-md p-6 glass-card rounded-2xl">
-          <div className="text-destructive text-5xl mb-4">⚠️</div>
-          <h2 className="text-xl font-semibold text-foreground mb-2">Invalid Questions Format</h2>
-          <p className="text-muted-foreground mb-4">The questions for this exam are not properly formatted. Please contact support.</p>
-          <Button onClick={() => navigate('/student-dashboard')}>
-            Back to Dashboard
-          </Button>
-        </div>
-      </div>
-    );
+  const validQuestions = examData.questions?.filter(q => q && q.text && Array.isArray(q.options) && q.options.length > 0) || [];
+  console.log('Exam data questions count:', examData.questions?.length);
+  console.log('Valid questions count:', validQuestions.length);
+  console.log('Sample question structure:', examData.questions?.[0]);
+  
+  if (validQuestions.length === 0 && examData.questions?.length > 0) {
+    console.warn('Questions exist but may have invalid structure');
   }
 
   return (
@@ -657,7 +650,7 @@ const ExamInterface = () => {
         {/* Desktop Palette Sidebar */}
         <div className="hidden lg:block w-80 p-4 pr-6 overflow-hidden">
           <QuestionPalette
-            questions={examData?.questions}
+            questions={examData?.questions || []}
             currentQuestionIndex={currentQuestionIndex}
             answeredQuestions={answeredQuestions}
             markedQuestions={markedQuestions}
@@ -666,7 +659,7 @@ const ExamInterface = () => {
           />
         </div>
 
-        {/* Proctoring Sidebar */}
+        {/* Proctoring Sidebar - restore original behavior */}
         <ProctoringSidebar
           isVisible={isProctoringSidebarOpen}
           onToggle={() => setIsProctoringSidebarOpen(!isProctoringSidebarOpen)}

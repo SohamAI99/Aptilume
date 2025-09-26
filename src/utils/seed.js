@@ -2,6 +2,7 @@
 import { db } from './firebase';
 import { seedTwoQuizzes } from './seedTwoQuizzes';
 import { removeUnwantedQuizzes } from './removeUnwantedQuizzes';
+import { createOrUpdateAptitudeQuiz } from './createAptitudeQuiz';
 import {
   collection,
   addDoc,
@@ -21,8 +22,11 @@ export async function seedInitialData(user) {
   // Remove unwanted quizzes first
   await removeUnwantedQuizzes();
 
-  // Seed only two quizzes as requested
+  // Seed all quizzes including the aptitude quiz
   await seedTwoQuizzes(user);
+  
+  // Also seed the aptitude quiz directly
+  await createOrUpdateAptitudeQuiz();
 
   // Seed user stats
   if (user?.uid) {
@@ -59,8 +63,21 @@ export async function seedInitialData(user) {
     type: 'system',
     user: user?.email || 'system',
     action: 'seeded database',
-    details: 'Initial demo data created with only two quizzes',
+    details: 'Initial demo data created with quizzes',
     status: 'success',
     createdAt: now,
   });
+}
+
+// Function to seed only the aptitude quiz
+export async function seedAptitudeQuizOnly() {
+  try {
+    console.log('Seeding Aptitude Test quiz...');
+    const quizId = await createOrUpdateAptitudeQuiz();
+    console.log(`Aptitude Test quiz successfully seeded with ID: ${quizId}`);
+    return quizId;
+  } catch (error) {
+    console.error('Error seeding Aptitude Test quiz:', error);
+    throw error;
+  }
 }

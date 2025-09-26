@@ -4,6 +4,7 @@ import HeroSection from './components/HeroSection';
 import FeaturesSection from './components/FeaturesSection';
 import CTASection from './components/CTASection';
 import Footer from './components/Footer';
+import DecorativeBackground from '../../components/DecorativeBackground';
 
 const LandingPage = () => {
   useEffect(() => {
@@ -39,7 +40,8 @@ const LandingPage = () => {
         <link rel="canonical" href="https://aptilume.com/landing-page" />
       </Helmet>
 
-      <div className="min-h-screen bg-background">
+      <div className="min-h-screen bg-background relative">
+        <DecorativeBackground />
         {/* Hero Section */}
         <HeroSection />
 

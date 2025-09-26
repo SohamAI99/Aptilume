@@ -8,6 +8,8 @@
     "test": "vite test",
     "eject": "vite eject",
     "seed": "node scripts/seedQuizzes.js",
+    "seed-all": "node src/utils/seed.js",
+    "seed-aptitude-only": "node scripts/seedAptitudeOnly.js",
     "remove-unwanted-quizzes": "node scripts/removeUnwantedQuizzes.js",
     "force-remove-unwanted-quizzes": "node src/utils/forceRemoveUnwantedQuizzes.js",
     "list-quizzes": "node src/utils/listQuizzes.js",
@@ -18,7 +20,8 @@
     "check-published-quizzes": "node src/utils/checkPublishedQuizzes.js",
     "debug-app": "node src/utils/debugApp.js",
     "test-firebase-connection": "node src/utils/testFirebaseConnection.js",
-    "health-check": "node src/utils/healthCheck.js"
+    "health-check": "node src/utils/healthCheck.js",
+    "seed-aptitude": "node src/utils/createAptitudeQuiz.js"
   },
   "dependencies": {
     "@radix-ui/react-slot": "^1.2.3",

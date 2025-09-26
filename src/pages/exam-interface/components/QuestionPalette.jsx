@@ -9,12 +9,6 @@ const QuestionPalette = ({
   onQuestionSelect,
   className = ""
 }) => {
-  // Log for debugging
-  React.useEffect(() => {
-    console.log('QuestionPalette received questions:', questions?.length);
-    console.log('Questions data:', questions);
-  }, [questions]);
-
   const getQuestionStatus = (index) => {
     const isAnswered = answeredQuestions?.has(index);
     const isMarked = markedQuestions?.has(index);
@@ -54,7 +48,7 @@ const QuestionPalette = ({
     }
   };
 
-  // Filter out invalid questions
+  // Ensure we're working with valid questions
   const validQuestions = questions?.filter(q => q && (q.text || q.question || q.id)) || [];
   
   const statusCounts = {
@@ -90,11 +84,12 @@ const QuestionPalette = ({
           </div>
         </div>
       </div>
+      
       {/* Question Grid */}
       <div className="flex-1 p-4 overflow-y-auto">
         {validQuestions.length > 0 ? (
           <div className="grid grid-cols-5 gap-2">
-            {validQuestions?.map((question, index) => {
+            {validQuestions.map((question, index) => {
               const status = getQuestionStatus(index);
               const styles = getStatusStyles(status);
               
@@ -120,6 +115,7 @@ const QuestionPalette = ({
           </div>
         )}
       </div>
+      
       {/* Palette Footer */}
       <div className="p-4 border-t border-border bg-muted/30">
         <div className="text-center">

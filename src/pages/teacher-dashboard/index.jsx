@@ -8,10 +8,6 @@ import { listenToUser, listenToQuizzes, getResultsByUser } from '../../utils/dbS
 import * as authService from '../../utils/authService';
 import AccountSection from '../../components/ui/AccountSection';
 import { getQuizzes, getQuizPerformance } from '../../utils/dbService';
-import { runAddQuestionsScript } from '../../utils/addSampleQuestions';
-import { createTestQuiz } from '../../utils/createTestQuiz';
-import { createOrUpdateMicrosoftQuiz } from '../../utils/createMicrosoftQuiz';
-import { createOrUpdateMetaQuiz } from '../../utils/createMetaQuiz'; // Add this import
 
 const TeacherDashboard = () => {
   const navigate = useNavigate();
@@ -84,87 +80,6 @@ const TeacherDashboard = () => {
     navigate(`/teacher/quiz/${quizId}/edit`);
   };
 
-  const handleAddSampleQuestions = async () => {
-    try {
-      setLoading(true);
-      await runAddQuestionsScript();
-      // Refresh quizzes after adding questions
-      const quizzesData = await getQuizzes();
-      setQuizzes(quizzesData);
-      alert('Sample questions added successfully!');
-    } catch (error) {
-      console.error('Error adding sample questions:', error);
-      alert('Failed to add sample questions');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleCreateTestQuiz = async () => {
-    try {
-      setLoading(true);
-      const quizId = await createTestQuiz();
-      // Refresh quizzes after creating test quiz
-      const quizzesData = await getQuizzes();
-      setQuizzes(quizzesData);
-      alert(`Test quiz created successfully with ID: ${quizId}`);
-    } catch (error) {
-      console.error('Error creating test quiz:', error);
-      alert('Failed to create test quiz');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleCreateMicrosoftQuiz = async () => {
-    try {
-      setLoading(true);
-      const quizId = await createOrUpdateMicrosoftQuiz();
-      // Refresh quizzes after creating Microsoft quiz
-      const quizzesData = await getQuizzes();
-      setQuizzes(quizzesData);
-      alert(`Microsoft Technical Interview Prep quiz created/updated successfully with ID: ${quizId}`);
-    } catch (error) {
-      console.error('Error creating Microsoft quiz:', error);
-      alert('Failed to create/update Microsoft quiz');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleCreateMetaQuiz = async () => {
-    try {
-      setLoading(true);
-      const quizId = await createOrUpdateMetaQuiz();
-      // Refresh quizzes after creating Meta quiz
-      const quizzesData = await getQuizzes();
-      setQuizzes(quizzesData);
-      alert(`Meta Product Sense Assessment quiz created/updated successfully with ID: ${quizId}`);
-    } catch (error) {
-      console.error('Error creating Meta quiz:', error);
-      alert('Failed to create/update Meta quiz');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleSeedTwoQuizzes = async () => {
-    try {
-      setLoading(true);
-      const microsoftQuizId = await createOrUpdateMicrosoftQuiz();
-      const metaQuizId = await createOrUpdateMetaQuiz();
-      // Refresh quizzes after creating both quizzes
-      const quizzesData = await getQuizzes();
-      setQuizzes(quizzesData);
-      alert(`Both quizzes created/updated successfully!\nMicrosoft Quiz ID: ${microsoftQuizId}\nMeta Quiz ID: ${metaQuizId}`);
-    } catch (error) {
-      console.error('Error seeding two quizzes:', error);
-      alert('Failed to seed two quizzes');
-    } finally {
-      setLoading(false);
-    }
-  };
-
   return (
     <div className="flex min-h-screen bg-background">
       <TeacherNavigation currentUser={mockUser} onLogout={handleLogout} />
@@ -185,81 +100,30 @@ const TeacherDashboard = () => {
             <div className="mb-8">
               <div className="flex items-center justify-between mb-6">
                 <div>
-                  <h1 className="text-3xl font-bold text-foreground">Teacher Dashboard</h1>
-                  <p className="text-muted-foreground mt-1">
-                    Manage your quizzes and track student performance
-                  </p>
                 </div>
                 <div className="flex gap-2">
-                  {/* Add these buttons */}
-                  <Button 
-                    variant="secondary" 
-                    onClick={handleAddSampleQuestions}
-                    disabled={loading}
-                    iconName="PlusCircle"
-                  >
-                    {loading ? 'Adding...' : 'Add Sample Questions'}
-                  </Button>
-                  <Button 
-                    variant="secondary" 
-                    onClick={handleCreateTestQuiz}
-                    disabled={loading}
-                    iconName="TestTube"
-                  >
-                    {loading ? 'Creating...' : 'Create Test Quiz'}
-                  </Button>
-                  <Button 
-                    variant="secondary" 
-                    onClick={handleCreateMicrosoftQuiz}
-                    disabled={loading}
-                    iconName="Microsoft"
-                  >
-                    {loading ? 'Creating...' : 'Microsoft Quiz'}
-                  </Button>
-                  <Button 
-                    variant="secondary" 
-                    onClick={handleCreateMetaQuiz}
-                    disabled={loading}
-                    iconName="Meta"
-                  >
-                    {loading ? 'Creating...' : 'Meta Quiz'}
-                  </Button>
-                  <Button 
-                    variant="secondary" 
-                    onClick={handleSeedTwoQuizzes}
-                    disabled={loading}
-                    iconName="Database"
-                  >
-                    {loading ? 'Seeding...' : 'Seed Two Quizzes'}
-                  </Button>
-                  <Button 
-                    variant="default" 
-                    onClick={handleCreateQuiz}
-                    iconName="Plus"
-                  >
-                    Create New Quiz
-                  </Button>
                 </div>
               </div>
-              {/* Welcome Section */}
-              <div className="mb-8">
-                <div className="flex items-center justify-between mb-4">
-                  <div>
-                    <h1 className="text-3xl font-bold text-foreground">
+              {/* Welcome Section - adjusted to fill empty space better */}
+              <div className="mb-8 glass-card rounded-2xl p-6">
+                <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+                  <div className="text-center md:text-left">
+                    <h1 className="text-3xl font-bold text-foreground mb-2">
                       Welcome back, {mockUser?.name}!
                     </h1>
-                    <p className="text-muted-foreground mt-1">
+                    <p className="text-muted-foreground text-lg">
                       Manage your quizzes and track student progress
                     </p>
                   </div>
-                  <div className="flex gap-2">
-                    <Button onClick={handleCreateQuiz} iconName="Plus">
+                  <div className="flex flex-wrap justify-center md:justify-end gap-3">
+                    <Button onClick={handleCreateQuiz} iconName="Plus" size="lg">
                       Create Quiz
                     </Button>
                     <Button 
                       variant="outline" 
                       onClick={() => setShowAIQuizGenerator(true)}
                       iconName="Sparkles"
+                      size="lg"
                     >
                       AI Quiz Generator
                     </Button>

@@ -110,6 +110,13 @@ export default {
         "fade-in": "fade-in 0.2s ease-out",
         "slide-in": "slide-in 0.2s ease-out",
         "spring-bounce": "spring-bounce 0.2s cubic-bezier(0.4, 0.0, 0.2, 1)",
+        "float": "float 6s ease-in-out infinite",
+        "float-delay-1": "float 6s ease-in-out 0.5s infinite",
+        "float-delay-2": "float 6s ease-in-out 1s infinite",
+        "float-delay-3": "float 6s ease-in-out 1.5s infinite",
+        "float-delay-4": "float 6s ease-in-out 2s infinite",
+        "float-delay-5": "float 6s ease-in-out 2.5s infinite",
+        "pulse-delay": "pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite 1s",
       },
       keyframes: {
         "accordion-down": {
@@ -132,6 +139,12 @@ export default {
           "0%": { transform: "scale(1)" },
           "50%": { transform: "scale(1.02)" },
           "100%": { transform: "scale(1)" },
+        },
+        "float": {
+          "0%": { transform: "translateY(0) translateX(0) rotate(0deg)" },
+          "33%": { transform: "translateY(-20px) translateX(10px) rotate(10deg)" },
+          "66%": { transform: "translateY(-10px) translateX(-10px) rotate(-10deg)" },
+          "100%": { transform: "translateY(0) translateX(0) rotate(0deg)" },
         },
       },
       transitionTimingFunction: {

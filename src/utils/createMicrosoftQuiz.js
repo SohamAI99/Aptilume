@@ -8,14 +8,14 @@ const microsoftQuiz = {
   description: "Prepare for Microsoft technical interviews with questions on data structures, algorithms, and system design.",
   difficulty: "Hard",
   duration: 90, // 90 minutes
-  questionCount: 20,
+  questionCount: 50, // Updated to 50 questions
   category: "Technical Interview",
   tags: ["microsoft", "technical-interview", "data-structures", "algorithms", "system-design"],
   isPublished: true,
   isRecommended: true
 };
 
-// Microsoft Technical Interview questions
+// Microsoft Technical Interview questions - expanded to 50 questions
 const microsoftQuestions = [
   {
     text: "What is the time complexity of searching for an element in a balanced binary search tree?",
@@ -315,6 +315,457 @@ const microsoftQuestions = [
     difficulty: "Easy",
     category: "Data Structures",
     topic: "Linked Lists",
+    marks: 4
+  },
+  // Additional 30 questions to reach 50 total
+  {
+    text: "What is the primary use of a semaphore in operating systems?",
+    options: [
+      "Memory management",
+      "Process synchronization",
+      "File handling",
+      "Network communication"
+    ],
+    correctAnswer: 1,
+    explanation: "Semaphores are synchronization primitives used to control access to shared resources in a concurrent environment.",
+    difficulty: "Medium",
+    category: "Operating Systems",
+    topic: "Process Synchronization",
+    marks: 4
+  },
+  {
+    text: "Which data structure is most suitable for implementing a breadth-first search algorithm?",
+    options: [
+      "Stack",
+      "Queue",
+      "Tree",
+      "Graph"
+    ],
+    correctAnswer: 1,
+    explanation: "BFS uses a queue to explore nodes level by level, following the FIFO (First In, First Out) principle.",
+    difficulty: "Easy",
+    category: "Algorithms",
+    topic: "Graph Traversal",
+    marks: 4
+  },
+  {
+    text: "What is the time complexity of the merge operation in merge sort?",
+    options: [
+      "O(1)",
+      "O(log n)",
+      "O(n)",
+      "O(n log n)"
+    ],
+    correctAnswer: 2,
+    explanation: "The merge operation combines two sorted arrays of size n/2, which takes linear time O(n).",
+    difficulty: "Medium",
+    category: "Algorithms",
+    topic: "Sorting Algorithms",
+    marks: 4
+  },
+  {
+    text: "In a relational database, what is a foreign key?",
+    options: [
+      "A key that uniquely identifies each record in a table",
+      "A key that references the primary key of another table",
+      "A key used for encryption",
+      "A key used for indexing"
+    ],
+    correctAnswer: 1,
+    explanation: "A foreign key is a field in one table that refers to the primary key in another table, establishing a relationship between the tables.",
+    difficulty: "Easy",
+    category: "Databases",
+    topic: "Relational Model",
+    marks: 4
+  },
+  {
+    text: "What is the purpose of normalization in database design?",
+    options: [
+      "To increase redundancy",
+      "To reduce data redundancy and improve data integrity",
+      "To speed up queries",
+      "To compress data"
+    ],
+    correctAnswer: 1,
+    explanation: "Normalization organizes data to minimize redundancy and dependency, improving data integrity and reducing storage requirements.",
+    difficulty: "Medium",
+    category: "Databases",
+    topic: "Database Design",
+    marks: 4
+  },
+  {
+    text: "Which HTTP status code indicates that a resource was successfully created?",
+    options: [
+      "200 OK",
+      "201 Created",
+      "204 No Content",
+      "301 Moved Permanently"
+    ],
+    correctAnswer: 1,
+    explanation: "HTTP 201 Created status code indicates that the request has been fulfilled and a new resource has been created.",
+    difficulty: "Easy",
+    category: "Web Development",
+    topic: "HTTP Status Codes",
+    marks: 4
+  },
+  {
+    text: "What is the main advantage of using a microservices architecture?",
+    options: [
+      "Simpler deployment",
+      "Tighter coupling between components",
+      "Independent deployment and scalability of services",
+      "Reduced network overhead"
+    ],
+    correctAnswer: 2,
+    explanation: "Microservices allow different services to be developed, deployed, and scaled independently, providing flexibility and resilience.",
+    difficulty: "Medium",
+    category: "System Design",
+    topic: "Architecture Patterns",
+    marks: 4
+  },
+  {
+    text: "In object-oriented programming, what is polymorphism?",
+    options: [
+      "The ability to hide implementation details",
+      "The ability to inherit properties from a parent class",
+      "The ability of objects of different types to be treated as instances of the same type",
+      "The ability to encapsulate data"
+    ],
+    correctAnswer: 2,
+    explanation: "Polymorphism allows objects of different classes to be treated as instances of the same superclass through a common interface.",
+    difficulty: "Medium",
+    category: "Object-Oriented Programming",
+    topic: "Polymorphism",
+    marks: 4
+  },
+  {
+    text: "What is the time complexity of finding the maximum element in a binary heap?",
+    options: [
+      "O(1)",
+      "O(log n)",
+      "O(n)",
+      "O(n log n)"
+    ],
+    correctAnswer: 0,
+    explanation: "In a max-heap, the maximum element is always at the root, so it can be found in constant time O(1).",
+    difficulty: "Medium",
+    category: "Data Structures",
+    topic: "Heaps",
+    marks: 4
+  },
+  {
+    text: "Which of the following is NOT a characteristic of a RESTful API?",
+    options: [
+      "Stateless",
+      "Cacheable",
+      "Uniform interface",
+      "Session-based"
+    ],
+    correctAnswer: 3,
+    explanation: "RESTful APIs are stateless, meaning each request from client to server must contain all the information needed to understand and process the request.",
+    difficulty: "Medium",
+    category: "Web Development",
+    topic: "REST APIs",
+    marks: 4
+  },
+  {
+    text: "What is the primary purpose of a CDN (Content Delivery Network)?",
+    options: [
+      "To store user data",
+      "To distribute content across multiple servers for faster delivery",
+      "To encrypt data transmission",
+      "To authenticate users"
+    ],
+    correctAnswer: 1,
+    explanation: "A CDN distributes content across multiple geographically dispersed servers to reduce latency and improve load times for users.",
+    difficulty: "Easy",
+    category: "Networking",
+    topic: "Content Delivery",
+    marks: 4
+  },
+  {
+    text: "In database transactions, what does the 'A' in ACID properties stand for?",
+    options: [
+      "Atomicity",
+      "Availability",
+      "Authentication",
+      "Authorization"
+    ],
+    correctAnswer: 0,
+    explanation: "Atomicity ensures that all operations within a transaction are completed successfully or none at all, maintaining data integrity.",
+    difficulty: "Medium",
+    category: "Databases",
+    topic: "Transactions",
+    marks: 4
+  },
+  {
+    text: "What is the main advantage of using a trie data structure?",
+    options: [
+      "Memory efficiency",
+      "Fast prefix-based searches",
+      "Simplicity of implementation",
+      "Balanced tree properties"
+    ],
+    correctAnswer: 1,
+    explanation: "Tries are particularly efficient for prefix-based searches and autocomplete functionality, with O(m) time complexity where m is the length of the key.",
+    difficulty: "Medium",
+    category: "Data Structures",
+    topic: "Trees",
+    marks: 4
+  },
+  {
+    text: "Which design pattern is used to ensure a class has only one instance?",
+    options: [
+      "Factory Pattern",
+      "Observer Pattern",
+      "Singleton Pattern",
+      "Strategy Pattern"
+    ],
+    correctAnswer: 2,
+    explanation: "The Singleton pattern restricts the instantiation of a class to one single instance and provides global access to that instance.",
+    difficulty: "Easy",
+    category: "Software Engineering",
+    topic: "Design Patterns",
+    marks: 4
+  },
+  {
+    text: "What is the time complexity of building a heap from an unordered array?",
+    options: [
+      "O(1)",
+      "O(log n)",
+      "O(n)",
+      "O(n log n)"
+    ],
+    correctAnswer: 2,
+    explanation: "Building a heap from an unordered array can be done in linear time O(n) using the bottom-up heap construction algorithm.",
+    difficulty: "Hard",
+    category: "Data Structures",
+    topic: "Heaps",
+    marks: 4
+  },
+  {
+    text: "In CSS, what does the 'z-index' property control?",
+    options: [
+      "Horizontal positioning",
+      "Vertical positioning",
+      "Stacking order of elements",
+      "Element size"
+    ],
+    correctAnswer: 2,
+    explanation: "The z-index property controls the stacking order of positioned elements, determining which elements appear in front of others.",
+    difficulty: "Easy",
+    category: "Web Development",
+    topic: "CSS",
+    marks: 4
+  },
+  {
+    text: "What is the primary purpose of a message queue in system design?",
+    options: [
+      "Data storage",
+      "Asynchronous communication between services",
+      "User authentication",
+      "Load balancing"
+    ],
+    correctAnswer: 1,
+    explanation: "Message queues enable asynchronous communication between services, decoupling components and improving system reliability.",
+    difficulty: "Medium",
+    category: "System Design",
+    topic: "Messaging",
+    marks: 4
+  },
+  {
+    text: "Which algorithm is used for finding the shortest path in a weighted graph with negative edge weights?",
+    options: [
+      "Dijkstra's Algorithm",
+      "Bellman-Ford Algorithm",
+      "Floyd-Warshall Algorithm",
+      "Prim's Algorithm"
+    ],
+    correctAnswer: 1,
+    explanation: "Bellman-Ford algorithm can handle graphs with negative edge weights and detect negative cycles, unlike Dijkstra's algorithm.",
+    difficulty: "Hard",
+    category: "Algorithms",
+    topic: "Graph Algorithms",
+    marks: 4
+  },
+  {
+    text: "What is the main difference between SQL and NoSQL databases?",
+    options: [
+      "SQL is faster than NoSQL",
+      "SQL uses structured queries, NoSQL uses flexible data models",
+      "SQL is open-source, NoSQL is proprietary",
+      "SQL is for web apps, NoSQL is for mobile apps"
+    ],
+    correctAnswer: 1,
+    explanation: "SQL databases use structured schemas and SQL for queries, while NoSQL databases use flexible data models like documents, key-value, or graphs.",
+    difficulty: "Medium",
+    category: "Databases",
+    topic: "Database Types",
+    marks: 4
+  },
+  {
+    text: "In Git, what does the 'rebase' command do?",
+    options: [
+      "Deletes a branch",
+      "Moves or combines a sequence of commits to a new base commit",
+      "Creates a new repository",
+      "Reverts changes"
+    ],
+    correctAnswer: 1,
+    explanation: "Git rebase moves or combines a sequence of commits to a new base commit, maintaining a linear project history.",
+    difficulty: "Medium",
+    category: "Software Engineering",
+    topic: "Version Control",
+    marks: 4
+  },
+  {
+    text: "What is the time complexity of the Knuth-Morris-Pratt string matching algorithm?",
+    options: [
+      "O(1)",
+      "O(m + n)",
+      "O(m * n)",
+      "O(n log n)"
+    ],
+    correctAnswer: 1,
+    explanation: "KMP algorithm has a time complexity of O(m + n) where m is the pattern length and n is the text length.",
+    difficulty: "Hard",
+    category: "Algorithms",
+    topic: "String Algorithms",
+    marks: 4
+  },
+  {
+    text: "Which HTTP header is used for cache control?",
+    options: [
+      "Content-Type",
+      "Authorization",
+      "Cache-Control",
+      "Accept"
+    ],
+    correctAnswer: 2,
+    explanation: "The Cache-Control header is used to specify caching policies in both requests and responses.",
+    difficulty: "Easy",
+    category: "Web Development",
+    topic: "HTTP Headers",
+    marks: 4
+  },
+  {
+    text: "What is the primary purpose of a circuit breaker pattern in microservices?",
+    options: [
+      "Load balancing",
+      "Preventing cascading failures",
+      "Data encryption",
+      "User authentication"
+    ],
+    correctAnswer: 1,
+    explanation: "The circuit breaker pattern prevents cascading failures by stopping requests to a failing service temporarily.",
+    difficulty: "Medium",
+    category: "System Design",
+    topic: "Resilience Patterns",
+    marks: 4
+  },
+  {
+    text: "In machine learning, what is overfitting?",
+    options: [
+      "Using too little training data",
+      "Model performs well on training data but poorly on new data",
+      "Using too many features",
+      "Slow training process"
+    ],
+    correctAnswer: 1,
+    explanation: "Overfitting occurs when a model learns the training data too well, including noise and outliers, resulting in poor generalization.",
+    difficulty: "Medium",
+    category: "Technical Interview",
+    topic: "Machine Learning",
+    marks: 4
+  },
+  {
+    text: "What is the time complexity of finding the median in a sorted array?",
+    options: [
+      "O(1)",
+      "O(log n)",
+      "O(n)",
+      "O(n log n)"
+    ],
+    correctAnswer: 0,
+    explanation: "In a sorted array of size n, the median can be found in constant time O(1) by accessing the middle element(s).",
+    difficulty: "Easy",
+    category: "Algorithms",
+    topic: "Searching",
+    marks: 4
+  },
+  {
+    text: "Which data structure is most appropriate for implementing an LRU (Least Recently Used) cache?",
+    options: [
+      "Array",
+      "Hash Map + Doubly Linked List",
+      "Stack",
+      "Queue"
+    ],
+    correctAnswer: 1,
+    explanation: "An LRU cache is typically implemented using a combination of a hash map for O(1) access and a doubly linked list for maintaining order.",
+    difficulty: "Hard",
+    category: "Data Structures",
+    topic: "Caching",
+    marks: 4
+  },
+  {
+    text: "What is the main advantage of using Docker containers?",
+    options: [
+      "Better security",
+      "Lightweight virtualization and consistent environments",
+      "Faster internet connection",
+      "Larger storage capacity"
+    ],
+    correctAnswer: 1,
+    explanation: "Docker containers provide lightweight virtualization and ensure consistent environments across development, testing, and production.",
+    difficulty: "Medium",
+    category: "System Design",
+    topic: "Containerization",
+    marks: 4
+  },
+  {
+    text: "In object-oriented programming, what is encapsulation?",
+    options: [
+      "Combining data and methods that operate on that data",
+      "Creating new classes from existing classes",
+      "Allowing objects of different types to be treated as the same type",
+      "Hiding implementation details and restricting access to object components"
+    ],
+    correctAnswer: 3,
+    explanation: "Encapsulation is the bundling of data with the methods that operate on that data and restricting direct access to object components.",
+    difficulty: "Medium",
+    category: "Object-Oriented Programming",
+    topic: "Encapsulation",
+    marks: 4
+  },
+  {
+    text: "What is the time complexity of the Floyd-Warshall algorithm for finding all-pairs shortest paths?",
+    options: [
+      "O(V)",
+      "O(E)",
+      "O(V^2)",
+      "O(V^3)"
+    ],
+    correctAnswer: 3,
+    explanation: "Floyd-Warshall algorithm has a time complexity of O(V^3) where V is the number of vertices in the graph.",
+    difficulty: "Hard",
+    category: "Algorithms",
+    topic: "Graph Algorithms",
+    marks: 4
+  },
+  {
+    text: "Which HTTP method should be used for updating a resource partially?",
+    options: [
+      "POST",
+      "PUT",
+      "PATCH",
+      "DELETE"
+    ],
+    correctAnswer: 2,
+    explanation: "The PATCH method is used for partial updates to a resource, while PUT is typically used for complete replacement.",
+    difficulty: "Easy",
+    category: "Web Development",
+    topic: "HTTP Methods",
     marks: 4
   }
 ];

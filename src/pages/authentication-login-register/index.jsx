@@ -10,6 +10,7 @@ import RegisterForm from './components/RegisterForm';
 import AuthFooter from './components/AuthFooter';
 import { USER_ROLES } from '../../utils/authService';
 import * as authService from '../../utils/authService';
+import DecorativeBackground from '../../components/DecorativeBackground';
 
 const AuthenticationPage = () => {
   const [activeTab, setActiveTab] = useState('login');
@@ -186,7 +187,8 @@ const AuthenticationPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center p-4">
+    <div className="min-h-screen bg-background flex items-center justify-center p-4 relative">
+      <DecorativeBackground />
       <motion.div
         variants={containerVariants}
         initial="hidden"

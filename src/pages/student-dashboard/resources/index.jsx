@@ -84,7 +84,7 @@ const Resources = () => {
       duration: "25 min",
       difficulty: "Intermediate",
       thumbnail: "/logo.png", // Use local logo instead of external image
-      url: "#"
+      url: "https://www.youtube.com/playlist?list=PLpyc33gOcbVADMKqylI__O_O_RMeHTyNK"
     },
     {
       id: 3,
@@ -95,7 +95,7 @@ const Resources = () => {
       duration: "10 min read",
       difficulty: "Beginner",
       thumbnail: "/logo.png", // Use local logo instead of external image
-      url: "#"
+      url: "https://www.youtube.com/playlist?list=PLpyc33gOcbVBbD8Vfy-gCbivjSSHbMpUX"
     },
     {
       id: 4,
@@ -106,7 +106,7 @@ const Resources = () => {
       duration: "30 min",
       difficulty: "Advanced",
       thumbnail: "/logo.png", // Use local logo instead of external image
-      url: "#"
+      url: "https://youtu.be/f_81iD62SWU?si=_JBjrwiEfahlnpiQ"
     },
     {
       id: 5,
@@ -128,7 +128,7 @@ const Resources = () => {
       duration: "12 min read",
       difficulty: "Beginner",
       thumbnail: "/logo.png", // Use local logo instead of external image
-      url: "#"
+      url: "https://youtu.be/_f9_6ZM-Qug?si=hwLr3WDwjlYtmhd9"
     }
   ];
 
@@ -261,7 +261,12 @@ const Resources = () => {
                         <p className="text-muted-foreground text-sm mb-4">{resource.description}</p>
                         <div className="flex justify-between items-center">
                           <span className="text-xs text-muted-foreground">{resource.duration}</span>
-                          <Button size="sm" iconName="Download">
+                          <Button 
+                            size="sm" 
+                            iconName="Download"
+                            onClick={() => window.open(resource.url, '_blank')}
+                            disabled={resource.url === '#'}
+                          >
                             Access
                           </Button>
                         </div>

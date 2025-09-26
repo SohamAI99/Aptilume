@@ -8,14 +8,14 @@ const metaQuiz = {
   description: "Product management and analytical thinking test designed for Meta's product roles and technical positions.",
   difficulty: "Hard",
   duration: 75, // 75 minutes
-  questionCount: 26, // Updated to match actual number of questions
+  questionCount: 50, // Updated to 50 questions
   category: "Product Management",
   tags: ["meta", "product-sense", "product-management", "analytics"],
   isPublished: true,
   isRecommended: true
 };
 
-// Meta Product Sense Assessment questions
+// Meta Product Sense Assessment questions - expanded to 50 questions
 const metaQuestions = [
   {
     text: "What is the first step in evaluating whether a product feature should be built?",
@@ -275,6 +275,247 @@ const metaQuestions = [
     difficulty: "Medium",
     category: "Prioritization",
     topic: "Frameworks",
+    marks: 4
+  },
+  // Additional 24 questions to reach 50 total
+  {
+    text: "What is the primary purpose of a product vision statement?",
+    options: ["Define engineering requirements", "Communicate long-term product direction", "Set quarterly goals", "List feature priorities"],
+    correctAnswer: 1,
+    explanation: "A product vision statement articulates the long-term direction and aspirations for the product.",
+    difficulty: "Easy",
+    category: "Product Strategy",
+    topic: "Vision",
+    marks: 4
+  },
+  {
+    text: "Which metric is most appropriate for measuring user engagement with a new feature?",
+    options: ["Feature adoption rate", "Total users", "Revenue growth", "Server uptime"],
+    correctAnswer: 0,
+    explanation: "Feature adoption rate directly measures how many users are actively using the new feature.",
+    difficulty: "Medium",
+    category: "Metrics",
+    topic: "Feature Analytics",
+    marks: 4
+  },
+  {
+    text: "What is the main advantage of using a cohort analysis?",
+    options: ["Simpler data visualization", "Tracking user behavior over time", "Reduced data storage", "Faster report generation"],
+    correctAnswer: 1,
+    explanation: "Cohort analysis tracks the behavior of a group of users over time, revealing patterns in user retention and engagement.",
+    difficulty: "Medium",
+    category: "Analytics",
+    topic: "Cohort Analysis",
+    marks: 4
+  },
+  {
+    text: "When should a product manager conduct user research?",
+    options: ["Only during initial product development", "Only when there are user complaints", "Throughout the product lifecycle", "Only before major releases"],
+    correctAnswer: 2,
+    explanation: "User research should be an ongoing activity throughout the product lifecycle to continuously understand user needs.",
+    difficulty: "Easy",
+    category: "Product Discovery",
+    topic: "User Research",
+    marks: 4
+  },
+  {
+    text: "What is the key difference between a KPI and a metric?",
+    options: ["KPIs are quantitative, metrics are qualitative", "KPIs measure success against objectives, metrics are general measurements", "KPIs are for executives, metrics are for teams", "There is no difference"],
+    correctAnswer: 1,
+    explanation: "KPIs (Key Performance Indicators) are specific metrics that measure progress toward strategic objectives.",
+    difficulty: "Medium",
+    category: "Metrics",
+    topic: "KPIs",
+    marks: 4
+  },
+  {
+    text: "Which approach is most effective for reducing feature creep?",
+    options: ["Add all requested features", "Strictly follow the product roadmap", "Regularly review and prioritize feature requests", "Ignore user feedback"],
+    correctAnswer: 2,
+    explanation: "Regular review and prioritization ensures that only the most valuable features are implemented.",
+    difficulty: "Medium",
+    category: "Product Strategy",
+    topic: "Scope Management",
+    marks: 4
+  },
+  {
+    text: "What is the primary goal of a product-market fit survey?",
+    options: ["Measure customer satisfaction", "Determine if customers would be disappointed without the product", "Calculate revenue growth", "Assess competitor positioning"],
+    correctAnswer: 1,
+    explanation: "Product-market fit surveys, like the PMF survey, measure how disappointed users would be if they could no longer use the product.",
+    difficulty: "Medium",
+    category: "Product Discovery",
+    topic: "Product-Market Fit",
+    marks: 4
+  },
+  {
+    text: "Which factor is most critical when entering a new international market?",
+    options: ["Local competition", "Cultural and regulatory considerations", "Translation costs", "Marketing budget"],
+    correctAnswer: 1,
+    explanation: "Cultural and regulatory considerations are critical for successful international expansion and compliance.",
+    difficulty: "Hard",
+    category: "Product Strategy",
+    topic: "International Expansion",
+    marks: 4
+  },
+  {
+    text: "What is the main purpose of a product backlog?",
+    options: ["Track engineering progress", "Prioritize and organize product work", "Document user stories", "Manage stakeholder expectations"],
+    correctAnswer: 1,
+    explanation: "A product backlog is a prioritized list of work items that need to be done to develop and improve the product.",
+    difficulty: "Easy",
+    category: "Product Management",
+    topic: "Agile",
+    marks: 4
+  },
+  {
+    text: "Which user research method is best for understanding 'why' users behave a certain way?",
+    options: ["Analytics data", "Surveys", "User interviews", "A/B testing"],
+    correctAnswer: 2,
+    explanation: "User interviews provide qualitative insights into user motivations, behaviors, and pain points.",
+    difficulty: "Medium",
+    category: "Product Discovery",
+    topic: "User Research",
+    marks: 4
+  },
+  {
+    text: "What is the primary benefit of using a minimum viable product (MVP)?",
+    options: ["Reduce development costs", "Test product assumptions with minimal resources", "Launch quickly", "Generate immediate revenue"],
+    correctAnswer: 1,
+    explanation: "An MVP allows teams to test core product assumptions with minimal development effort and resources.",
+    difficulty: "Medium",
+    category: "Product Discovery",
+    topic: "MVP",
+    marks: 4
+  },
+  {
+    text: "Which pricing strategy is most appropriate for a new product in a competitive market?",
+    options: ["Premium pricing", "Penetration pricing", "Cost-plus pricing", "Value-based pricing"],
+    correctAnswer: 1,
+    explanation: "Penetration pricing helps gain market share quickly by setting a low initial price in a competitive market.",
+    difficulty: "Medium",
+    category: "Monetization",
+    topic: "Pricing Strategy",
+    marks: 4
+  },
+  {
+    text: "What is the main purpose of a go-to-market strategy?",
+    options: ["Define product features", "Plan product launch and adoption", "Set sales targets", "Identify competitors"],
+    correctAnswer: 1,
+    explanation: "A go-to-market strategy outlines how a product will be launched, marketed, and sold to customers.",
+    difficulty: "Medium",
+    category: "Product Strategy",
+    topic: "Go-to-Market",
+    marks: 4
+  },
+  {
+    text: "Which metric is most useful for measuring the success of a freemium model?",
+    options: ["Total users", "Conversion rate from free to paid", "Monthly active users", "Customer acquisition cost"],
+    correctAnswer: 1,
+    explanation: "Conversion rate from free to paid users is the key metric for evaluating freemium model success.",
+    difficulty: "Medium",
+    category: "Monetization",
+    topic: "Freemium Model",
+    marks: 4
+  },
+  {
+    text: "What is the primary advantage of using a product-led growth strategy?",
+    options: ["Lower customer acquisition costs", "Higher profit margins", "Faster sales cycles", "Reduced engineering effort"],
+    correctAnswer: 0,
+    explanation: "Product-led growth leverages the product itself to drive user acquisition, reducing reliance on sales and marketing.",
+    difficulty: "Hard",
+    category: "Product Strategy",
+    topic: "Growth Strategy",
+    marks: 4
+  },
+  {
+    text: "Which approach is best for handling technical debt while maintaining product velocity?",
+    options: ["Ignore technical debt", "Allocate dedicated sprints for tech debt", "Refactor continuously during feature development", "Hire more engineers"],
+    correctAnswer: 2,
+    explanation: "Continuous refactoring during feature development balances addressing tech debt with delivering product value.",
+    difficulty: "Hard",
+    category: "Software Engineering",
+    topic: "Technical Debt",
+    marks: 4
+  },
+  {
+    text: "What is the main purpose of a product council or review board?",
+    options: ["Make final product decisions", "Coordinate cross-functional teams", "Review and prioritize product initiatives", "Manage product budgets"],
+    correctAnswer: 2,
+    explanation: "A product council reviews and prioritizes product initiatives to ensure alignment with company strategy and resource allocation.",
+    difficulty: "Medium",
+    category: "Product Management",
+    topic: "Governance",
+    marks: 4
+  },
+  {
+    text: "Which factor is most important when prioritizing a product roadmap?",
+    options: ["Engineering capacity", "Customer requests", "Strategic business objectives", "Market trends"],
+    correctAnswer: 2,
+    explanation: "Strategic business objectives should guide roadmap prioritization to ensure all efforts contribute to long-term success.",
+    difficulty: "Medium",
+    category: "Product Strategy",
+    topic: "Roadmap Planning",
+    marks: 4
+  },
+  {
+    text: "What is the primary benefit of using customer journey mapping?",
+    options: ["Create marketing materials", "Identify pain points and opportunities across the user experience", "Track sales performance", "Measure customer satisfaction"],
+    correctAnswer: 1,
+    explanation: "Customer journey mapping visualizes the entire user experience to identify pain points and improvement opportunities.",
+    difficulty: "Medium",
+    category: "Product Discovery",
+    topic: "User Experience",
+    marks: 4
+  },
+  {
+    text: "Which approach is most effective for reducing user churn?",
+    options: ["Offer discounts", "Improve onboarding experience", "Increase marketing spend", "Add more features"],
+    correctAnswer: 1,
+    explanation: "Improving the onboarding experience helps users understand and realize value from the product quickly, reducing early churn.",
+    difficulty: "Medium",
+    category: "Product Strategy",
+    topic: "Retention",
+    marks: 4
+  },
+  {
+    text: "What is the main purpose of a product requirement document (PRD)?",
+    options: ["Assign engineering tasks", "Define success metrics", "Communicate product vision and requirements", "Document technical specs"],
+    correctAnswer: 2,
+    explanation: "A PRD communicates the product vision, goals, requirements, and success criteria to all stakeholders.",
+    difficulty: "Easy",
+    category: "Product Management",
+    topic: "Documentation",
+    marks: 4
+  },
+  {
+    text: "Which metric is most appropriate for measuring product usability?",
+    options: ["Task completion rate", "Monthly active users", "Revenue per user", "Customer lifetime value"],
+    correctAnswer: 0,
+    explanation: "Task completion rate measures how successfully users can accomplish specific tasks, indicating usability.",
+    difficulty: "Medium",
+    category: "Metrics",
+    topic: "Usability",
+    marks: 4
+  },
+  {
+    text: "What is the primary advantage of using OKRs (Objectives and Key Results)?",
+    options: ["Simplify reporting", "Align teams on measurable outcomes", "Reduce meeting time", "Improve budget allocation"],
+    correctAnswer: 1,
+    explanation: "OKRs align teams around ambitious objectives and measurable key results that drive progress toward strategic goals.",
+    difficulty: "Medium",
+    category: "Product Management",
+    topic: "Goal Setting",
+    marks: 4
+  },
+  {
+    text: "Which approach is best for managing product feedback from multiple sources?",
+    options: ["Ignore conflicting feedback", "Prioritize based on source credibility", "Centralize and categorize feedback", "Implement all feedback immediately"],
+    correctAnswer: 2,
+    explanation: "Centralizing and categorizing feedback helps identify patterns and prioritize based on user impact and strategic alignment.",
+    difficulty: "Medium",
+    category: "Product Strategy",
+    topic: "Feedback Management",
     marks: 4
   }
 ];
