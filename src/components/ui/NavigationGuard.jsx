@@ -17,7 +17,15 @@ const NavigationGuard = ({
     '/admin-dashboard',
     '/quiz-rules-instructions', 
     '/password-gate-verification',
-    '/exam-interface'
+    '/exam-interface',
+    '/leaderboard', // Add leaderboard to protected routes
+    '/results-review',
+    '/student/quizzes',
+    '/student/analytics',
+    '/student/resources',
+    '/student/attempt-history',
+    '/student/profile',
+    '/student/settings'
   ];
 
   // Routes that should redirect authenticated users

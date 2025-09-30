@@ -3,7 +3,7 @@ import { Camera, Mic, Monitor, Volume2, Eye, Users, AlertTriangle, CheckCircle }
 import { Button } from '../../../components/ui/Button';
 
 const ProctoringSidebar = ({ 
-  isVisible = false, 
+  isVisible = true, // Default to true to ensure it's visible during exams
   onToggle,
   violations = [],
   webcamEnabled = true,
@@ -83,10 +83,10 @@ const ProctoringSidebar = ({
     }
   };
 
-  if (!isVisible) return null;
-
+  // Always render the component but control visibility with CSS
+  // This ensures the proctoring features are always active during exams
   return (
-    <div className="fixed right-0 top-0 h-full w-80 bg-background border-l border-border shadow-lg z-40 transform transition-transform duration-300 ease-in-out">
+    <div className={`fixed right-0 top-0 h-full w-80 bg-background border-l border-border shadow-lg z-40 transform transition-transform duration-300 ease-in-out ${isVisible ? 'translate-x-0' : 'translate-x-full'}`}>
       {/* Header */}
       <div className="flex items-center justify-between p-4 border-b border-border">
         <h3 className="font-semibold text-foreground">Proctoring Panel</h3>

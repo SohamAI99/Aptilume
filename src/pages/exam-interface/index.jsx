@@ -32,7 +32,7 @@ const ExamInterface = () => {
   const [timeRemaining, setTimeRemaining] = useState(0);
   const [isSubmitModalOpen, setIsSubmitModalOpen] = useState(false);
   const [isMobilePaletteOpen, setIsMobilePaletteOpen] = useState(false);
-  const [isProctoringSidebarOpen, setIsProctoringSidebarOpen] = useState(false);
+  const [isProctoringSidebarOpen, setIsProctoringSidebarOpen] = useState(true); // Default to true
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [examStartTime] = useState(new Date());
   const [loading, setLoading] = useState(true);
@@ -659,7 +659,7 @@ const ExamInterface = () => {
           />
         </div>
 
-        {/* Proctoring Sidebar - restore original behavior */}
+        {/* Proctoring Sidebar - Always visible during exam */}
         <ProctoringSidebar
           isVisible={isProctoringSidebarOpen}
           onToggle={() => setIsProctoringSidebarOpen(!isProctoringSidebarOpen)}

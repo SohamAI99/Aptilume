@@ -194,6 +194,10 @@ const ResultsReview = () => {
     });
   };
 
+  const handleViewSimilarTests = () => {
+    navigate('/student/quizzes');
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
@@ -286,13 +290,20 @@ const ResultsReview = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex flex-col sm:flex-row items-center justify-between space-y-3 sm:space-y-0 sm:space-x-4">
             <div className="flex items-center space-x-3">
-              {/* Removed Back to Dashboard button */}
+              <Button
+                variant="outline"
+                iconName="LayoutDashboard"
+                iconPosition="left"
+                onClick={handleBackToDashboard}
+              >
+                Dashboard
+              </Button>
               
               <Button
                 variant="outline"
                 iconName="Eye"
                 iconPosition="left"
-                onClick={() => navigate('/quiz-rules-instructions')}
+                onClick={handleViewSimilarTests}
               >
                 View Similar Tests
               </Button>

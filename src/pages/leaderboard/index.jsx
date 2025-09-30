@@ -5,7 +5,7 @@ import * as authService from '../../utils/authService';
 import { listenToLeaderboardUsers, getAttemptsByUser } from '../../utils/dbService';
 import StudentNavigation from '../student-dashboard/components/StudentNavigation';
 import AccountSection from '../../components/ui/AccountSection';
-import { Trophy, Calendar, BarChart3, Target, TrendingUp, Award } from 'lucide-react';
+import { Trophy, Calendar, BarChart3, Target, TrendingUp, Award, Clock } from 'lucide-react';
 
 const Leaderboard = () => {
   const navigate = useNavigate();

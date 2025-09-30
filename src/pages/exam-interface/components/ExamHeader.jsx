@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from '../../../components/ui/Button';
-import { User, Clock, Timer, Minimize2, Maximize2, CheckCircle, AlertTriangle, X } from 'lucide-react';
+import { User, Clock, Timer, Minimize2, Maximize2, CheckCircle, AlertTriangle, X, Eye } from 'lucide-react';
 
 const ExamHeader = ({ 
   examTitle, 
@@ -93,6 +93,16 @@ const ExamHeader = ({
 
         {/* Right Section - Actions */}
         <div className="flex items-center space-x-3">
+          {/* Proctoring Toggle - Always visible during exam */}
+          <Button
+            variant="outline"
+            size="sm"
+            icon={<Eye className="h-4 w-4" />}
+            className="hidden md:flex"
+          >
+            Proctoring
+          </Button>
+
           {/* Fullscreen Toggle */}
           <Button
             variant="ghost"
@@ -141,6 +151,11 @@ const ExamHeader = ({
             <span className="text-muted-foreground">{currentTime?.toLocaleTimeString()}</span>
           </div>
           <div className="flex items-center space-x-2">
+            <Button
+              variant="ghost"
+              size="xs"
+              icon={<Eye className="h-3 w-3" />}
+            />
             <Button
               variant="ghost"
               size="xs"

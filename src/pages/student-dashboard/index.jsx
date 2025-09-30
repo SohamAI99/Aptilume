@@ -8,7 +8,7 @@ import FilterChips from './components/FilterChips';
 import SearchBar from './components/SearchBar';
 import SectionHeader from './components/SectionHeader';
 import EmptyState from './components/EmptyState';
-import { ArrowLeft, PlusCircle, BarChart3 } from 'lucide-react';
+import { ArrowLeft, PlusCircle, BarChart3, Trophy } from 'lucide-react';
 import CustomQuizModal from './components/CustomQuizModal';
 import { listenToQuizzes, listenToUser, getAttemptsByUser, getResultsByUser } from '../../utils/dbService';
 import * as authService from '../../utils/authService';
@@ -231,6 +231,13 @@ const StudentDashboard = () => {
                   </p>
                 </div>
                 <div className="flex gap-2">
+                  <Button 
+                    onClick={() => navigate('/leaderboard')} 
+                    variant="outline" 
+                    icon={<Trophy size={16} />}
+                  >
+                    Leaderboard
+                  </Button>
                   <Button 
                     onClick={() => setShowCustomQuiz(true)} 
                     variant="outline" 
