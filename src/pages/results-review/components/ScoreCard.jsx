@@ -1,5 +1,4 @@
 import React from 'react';
-import Icon from '../../../components/AppIcon';
 
 const ScoreCard = ({ title, value, icon, color = 'primary' }) => {
   const getColorClasses = (color) => {
@@ -19,10 +18,13 @@ const ScoreCard = ({ title, value, icon, color = 'primary' }) => {
     }
   };
 
+  // Map icon names to actual Lucide icons - we'll handle this in the parent component
+  // For now, we'll just render the icon passed as a prop
+
   return (
     <div className="text-center p-6 bg-white/50 rounded-2xl border border-border/20 hover:shadow-elevation-2 transition-all duration-200">
       <div className={`w-12 h-12 rounded-xl ${getColorClasses(color)} flex items-center justify-center mx-auto mb-3`}>
-        <Icon name={icon} size={24} />
+        {icon}
       </div>
       <div className="text-2xl font-bold text-foreground mb-1">{value}</div>
       <div className="text-sm text-muted-foreground">{title}</div>

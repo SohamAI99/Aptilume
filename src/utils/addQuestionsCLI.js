@@ -175,8 +175,8 @@ const runAddQuestionsScript = async () => {
   }
 };
 
-// Run the script if this file is executed directly
-if (import.meta.url === `file://${process.argv[1]}`) {
+// Run the script if this file is executed directly (Node.js environment only)
+if (typeof process !== 'undefined' && process.argv && import.meta.url === `file://${process.argv[1]}`) {
   runAddQuestionsScript();
 }
 

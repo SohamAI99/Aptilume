@@ -1,6 +1,6 @@
 import React from 'react';
-import Icon from '../../../components/AppIcon';
 import Button from '../../../components/ui/Button';
+import { ArrowRight } from 'lucide-react';
 
 const SectionHeader = ({ 
   title, 
@@ -11,12 +11,21 @@ const SectionHeader = ({
   count,
   className = '' 
 }) => {
+  // Map icon names to lucide-react icons
+  const getIcon = (iconName) => {
+    // Since we're not using AppIcon anymore, we'll just return null
+    // In a real implementation, you might want to map specific icon names to lucide-react icons
+    return null;
+  };
+
+  const iconComponent = icon ? getIcon(icon) : null;
+
   return (
     <div className={`flex items-center justify-between mb-6 ${className}`}>
       <div className="flex items-center gap-3">
-        {icon && (
+        {iconComponent && (
           <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center">
-            <Icon name={icon} size={20} className="text-primary" />
+            {iconComponent}
           </div>
         )}
         <div>
@@ -38,7 +47,7 @@ const SectionHeader = ({
         <Button
           variant="outline"
           size="sm"
-          iconName="ArrowRight"
+          icon={<ArrowRight size={16} />}
           iconPosition="right"
           onClick={onAction}
         >

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import Button from './ui/Button';
-import Icon from './AppIcon';
+import { Button } from './ui/Button';
+import { WifiOff, Wifi } from 'lucide-react';
 
 const NetworkErrorBoundary = ({ children }) => {
   const [isOnline, setIsOnline] = useState(navigator.onLine);
@@ -10,7 +10,7 @@ const NetworkErrorBoundary = ({ children }) => {
     // Add event listeners for online/offline events
     const handleOnline = () => {
       setIsOnline(true);
-      setShowOfflineMessage(false);
+      setShowOfflineMessage(true);
     };
 
     const handleOffline = () => {
@@ -42,15 +42,18 @@ const NetworkErrorBoundary = ({ children }) => {
 
   if (!isOnline) {
     return (
-      <div className="fixed top-4 right-4 z-50">
-        <div className="glass-card rounded-lg p-4 shadow-lg flex items-center gap-3">
-          <Icon name="WifiOff" size={20} className="text-warning" />
-          <div>
-            <div className="font-medium">Offline Mode</div>
-            <div className="text-sm text-muted-foreground">Some features may be limited</div>
+      <>
+        <div className="fixed top-4 right-4 z-50">
+          <div className="glass-card rounded-lg p-4 shadow-lg flex items-center gap-3">
+            <WifiOff className="h-5 w-5 text-warning" />
+            <div>
+              <div className="font-medium">Offline Mode</div>
+              <div className="text-sm text-muted-foreground">Some features may be limited</div>
+            </div>
           </div>
         </div>
-      </div>
+        {children}
+      </>
     );
   }
 
@@ -59,7 +62,7 @@ const NetworkErrorBoundary = ({ children }) => {
       {showOfflineMessage && (
         <div className="fixed top-4 right-4 z-50 animate-fade-in">
           <div className="glass-card rounded-lg p-4 shadow-lg flex items-center gap-3">
-            <Icon name="Wifi" size={20} className="text-success" />
+            <Wifi className="h-5 w-5 text-success" />
             <div>
               <div className="font-medium">Back Online</div>
               <div className="text-sm text-muted-foreground">All features restored</div>

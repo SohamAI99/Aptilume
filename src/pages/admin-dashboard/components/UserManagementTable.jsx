@@ -1,10 +1,20 @@
 import React, { useState } from 'react';
-import Icon from '../../../components/AppIcon';
-import Button from '../../../components/ui/Button';
+import { Button } from '../../../components/ui/Button';
 import Input from '../../../components/ui/Input';
 import Select from '../../../components/ui/Select';
 import { cn } from '../../../utils/cn';
 import { activateUser, deactivateUser, suspendUser } from '../../../utils/dbService';
+import { 
+  UserPlus, 
+  Download, 
+  Search, 
+  Eye, 
+  Edit, 
+  Check, 
+  X, 
+  UserX, 
+  Trash2 
+} from 'lucide-react';
 
 const UserManagementTable = ({ users }) => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -166,7 +176,7 @@ const UserManagementTable = ({ users }) => {
         <div className="flex items-center gap-3">
           <Button
             variant="outline"
-            iconName="UserPlus"
+            icon={<UserPlus className="h-4 w-4" />}
             iconPosition="left"
             onClick={() => console.log('Add new user')}
           >
@@ -174,7 +184,7 @@ const UserManagementTable = ({ users }) => {
           </Button>
           <Button
             variant="outline"
-            iconName="Download"
+            icon={<Download className="h-4 w-4" />}
             iconPosition="left"
             onClick={() => handleBulkAction('export')}
           >
@@ -193,7 +203,7 @@ const UserManagementTable = ({ users }) => {
               value={searchTerm}
               onChange={(e) => setSearchTerm(e?.target?.value)}
               className="w-full"
-              iconName="Search"
+              icon={<Search className="h-4 w-4" />}
             />
           </div>
           <Select
@@ -209,132 +219,114 @@ const UserManagementTable = ({ users }) => {
             placeholder="Filter by status"
           />
         </div>
-
-        {/* Bulk Actions */}
-        {selectedUsers?.length > 0 && (
-          <div className="mt-4 p-3 bg-primary/10 rounded-lg border border-primary/20">
-            <div className="flex items-center justify-between">
-              <span className="text-sm font-medium text-primary">
-                {selectedUsers?.length} user{selectedUsers?.length > 1 ? 's' : ''} selected
-              </span>
-              <div className="flex items-center gap-2">
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={() => handleBulkAction('activate')}
-                >
-                  Activate
-                </Button>
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={() => handleBulkAction('deactivate')}
-                >
-                  Deactivate
-                </Button>
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={() => handleBulkAction('export')}
-                >
-                  Export Selected
-                </Button>
-              </div>
-            </div>
-          </div>
-        )}
       </div>
 
       {/* Users Table */}
       <div className="glass-card rounded-xl overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full">
-            <thead className="bg-muted/50">
+            <thead className="bg-muted/30">
               <tr>
-                <th className="w-12 px-6 py-4">
+                <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
                   <input
                     type="checkbox"
-                    checked={filteredUsers?.length > 0 && selectedUsers?.length === filteredUsers?.length}
+                    checked={selectedUsers?.length === filteredUsers?.length && filteredUsers?.length > 0}
                     onChange={toggleAllUsers}
-                    className="rounded border-gray-300 text-primary focus:ring-primary"
+                    className="rounded"
                   />
                 </th>
-                <th className="px-6 py-4 text-left text-sm font-medium text-foreground">User</th>
-                <th className="px-6 py-4 text-left text-sm font-medium text-foreground">Role</th>
-                <th className="px-6 py-4 text-left text-sm font-medium text-foreground">Status</th>
-                <th className="px-6 py-4 text-left text-sm font-medium text-foreground">Join Date</th>
-                <th className="px-6 py-4 text-left text-sm font-medium text-foreground">Last Activity</th>
-                <th className="px-6 py-4 text-left text-sm font-medium text-foreground">Tests</th>
-                <th className="px-6 py-4 text-left text-sm font-medium text-foreground">Avg Score</th>
-                <th className="px-6 py-4 text-left text-sm font-medium text-foreground">Actions</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                  User
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                  Role
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                  Status
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                  Last Active
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                  Actions
+                </th>
               </tr>
             </thead>
             <tbody className="divide-y divide-border">
               {filteredUsers?.map((user) => (
-                <tr key={user?.id} className="hover:bg-muted/30 transition-colors">
-                  <td className="px-6 py-4">
+                <tr key={user?.id} className="hover:bg-muted/30">
+                  <td className="px-6 py-4 whitespace-nowrap">
                     <input
                       type="checkbox"
                       checked={selectedUsers?.includes(user?.id)}
                       onChange={() => toggleUserSelection(user?.id)}
-                      className="rounded border-gray-300 text-primary focus:ring-primary"
+                      className="rounded"
                     />
                   </td>
-                  <td className="px-6 py-4">
+                  <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center">
-                      <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center mr-3">
-                        <Icon name="User" size={14} color="white" />
+                      <div className="flex-shrink-0 h-10 w-10">
+                        <img
+                          className="h-10 w-10 rounded-full"
+                          src={user?.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(user?.name)}&background=0D8ABC&color=fff`}
+                          alt={user?.name}
+                        />
                       </div>
-                      <div>
-                        <div className="text-sm font-medium text-foreground">
-                          {user?.name || 'Unknown User'}
-                        </div>
-                        <div className="text-sm text-muted-foreground">
-                          {user?.email || 'No email'}
-                        </div>
+                      <div className="ml-4">
+                        <div className="text-sm font-medium text-foreground">{user?.name}</div>
+                        <div className="text-sm text-muted-foreground">{user?.email}</div>
                       </div>
                     </div>
                   </td>
-                  <td className="px-6 py-4">
+                  <td className="px-6 py-4 whitespace-nowrap">
                     {getRoleBadge(user?.userType)}
                   </td>
-                  <td className="px-6 py-4">
+                  <td className="px-6 py-4 whitespace-nowrap">
                     {getStatusBadge(user)}
                   </td>
-                  <td className="px-6 py-4 text-sm text-muted-foreground">
-                    {user?.createdAt ? new Date(user?.createdAt?.toDate?.()).toLocaleDateString() : 'N/A'}
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-muted-foreground">
+                    {user?.lastActive ? new Date(user?.lastActive?.seconds * 1000)?.toLocaleDateString() : 'Never'}
                   </td>
-                  <td className="px-6 py-4 text-sm text-muted-foreground">
-                    {user?.lastLoginAt ? new Date(user?.lastLoginAt?.toDate?.()).toLocaleDateString() : 'N/A'}
-                  </td>
-                  <td className="px-6 py-4 text-sm text-foreground">
-                    {user?.stats?.totalTestsTaken || 0}
-                  </td>
-                  <td className="px-6 py-4 text-sm text-foreground">
-                    {user?.stats?.averageScore ? `${Math.round(user?.stats?.averageScore)}%` : 'N/A'}
-                  </td>
-                  <td className="px-6 py-4">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                     <div className="flex items-center space-x-2">
                       <Button
-                        size="xs"
+                        size="sm"
                         variant="ghost"
-                        iconName="Edit"
+                        icon={<Eye className="h-4 w-4" />}
+                        onClick={() => console.log('View user', user?.id)}
+                      />
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        icon={<Edit className="h-4 w-4" />}
                         onClick={() => console.log('Edit user', user?.id)}
-                        className="p-1"
+                      />
+                      {user?.isActive ? (
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          icon={<X className="h-4 w-4 text-red-600" />}
+                          onClick={() => handleUserAction(user?.id, 'deactivate')}
+                        />
+                      ) : (
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          icon={<Check className="h-4 w-4 text-green-600" />}
+                          onClick={() => handleUserAction(user?.id, 'activate')}
+                        />
+                      )}
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        icon={<UserX className="h-4 w-4 text-yellow-600" />}
+                        onClick={() => handleUserAction(user?.id, 'suspend')}
                       />
                       <Button
-                        size="xs"
+                        size="sm"
                         variant="ghost"
-                        iconName={user?.isActive === true ? 'UserX' : 'UserCheck'}
-                        onClick={() => handleUserAction(user?.id, user?.isActive === true ? 'deactivate' : 'activate')}
-                        className="p-1"
-                      />
-                      <Button
-                        size="xs"
-                        variant="ghost"
-                        iconName="Trash2"
+                        icon={<Trash2 className="h-4 w-4 text-red-600" />}
                         onClick={() => handleUserAction(user?.id, 'delete')}
-                        className="p-1 text-destructive hover:text-destructive"
                       />
                     </div>
                   </td>
@@ -343,15 +335,30 @@ const UserManagementTable = ({ users }) => {
             </tbody>
           </table>
         </div>
-        
-        {filteredUsers?.length === 0 && (
-          <div className="text-center py-12">
-            <Icon name="Users" size={48} className="mx-auto text-muted-foreground/50 mb-4" />
-            <h3 className="text-lg font-medium text-foreground mb-2">No users found</h3>
-            <p className="text-muted-foreground">Try adjusting your search or filter criteria.</p>
-          </div>
-        )}
       </div>
+
+      {/* Empty State */}
+      {filteredUsers?.length === 0 && (
+        <div className="glass-card rounded-xl p-12 text-center">
+          <div className="mx-auto w-16 h-16 bg-muted rounded-full flex items-center justify-center mb-4">
+            <Search className="h-8 w-8 text-muted-foreground" />
+          </div>
+          <h3 className="text-lg font-medium text-foreground mb-1">No users found</h3>
+          <p className="text-muted-foreground mb-4">
+            Try adjusting your search or filter criteria
+          </p>
+          <Button
+            variant="outline"
+            onClick={() => {
+              setSearchTerm('');
+              setRoleFilter('all');
+              setStatusFilter('all');
+            }}
+          >
+            Clear Filters
+          </Button>
+        </div>
+      )}
     </div>
   );
 };

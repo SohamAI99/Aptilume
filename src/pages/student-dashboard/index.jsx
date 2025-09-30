@@ -8,7 +8,7 @@ import FilterChips from './components/FilterChips';
 import SearchBar from './components/SearchBar';
 import SectionHeader from './components/SectionHeader';
 import EmptyState from './components/EmptyState';
-import Icon from '../../components/AppIcon';
+import { ArrowLeft, PlusCircle, BarChart3 } from 'lucide-react';
 import CustomQuizModal from './components/CustomQuizModal';
 import { listenToQuizzes, listenToUser, getAttemptsByUser, getResultsByUser } from '../../utils/dbService';
 import * as authService from '../../utils/authService';
@@ -90,7 +90,13 @@ const StudentDashboard = () => {
     let unsubscribe;
     const setupTestsListener = () => {
       unsubscribe = listenToQuizzes((tests) => {
-        setActiveTests(tests);
+        // Filter out the unwanted quizzes
+        const filteredTests = tests.filter(test => 
+          !test.title.includes("Startup Technical Challenge") &&
+          !test.title.includes("Amazon Leadership Principles Quiz") &&
+          !test.title.includes("Google Software Engineer Assessment")
+        );
+        setActiveTests(filteredTests);
       }, { isPublished: true });
       setTestsUnsubscribe(() => unsubscribe);
     };
@@ -135,7 +141,17 @@ const StudentDashboard = () => {
       const unsubscribe = auth.onAuthStateChanged((u) => {
         if (unsub) unsub();
         if (!u) return setRecommendedTests([]);
-        unsub = listenToQuizzes(setRecommendedTests, { isRecommended: true, isPublished: true });
+        // Filter out the unwanted quizzes from recommended tests as well
+        const unsubscribeTests = listenToQuizzes((tests) => {
+          const filteredTests = tests.filter(test => 
+            test.isRecommended && test.isPublished &&
+            !test.title.includes("Startup Technical Challenge") &&
+            !test.title.includes("Amazon Leadership Principles Quiz") &&
+            !test.title.includes("Google Software Engineer Assessment")
+          );
+          setRecommendedTests(filteredTests);
+        });
+        unsub = unsubscribeTests;
       });
       
       return () => { if (unsubscribe) unsubscribe(); if (unsub) unsub(); };
@@ -218,14 +234,14 @@ const StudentDashboard = () => {
                   <Button 
                     onClick={() => setShowCustomQuiz(true)} 
                     variant="outline" 
-                    iconName="Plus"
+                    icon={<PlusCircle size={16} />}
                   >
                     Custom Quiz
                   </Button>
                   <Button 
                     onClick={() => navigate('/student/analytics')} 
                     variant="default" 
-                    iconName="BarChart3"
+                    icon={<BarChart3 size={16} />}
                   >
                     Analytics
                   </Button>
@@ -254,7 +270,7 @@ const StudentDashboard = () => {
               title="Recommended for You" 
               subtitle="Based on your performance and interests"
               actionText="View All"
-              onAction={() => console.log('View all recommended')}
+              onAction={() => navigate('/student/quizzes')}
             />
             
             {filteredRecommendedTests.length > 0 ? (
@@ -298,7 +314,7 @@ const StudentDashboard = () => {
                 title="Recent Attempts" 
                 subtitle="Your most recent test attempts"
                 actionText="View All"
-                onAction={() => navigate('/attempt-history')}
+                onAction={() => navigate('/student/attempt-history')}
               />
               
               {recentAttempts.length > 0 ? (

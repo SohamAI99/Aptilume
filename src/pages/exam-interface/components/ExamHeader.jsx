@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import Button from '../../../components/ui/Button';
-import Icon from '../../../components/AppIcon';
+import { Button } from '../../../components/ui/Button';
+import { User, Clock, Timer, Minimize2, Maximize2, CheckCircle, AlertTriangle, X } from 'lucide-react';
 
 const ExamHeader = ({ 
   examTitle, 
@@ -62,11 +62,11 @@ const ExamHeader = ({
           
           <div className="hidden md:flex items-center space-x-4 text-sm">
             <div className="flex items-center space-x-2">
-              <Icon name="User" size={16} className="text-muted-foreground" />
+              <User className="h-4 w-4 text-muted-foreground" />
               <span className="text-foreground font-medium">{studentName}</span>
             </div>
             <div className="flex items-center space-x-2">
-              <Icon name="Clock" size={16} className="text-muted-foreground" />
+              <Clock className="h-4 w-4 text-muted-foreground" />
               <span className="text-muted-foreground">
                 {currentTime?.toLocaleTimeString()}
               </span>
@@ -78,10 +78,8 @@ const ExamHeader = ({
         <div className="flex items-center">
           <div className={`px-4 py-2 rounded-lg border-2 ${getTimeBackground()}`}>
             <div className="flex items-center space-x-2">
-              <Icon 
-                name="Timer" 
-                size={20} 
-                className={timeRemaining <= 300 ? 'text-destructive animate-pulse' : 'text-muted-foreground'} 
+              <Timer 
+                className={`h-5 w-5 ${timeRemaining <= 300 ? 'text-destructive animate-pulse' : 'text-muted-foreground'}`} 
               />
               <div className="text-center">
                 <div className={`text-xl font-mono font-bold ${getTimeColor()}`}>
@@ -99,7 +97,7 @@ const ExamHeader = ({
           <Button
             variant="ghost"
             size="sm"
-            iconName={isFullscreen ? "Minimize2" : "Maximize2"}
+            icon={isFullscreen ? <Minimize2 className="h-4 w-4" /> : <Maximize2 className="h-4 w-4" />}
             onClick={onMinimize}
             className="hidden md:flex"
           >
@@ -110,7 +108,7 @@ const ExamHeader = ({
           <Button
             variant="success"
             size="sm"
-            iconName="CheckCircle"
+            icon={<CheckCircle className="h-4 w-4" />}
             iconPosition="left"
             onClick={onSubmit}
             className="bg-green-600 hover:bg-green-700"
@@ -122,7 +120,7 @@ const ExamHeader = ({
           <Button
             variant="destructive"
             size="sm"
-            iconName="AlertTriangle"
+            icon={<AlertTriangle className="h-4 w-4" />}
             onClick={() => {
               if (window.confirm('Are you sure you want to exit the exam? Your progress will be lost.')) {
                 window.location.href = '/student-dashboard';
@@ -146,13 +144,13 @@ const ExamHeader = ({
             <Button
               variant="ghost"
               size="xs"
-              iconName="Maximize2"
+              icon={<Maximize2 className="h-3 w-3" />}
               onClick={onMinimize}
             />
             <Button
               variant="destructive"
               size="xs"
-              iconName="X"
+              icon={<X className="h-3 w-3" />}
               onClick={() => {
                 if (window.confirm('Exit exam?')) {
                   window.location.href = '/student-dashboard';

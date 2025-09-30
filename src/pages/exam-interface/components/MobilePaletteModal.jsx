@@ -1,5 +1,6 @@
 import React from 'react';
-import Button from '../../../components/ui/Button';
+import { Button } from '../../../components/ui/Button';
+import { X } from 'lucide-react';
 import QuestionPalette from './QuestionPalette';
 
 const MobilePaletteModal = ({ 
@@ -32,7 +33,7 @@ const MobilePaletteModal = ({
           <Button
             variant="ghost"
             size="sm"
-            iconName="X"
+            icon={<X className="h-4 w-4" />}
             onClick={onClose}
           />
         </div>

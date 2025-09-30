@@ -3,8 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { reauthenticateWithCredential, EmailAuthProvider } from 'firebase/auth';
 import { auth } from '../../../utils/firebase';
 import Input from '../../../components/ui/Input';
-import Button from '../../../components/ui/Button';
-import Icon from '../../../components/AppIcon';
+import { Button } from '../../../components/ui/Button';
+import { Eye, EyeOff, Clock, Shield, Lock } from 'lucide-react';
 
 const PasswordVerificationForm = ({ 
   onVerify, 
@@ -96,17 +96,18 @@ const PasswordVerificationForm = ({
           className="absolute right-3 top-9 text-muted-foreground hover:text-foreground transition-colors focus-ring rounded p-1"
           disabled={isLoading || isDelayed}
         >
-          <Icon 
-            name={showPassword ? "EyeOff" : "Eye"} 
-            size={18} 
-          />
+          {showPassword ? (
+            <EyeOff className="h-4 w-4" />
+          ) : (
+            <Eye className="h-4 w-4" />
+          )}
         </button>
       </div>
       {/* Delay Notice */}
       {isDelayed && (
         <div className="p-3 bg-warning/10 border border-warning/20 rounded-lg">
           <div className="flex items-center space-x-2">
-            <Icon name="Clock" size={16} className="text-warning" />
+            <Clock className="h-4 w-4 text-warning" />
             <p className="text-sm text-warning font-medium">
               Please wait {delayTime} seconds before trying again
             </p>
@@ -136,7 +137,7 @@ const PasswordVerificationForm = ({
           variant="default"
           disabled={!canSubmit}
           loading={isLoading}
-          iconName="Shield"
+          icon={<Shield className="h-4 w-4" />}
           iconPosition="left"
           className="order-1 sm:order-2 flex-1"
         >
@@ -146,11 +147,11 @@ const PasswordVerificationForm = ({
       {/* Security Indicators */}
       <div className="flex items-center justify-center space-x-4 pt-4 border-t border-border">
         <div className="flex items-center space-x-2">
-          <Icon name="Shield" size={14} className="text-success" />
+          <Shield className="h-3.5 w-3.5 text-success" />
           <span className="text-xs text-muted-foreground">SSL Secured</span>
         </div>
         <div className="flex items-center space-x-2">
-          <Icon name="Lock" size={14} className="text-success" />
+          <Lock className="h-3.5 w-3.5 text-success" />
           <span className="text-xs text-muted-foreground">Password Verified</span>
         </div>
       </div>

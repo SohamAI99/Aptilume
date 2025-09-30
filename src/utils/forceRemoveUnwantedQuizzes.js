@@ -1,6 +1,20 @@
-// Force remove unwanted quizzes - more aggressive approach
-import { db } from './firebase.js';
-import { collection, getDocs, deleteDoc, query, where } from 'firebase/firestore';
+import { initializeApp } from 'firebase/app';
+import { getFirestore, collection, getDocs, deleteDoc, query, where, doc } from 'firebase/firestore';
+
+// Firebase configuration from .env
+const firebaseConfig = {
+  apiKey: "AIzaSyA4LziZrzJH428rCYEPaojdrsjgcGRDwCw",
+  authDomain: "qkie-34136.firebaseapp.com",
+  projectId: "qkie-34136",
+  storageBucket: "qkie-34136.appspot.com",
+  messagingSenderId: "399296096924",
+  appId: "1:399296096924:web:1958478e9ab011e799db59",
+  measurementId: "G-MDSK70WS4H"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
 // List of quizzes to remove (with possible variations)
 const quizzesToRemove = [
@@ -104,6 +118,19 @@ export async function forceRemoveUnwantedQuizzes() {
     console.error('Error force removing unwanted quizzes:', error);
     throw error;
   }
+}
+
+// Run the function if this file is executed directly (Node.js environment only)
+if (typeof process !== 'undefined' && process.argv && import.meta.url === `file://${process.argv[1]}`) {
+  forceRemoveUnwantedQuizzes()
+    .then(result => {
+      console.log('Removal completed:', result);
+      process.exit(0);
+    })
+    .catch(error => {
+      console.error('Removal failed:', error);
+      process.exit(1);
+    });
 }
 
 export default { forceRemoveUnwantedQuizzes };

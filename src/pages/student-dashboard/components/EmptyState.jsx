@@ -1,5 +1,5 @@
 import React from 'react';
-import Icon from '../../../components/AppIcon';
+import { FileX, Plus } from 'lucide-react';
 import Button from '../../../components/ui/Button';
 
 const EmptyState = ({ 
@@ -10,10 +10,17 @@ const EmptyState = ({
   onAction,
   className = '' 
 }) => {
+  // Map icon names to actual Lucide icons
+  const iconMap = {
+    FileX: FileX
+  };
+
+  const IconComponent = iconMap[icon] || FileX;
+
   return (
     <div className={`text-center py-12 ${className}`}>
       <div className="w-16 h-16 bg-muted/30 rounded-full flex items-center justify-center mx-auto mb-4">
-        <Icon name={icon} size={32} className="text-muted-foreground" />
+        <IconComponent className="h-8 w-8 text-muted-foreground" />
       </div>
       
       <h3 className="text-lg font-semibold text-foreground mb-2">
@@ -27,7 +34,7 @@ const EmptyState = ({
       {actionLabel && onAction && (
         <Button
           variant="default"
-          iconName="Plus"
+          icon={<Plus className="h-4 w-4" />}
           iconPosition="left"
           onClick={onAction}
         >

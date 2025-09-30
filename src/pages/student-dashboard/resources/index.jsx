@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Icon from '../../../components/AppIcon';
+import { Search, BookOpen, Calculator, Brain, Type, Code, Users, FileText, Play, File, ArrowLeft, Download } from 'lucide-react';
 import Button from '../../../components/ui/Button';
 import StudentNavigation from '../components/StudentNavigation';
 import AccountSection from '../../../components/ui/AccountSection';
@@ -55,12 +55,12 @@ const Resources = () => {
   };
 
   const categories = [
-    { id: 'all', name: 'All Resources', icon: 'BookOpen' },
-    { id: 'math', name: 'Mathematics', icon: 'Calculator' },
-    { id: 'reasoning', name: 'Logical Reasoning', icon: 'Brain' },
-    { id: 'verbal', name: 'Verbal Ability', icon: 'Type' },
-    { id: 'technical', name: 'Technical Skills', icon: 'Code' },
-    { id: 'interview', name: 'Interview Prep', icon: 'Users' }
+    { id: 'all', name: 'All Resources', icon: <BookOpen size={16} /> },
+    { id: 'math', name: 'Mathematics', icon: <Calculator size={16} /> },
+    { id: 'reasoning', name: 'Logical Reasoning', icon: <Brain size={16} /> },
+    { id: 'verbal', name: 'Verbal Ability', icon: <Type size={16} /> },
+    { id: 'technical', name: 'Technical Skills', icon: <Code size={16} /> },
+    { id: 'interview', name: 'Interview Prep', icon: <Users size={16} /> }
   ];
 
   const resources = [
@@ -73,7 +73,7 @@ const Resources = () => {
       duration: "15 min read",
       difficulty: "Beginner",
       thumbnail: "/logo.png", // Use local logo instead of external image
-      url: "#"
+      url: "/pdfs/Quantitative_Aptitude_Basics.pdf"
     },
     {
       id: 2,
@@ -117,7 +117,7 @@ const Resources = () => {
       duration: "45 min read",
       difficulty: "Intermediate",
       thumbnail: "/logo.png", // Use local logo instead of external image
-      url: "#"
+      url: "/pdfs/Coding_Interview_Preparation.pdf"
     },
     {
       id: 6,
@@ -141,10 +141,10 @@ const Resources = () => {
 
   const getTypeIcon = (type) => {
     switch (type) {
-      case 'pdf': return 'FileText';
-      case 'video': return 'Play';
-      case 'article': return 'File';
-      default: return 'Book';
+      case 'pdf': return <FileText size={12} />;
+      case 'video': return <Play size={12} />;
+      case 'article': return <File size={12} />;
+      default: return <BookOpen size={12} />;
     }
   };
 
@@ -154,6 +154,17 @@ const Resources = () => {
       case 'video': return 'bg-accent/20 text-accent';
       case 'article': return 'bg-primary/20 text-primary';
       default: return 'bg-muted/20 text-foreground';
+    }
+  };
+
+  // Function to handle resource access
+  const handleResourceAccess = (url, type) => {
+    if (type === 'pdf') {
+      // For PDFs, open in new tab
+      window.open(url, '_blank');
+    } else {
+      // For other resources, open in new tab
+      window.open(url, '_blank');
     }
   };
 
@@ -194,15 +205,13 @@ const Resources = () => {
                     Access study materials, guides, and tips to improve your aptitude skills
                   </p>
                 </div>
-                <Button onClick={() => navigate('/student-dashboard')} variant="outline" iconName="ArrowLeft">
-                  Back to Dashboard
-                </Button>
+                {/* Removed Back to Dashboard button */}
               </div>
 
               {/* Search Bar */}
               <div className="glass-card rounded-2xl p-6 mb-8">
                 <div className="relative">
-                  <Icon name="Search" size={20} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" />
+                  <Search size={20} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" />
                   <input
                     type="text"
                     value={searchQuery}
@@ -225,7 +234,7 @@ const Resources = () => {
                         : 'bg-muted hover:bg-muted/80 text-foreground'
                     }`}
                   >
-                    <Icon name={category.icon} size={16} />
+                    {category.icon}
                     <span className="font-medium">{category.name}</span>
                   </button>
                 ))}
@@ -246,7 +255,7 @@ const Resources = () => {
                         </div>
                         <div className="absolute top-3 right-3">
                           <span className={`px-2 py-1 rounded-full text-xs font-medium ${getTypeColor(resource.type)}`}>
-                            <Icon name={getTypeIcon(resource.type)} size={12} className="inline mr-1" />
+                            <span className="inline mr-1">{getTypeIcon(resource.type)}</span>
                             {resource.type}
                           </span>
                         </div>
@@ -263,9 +272,8 @@ const Resources = () => {
                           <span className="text-xs text-muted-foreground">{resource.duration}</span>
                           <Button 
                             size="sm" 
-                            iconName="Download"
-                            onClick={() => window.open(resource.url, '_blank')}
-                            disabled={resource.url === '#'}
+                            icon={<Download size={16} />}
+                            onClick={() => handleResourceAccess(resource.url, resource.type)}
                           >
                             Access
                           </Button>
@@ -276,7 +284,7 @@ const Resources = () => {
                 </div>
               ) : (
                 <div className="glass-card rounded-2xl p-12 text-center">
-                  <Icon name="BookOpen" size={48} className="text-muted-foreground mx-auto mb-4" />
+                  <BookOpen size={48} className="text-muted-foreground mx-auto mb-4" />
                   <h3 className="text-xl font-semibold mb-2">No resources found</h3>
                   <p className="text-muted-foreground mb-6">
                     Try adjusting your search or category filter

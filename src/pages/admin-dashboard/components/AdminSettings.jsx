@@ -1,17 +1,17 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Icon from '../../../components/AppIcon';
-import Button from '../../../components/ui/Button';
+import { Button } from '../../../components/ui/Button';
+import { Settings, Shield, Bell, Server } from 'lucide-react';
 
 const AdminSettings = () => {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('general');
 
   const tabs = [
-    { id: 'general', label: 'General', icon: 'Settings' },
-    { id: 'security', label: 'Security', icon: 'Shield' },
-    { id: 'notifications', label: 'Notifications', icon: 'Bell' },
-    { id: 'system', label: 'System', icon: 'Server' }
+    { id: 'general', label: 'General', icon: Settings },
+    { id: 'security', label: 'Security', icon: Shield },
+    { id: 'notifications', label: 'Notifications', icon: Bell },
+    { id: 'system', label: 'System', icon: Server }
   ];
 
   const [settings, setSettings] = useState({
@@ -236,18 +236,18 @@ const AdminSettings = () => {
               <div className="flex items-center justify-between p-4 glass-card rounded-lg">
                 <div>
                   <h4 className="font-medium">Data Retention</h4>
-                  <p className="text-sm text-muted-foreground">Keep user data for a specified period</p>
+                  <p className="text-sm text-muted-foreground">Automatically delete data older than specified period</p>
                 </div>
                 <select
                   value={settings.dataRetention}
                   onChange={(e) => handleChange('dataRetention', parseInt(e.target.value))}
                   className="px-3 py-1 bg-background border border-border rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none transition"
                 >
+                  <option value={30}>30 days</option>
                   <option value={90}>90 days</option>
                   <option value={180}>180 days</option>
                   <option value={365}>1 year</option>
                   <option value={730}>2 years</option>
-                  <option value={0}>Indefinitely</option>
                 </select>
               </div>
             </div>
@@ -263,39 +263,47 @@ const AdminSettings = () => {
     <div className="max-w-4xl mx-auto">
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-2xl font-bold">Admin Settings</h2>
-        <Button onClick={() => navigate('/admin-dashboard')} variant="outline" iconName="ArrowLeft">
+        <Button onClick={() => navigate('/admin-dashboard')} variant="outline">
           Back to Dashboard
         </Button>
       </div>
 
-      <div className="glass-card rounded-2xl overflow-hidden">
-        <div className="border-b border-border">
-          <div className="flex flex-wrap">
-            {tabs.map((tab) => (
-              <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
-                className={`flex items-center gap-2 px-6 py-4 text-sm font-medium border-b-2 transition-colors ${
-                  activeTab === tab.id
-                    ? 'border-primary text-primary bg-primary/5'
-                    : 'border-transparent text-muted-foreground hover:text-foreground'
-                }`}
-              >
-                <Icon name={tab.icon} size={16} />
-                <span>{tab.label}</span>
-              </button>
-            ))}
+      <div className="glass-card rounded-2xl p-6">
+        <div className="flex flex-col md:flex-row gap-6">
+          {/* Sidebar Navigation */}
+          <div className="md:w-1/4">
+            <div className="space-y-1">
+              {tabs.map((tab) => {
+                const IconComponent = tab.icon;
+                return (
+                  <button
+                    key={tab.id}
+                    onClick={() => setActiveTab(tab.id)}
+                    className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-left transition-colors ${
+                      activeTab === tab.id
+                        ? 'bg-primary/10 text-primary border border-primary/20'
+                        : 'hover:bg-muted text-foreground'
+                    }`}
+                  >
+                    <IconComponent className="h-5 w-5" />
+                    <span className="font-medium">{tab.label}</span>
+                  </button>
+                );
+              })}
+            </div>
           </div>
-        </div>
-
-        <div className="p-6">
-          {renderTabContent()}
           
-          <div className="flex justify-end gap-3 mt-8">
-            <Button variant="outline">Cancel</Button>
-            <Button onClick={handleSave} iconName="Save">
-              Save Settings
-            </Button>
+          {/* Main Content */}
+          <div className="md:w-3/4">
+            <div className="bg-muted/20 rounded-lg p-6 border border-border">
+              {renderTabContent()}
+              
+              <div className="mt-8 flex justify-end">
+                <Button variant="primary" onClick={handleSave}>
+                  Save Changes
+                </Button>
+              </div>
+            </div>
           </div>
         </div>
       </div>

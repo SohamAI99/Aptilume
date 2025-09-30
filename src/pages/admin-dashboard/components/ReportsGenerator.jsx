@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import Icon from '../../../components/AppIcon';
-import Button from '../../../components/ui/Button';
+import { Button } from '../../../components/ui/Button';
 import Input from '../../../components/ui/Input';
 import Select from '../../../components/ui/Select';
 import { cn } from '../../../utils/cn';
+import { Database } from 'lucide-react';
 
 const ReportsGenerator = () => {
   const [reportType, setReportType] = useState('users');
@@ -114,7 +114,7 @@ const ReportsGenerator = () => {
       {/* Firestore Queries Documentation */}
       <div className="glass-card rounded-xl p-6 bg-amber-50 border border-amber-200">
         <h3 className="text-lg font-semibold text-amber-900 mb-3 flex items-center">
-          <Icon name="Database" size={20} className="mr-2" />
+          <Database className="h-5 w-5 mr-2" />
           Firestore Queries for Report Generation
         </h3>
         <div className="space-y-2 text-sm text-amber-800 font-mono">
@@ -203,132 +203,64 @@ const ReportsGenerator = () => {
             )}
           </div>
 
-          {/* Report Queries Preview */}
-          <div className="glass-card rounded-xl p-6">
-            <h3 className="text-lg font-semibold text-foreground mb-4">
-              Firestore Queries for {selectedReport?.label}
-            </h3>
-            <div className="space-y-3">
-              {getReportQueries(reportType)?.map((query, index) => (
-                <div key={index} className="p-3 bg-muted/30 rounded-lg">
-                  <div className="text-xs font-semibold text-muted-foreground mb-1">
-                    Query {index + 1}:
-                  </div>
-                  <code className="text-xs text-foreground font-mono break-all">
-                    {query}
-                  </code>
-                </div>
-              ))}
-            </div>
+          {/* Generate Button */}
+          <div className="flex justify-end">
+            <Button
+              onClick={handleGenerateReport}
+              loading={isGenerating}
+              disabled={isGenerating}
+              size="lg"
+            >
+              {isGenerating ? 'Generating Report...' : 'Generate Report'}
+            </Button>
           </div>
         </div>
 
         {/* Report Preview */}
         <div className="space-y-6">
-          {/* Report Summary */}
           <div className="glass-card rounded-xl p-6">
-            <h3 className="text-lg font-semibold text-foreground mb-4">Report Summary</h3>
-            <div className="space-y-3">
-              <div className="flex items-center justify-between py-2 border-b border-border">
-                <span className="text-sm text-muted-foreground">Type:</span>
-                <span className="text-sm font-medium text-foreground">{selectedReport?.label}</span>
+            <h3 className="text-lg font-semibold text-foreground mb-4">Report Preview</h3>
+            <div className="space-y-4">
+              <div className="p-4 bg-muted/30 rounded-lg">
+                <h4 className="font-medium text-foreground">{selectedReport?.label}</h4>
+                <p className="text-sm text-muted-foreground mt-1">{selectedReport?.description}</p>
               </div>
-              <div className="flex items-center justify-between py-2 border-b border-border">
-                <span className="text-sm text-muted-foreground">Date Range:</span>
-                <span className="text-sm font-medium text-foreground">
-                  {dateRangeOptions?.find(d => d?.value === dateRange)?.label}
-                </span>
-              </div>
-              <div className="flex items-center justify-between py-2 border-b border-border">
-                <span className="text-sm text-muted-foreground">Format:</span>
-                <span className="text-sm font-medium text-foreground">
-                  {formatOptions?.find(f => f?.value === format)?.label}
-                </span>
-              </div>
-              <div className="flex items-center justify-between py-2">
-                <span className="text-sm text-muted-foreground">Estimated Size:</span>
-                <span className="text-sm font-medium text-foreground">~2.5 MB</span>
-              </div>
-            </div>
-
-            <Button
-              fullWidth
-              iconName={isGenerating ? "Loader2" : "Download"}
-              iconPosition="left"
-              onClick={handleGenerateReport}
-              disabled={isGenerating}
-              loading={isGenerating}
-              className="mt-6"
-            >
-              {isGenerating ? 'Generating Report...' : 'Generate Report'}
-            </Button>
-          </div>
-
-          {/* Recent Reports */}
-          <div className="glass-card rounded-xl p-6">
-            <h3 className="text-lg font-semibold text-foreground mb-4">Recent Reports</h3>
-            <div className="space-y-3">
-              {[
-                { name: 'User Analytics Report', date: '2025-01-09', size: '1.2 MB', type: 'PDF' },
-                { name: 'Test Performance Report', date: '2025-01-08', size: '3.1 MB', type: 'Excel' },
-                { name: 'System Health Report', date: '2025-01-07', size: '890 KB', type: 'PDF' }
-              ]?.map((report, index) => (
-                <div key={index} className="flex items-center justify-between p-3 bg-muted/20 rounded-lg">
-                  <div className="flex-1">
-                    <div className="text-sm font-medium text-foreground">{report?.name}</div>
-                    <div className="text-xs text-muted-foreground">{report?.date} • {report?.size}</div>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <span className="text-xs px-2 py-1 bg-primary/10 text-primary rounded">
-                      {report?.type}
-                    </span>
-                    <Button
-                      size="xs"
-                      variant="ghost"
-                      iconName="Download"
-                      onClick={() => console.log('Download report', index)}
-                      className="p-1"
-                    />
-                  </div>
+              
+              <div className="space-y-2 text-sm">
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">Format:</span>
+                  <span className="font-medium">
+                    {formatOptions?.find(f => f?.value === format)?.label}
+                  </span>
                 </div>
-              ))}
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">Date Range:</span>
+                  <span className="font-medium">
+                    {dateRangeOptions?.find(d => d?.value === dateRange)?.label}
+                  </span>
+                </div>
+              </div>
+              
+              <div className="pt-4 border-t border-border">
+                <h4 className="font-medium text-foreground mb-2">Sample Data Points</h4>
+                <ul className="text-sm space-y-1 text-muted-foreground">
+                  <li>• User registration trends</li>
+                  <li>• Test completion rates</li>
+                  <li>• Average scores by category</li>
+                  <li>• System performance metrics</li>
+                </ul>
+              </div>
             </div>
           </div>
-
-          {/* Quick Actions */}
+          
           <div className="glass-card rounded-xl p-6">
-            <h3 className="text-lg font-semibold text-foreground mb-4">Quick Reports</h3>
-            <div className="space-y-2">
-              <Button
-                size="sm"
-                variant="outline"
-                iconName="Users"
-                iconPosition="left"
-                onClick={() => console.log('Generate daily user report')}
-                fullWidth
-              >
-                Daily User Summary
-              </Button>
-              <Button
-                size="sm"
-                variant="outline"
-                iconName="BarChart3"
-                iconPosition="left"
-                onClick={() => console.log('Generate test analytics')}
-                fullWidth
-              >
-                Test Analytics
-              </Button>
-              <Button
-                size="sm"
-                variant="outline"
-                iconName="DollarSign"
-                iconPosition="left"
-                onClick={() => console.log('Generate revenue report')}
-                fullWidth
-              >
-                Revenue Report
-              </Button>
+            <h3 className="text-lg font-semibold text-foreground mb-4">Report Delivery</h3>
+            <p className="text-sm text-muted-foreground mb-4">
+              Reports will be generated and delivered to your email or can be downloaded directly.
+            </p>
+            <div className="flex items-center space-x-2 text-sm">
+              <input type="checkbox" id="email-delivery" className="rounded" />
+              <label htmlFor="email-delivery">Send to email when ready</label>
             </div>
           </div>
         </div>

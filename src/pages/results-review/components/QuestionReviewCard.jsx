@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import Icon from '../../../components/AppIcon';
-import Button from '../../../components/ui/Button';
+import { Clock, CheckCircle, XCircle } from 'lucide-react';
+import { Button } from '../../../components/ui/Button';
 
 const QuestionReviewCard = ({ question, index }) => {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -11,15 +11,17 @@ const QuestionReviewCard = ({ question, index }) => {
   };
 
   const getStatusIcon = (isCorrect) => {
-    if (question?.selectedOption === null) return 'Clock';
-    return isCorrect ? 'CheckCircle' : 'XCircle';
+    if (question?.selectedOption === null) return Clock;
+    return isCorrect ? CheckCircle : XCircle;
   };
 
   const getStatusBadge = (isCorrect) => {
+    const IconComponent = getStatusIcon(isCorrect);
+    
     if (question?.selectedOption === null) {
       return (
         <div className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-warning/10 text-warning">
-          <Icon name="Clock" size={12} className="mr-1" />
+          <IconComponent className="h-3 w-3 mr-1" />
           Unanswered
         </div>
       );
@@ -28,7 +30,7 @@ const QuestionReviewCard = ({ question, index }) => {
       <div className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
         isCorrect ? 'bg-success/10 text-success' : 'bg-destructive/10 text-destructive'
       }`}>
-        <Icon name={getStatusIcon(isCorrect)} size={12} className="mr-1" />
+        <IconComponent className="h-3 w-3 mr-1" />
         {isCorrect ? 'Correct' : 'Incorrect'}
       </div>
     );
@@ -48,116 +50,96 @@ const QuestionReviewCard = ({ question, index }) => {
   };
 
   return (
-    <div className="glass-card rounded-2xl border border-border/20 overflow-hidden hover:shadow-elevation-2 transition-all duration-200">
-      <div className="p-6">
-        <div className="flex items-start justify-between mb-4">
-          <div className="flex-1">
-            <div className="flex items-center space-x-3 mb-3">
-              <div className="flex items-center space-x-2">
-                <span className="text-sm font-medium text-muted-foreground">Q{index + 1}</span>
-                {getStatusBadge(question?.isCorrect)}
-                <div className={`px-2 py-1 rounded-full text-xs font-medium ${getDifficultyColor(question?.difficulty)}`}>
-                  {question?.difficulty}
-                </div>
-              </div>
-            </div>
-            <h4 className="text-lg font-medium text-foreground mb-2 leading-relaxed">
-              {question?.question}
-            </h4>
-            <div className="flex items-center space-x-4 text-sm text-muted-foreground">
-              <div className="flex items-center space-x-1">
-                <Icon name="BookOpen" size={14} />
-                <span>{question?.subject}</span>
-              </div>
-              <div className="flex items-center space-x-1">
-                <Icon name="Clock" size={14} />
-                <span>{question?.timeSpent}s</span>
-              </div>
+    <div className="glass-card rounded-xl border border-border overflow-hidden">
+      {/* Question Header */}
+      <div 
+        className="p-4 cursor-pointer flex items-center justify-between bg-muted/30 hover:bg-muted/50 transition-colors"
+        onClick={() => setIsExpanded(!isExpanded)}
+      >
+        <div className="flex items-center space-x-3">
+          <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+            <span className="text-sm font-medium text-primary">{index + 1}</span>
+          </div>
+          <div>
+            <h3 className="font-medium text-foreground line-clamp-1">
+              {question?.questionText}
+            </h3>
+            <div className="flex items-center space-x-2 mt-1">
+              <span className={`text-xs px-2 py-1 rounded-full ${getDifficultyColor(question?.difficulty)}`}>
+                {question?.difficulty}
+              </span>
+              {getStatusBadge(question?.isCorrect)}
             </div>
           </div>
-          <Button
-            variant="ghost"
-            size="sm"
-            iconName={isExpanded ? "ChevronUp" : "ChevronDown"}
-            onClick={() => setIsExpanded(!isExpanded)}
-          />
         </div>
-
-        {isExpanded && (
-          <div className="space-y-4 pt-4 border-t border-border/20">
-            {/* Answer Options */}
-            <div className="space-y-2">
-              <h5 className="font-medium text-foreground text-sm">Answer Options:</h5>
-              {question?.options?.map((option, optionIndex) => (
-                <div
-                  key={optionIndex}
-                  className={`p-3 rounded-lg border transition-colors ${
-                    optionIndex === question?.correctOption
-                      ? 'bg-success/10 border-success/20 text-success'
-                      : optionIndex === question?.selectedOption && !question?.isCorrect
-                      ? 'bg-destructive/10 border-destructive/20 text-destructive' :'bg-muted/20 border-border/20 text-muted-foreground'
-                  }`}
-                >
-                  <div className="flex items-center space-x-2">
-                    <span className="font-medium text-xs">
-                      {String.fromCharCode(65 + optionIndex)}
-                    </span>
-                    <span className="text-sm">{option}</span>
-                    {optionIndex === question?.correctOption && (
-                      <Icon name="CheckCircle" size={16} className="text-success" />
-                    )}
-                    {optionIndex === question?.selectedOption && !question?.isCorrect && (
-                      <Icon name="XCircle" size={16} className="text-destructive" />
-                    )}
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            {/* Your Answer */}
-            <div className="p-4 bg-muted/30 rounded-lg">
-              <div className="flex items-center justify-between mb-2">
-                <span className="font-medium text-sm text-foreground">Your Answer:</span>
-                <Icon 
-                  name={getStatusIcon(question?.isCorrect)} 
-                  size={16} 
-                  className={getStatusColor(question?.isCorrect)} 
-                />
-              </div>
-              <span className="text-sm text-foreground">
-                {question?.selectedOption !== null 
-                  ? `${String.fromCharCode(65 + question?.selectedOption)} - ${question?.options?.[question?.selectedOption]}`
-                  : 'No answer selected'
-                }
-              </span>
-            </div>
-
-            {/* Correct Answer */}
-            <div className="p-4 bg-success/10 rounded-lg border border-success/20">
-              <div className="flex items-center space-x-2 mb-2">
-                <Icon name="CheckCircle" size={16} className="text-success" />
-                <span className="font-medium text-sm text-success">Correct Answer:</span>
-              </div>
-              <span className="text-sm text-foreground">
-                {String.fromCharCode(65 + question?.correctOption)} - {question?.options?.[question?.correctOption]}
-              </span>
-            </div>
-
-            {/* Explanation */}
-            {question?.explanation && (
-              <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
-                <div className="flex items-start space-x-2">
-                  <Icon name="Lightbulb" size={16} className="text-blue-600 mt-0.5 flex-shrink-0" />
-                  <div>
-                    <span className="font-medium text-sm text-blue-800 mb-1 block">Explanation:</span>
-                    <p className="text-sm text-blue-700 leading-relaxed">{question?.explanation}</p>
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
-        )}
+        <Button variant="ghost" size="sm">
+          <svg 
+            className={`h-5 w-5 transform transition-transform ${isExpanded ? 'rotate-180' : ''}`} 
+            fill="none" 
+            viewBox="0 0 24 24" 
+            stroke="currentColor"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+          </svg>
+        </Button>
       </div>
+
+      {/* Expanded Content */}
+      {isExpanded && (
+        <div className="p-4 border-t border-border bg-background/50">
+          {/* Options */}
+          <div className="space-y-3 mb-4">
+            <h4 className="font-medium text-foreground mb-2">Options:</h4>
+            {question?.options?.map((option, optIndex) => {
+              const isSelected = question?.selectedOption === optIndex;
+              const isCorrect = question?.correctOption === optIndex;
+              
+              let optionStyle = "p-3 rounded-lg border";
+              if (isSelected && isCorrect) {
+                optionStyle += " bg-success/10 border-success text-success";
+              } else if (isSelected && !isCorrect) {
+                optionStyle += " bg-destructive/10 border-destructive text-destructive";
+              } else if (isCorrect) {
+                optionStyle += " bg-success/10 border-success text-success";
+              } else {
+                optionStyle += " bg-muted border-border";
+              }
+              
+              return (
+                <div key={optIndex} className={optionStyle}>
+                  <div className="flex items-center">
+                    <span className="font-medium mr-2">{String.fromCharCode(65 + optIndex)}.</span>
+                    <span>{option}</span>
+                    {isSelected && (
+                      <span className="ml-auto text-xs bg-primary/10 text-primary px-2 py-1 rounded-full">
+                        Your Answer
+                      </span>
+                    )}
+                    {isCorrect && !isSelected && (
+                      <span className="ml-auto text-xs bg-success/10 text-success px-2 py-1 rounded-full">
+                        Correct Answer
+                      </span>
+                    )}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Explanation */}
+          {question?.explanation && (
+            <div className="bg-info/10 border border-info/20 rounded-lg p-4">
+              <h4 className="font-medium text-foreground mb-2 flex items-center">
+                <svg className="h-4 w-4 mr-2 text-info" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                Explanation
+              </h4>
+              <p className="text-sm text-foreground">{question?.explanation}</p>
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 };

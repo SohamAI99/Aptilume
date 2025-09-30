@@ -1,8 +1,8 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import Button from '../../../components/ui/Button';
-import Icon from '../../../components/AppIcon';
+import { Button } from '../../../components/ui/Button';
+import { Zap, Shield, Users, Award, CheckCircle, Clock, Rocket, PlayCircle } from 'lucide-react';
 
 const CTASection = () => {
   const navigate = useNavigate();
@@ -21,19 +21,19 @@ const CTASection = () => {
 
   const benefits = [
     {
-      icon: "Zap",
+      icon: <Zap className="h-5 w-5 text-white" />,
       text: "Get started in under 2 minutes"
     },
     {
-      icon: "Shield",
+      icon: <Shield className="h-5 w-5 text-white" />,
       text: "Enterprise-grade security"
     },
     {
-      icon: "Users",
+      icon: <Users className="h-5 w-5 text-white" />,
       text: "24/7 customer support"
     },
     {
-      icon: "Award",
+      icon: <Award className="h-5 w-5 text-white" />,
       text: "Trusted by 50K+ students"
     }
   ];
@@ -82,7 +82,7 @@ const CTASection = () => {
                 className="flex items-center space-x-3 p-4 glass-card rounded-lg"
               >
                 <div className="w-10 h-10 bg-primary rounded-lg flex items-center justify-center flex-shrink-0">
-                  <Icon name={benefit?.icon} size={20} color="white" />
+                  {benefit?.icon}
                 </div>
                 <span className="text-sm font-medium text-foreground">{benefit?.text}</span>
               </motion.div>
@@ -100,7 +100,7 @@ const CTASection = () => {
             <Button
               variant="default"
               size="xl"
-              iconName="Rocket"
+              icon={<Rocket className="h-5 w-5" />}
               iconPosition="left"
               onClick={handleGetStarted}
               className="w-full sm:w-auto px-10 py-5 text-lg font-semibold spring-bounce"
@@ -110,7 +110,7 @@ const CTASection = () => {
             <Button
               variant="outline"
               size="xl"
-              iconName="PlayCircle"
+              icon={<PlayCircle className="h-5 w-5" />}
               iconPosition="left"
               onClick={handleLearnMore}
               className="w-full sm:w-auto px-10 py-5 text-lg font-semibold spring-bounce"
@@ -128,15 +128,15 @@ const CTASection = () => {
             className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-8 text-sm text-muted-foreground"
           >
             <div className="flex items-center space-x-2">
-              <Icon name="CheckCircle" size={16} className="text-accent" />
+              <CheckCircle className="h-4 w-4 text-accent" />
               <span>No credit card required</span>
             </div>
             <div className="flex items-center space-x-2">
-              <Icon name="Clock" size={16} className="text-accent" />
+              <Clock className="h-4 w-4 text-accent" />
               <span>Setup in 2 minutes</span>
             </div>
             <div className="flex items-center space-x-2">
-              <Icon name="Shield" size={16} className="text-accent" />
+              <Shield className="h-4 w-4 text-accent" />
               <span>100% secure & private</span>
             </div>
           </motion.div>

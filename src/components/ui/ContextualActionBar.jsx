@@ -1,134 +1,69 @@
 import React from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
-import Button from './Button';
+import { Button } from './Button';
+import { X, Trash2, Edit, Copy, Move, Download, Share2 } from 'lucide-react';
 
 const ContextualActionBar = ({ 
-  examState, 
-  onExitExam, 
-  onSubmitTest, 
-  className = '' 
+  selectedItems = [], 
+  onClose, 
+  actions = [],
+  onAction 
 }) => {
-  const location = useLocation();
-  const navigate = useNavigate();
+  const defaultActions = [
+    { id: 'edit', label: 'Edit', icon: Edit },
+    { id: 'duplicate', label: 'Duplicate', icon: Copy },
+    { id: 'move', label: 'Move', icon: Move },
+    { id: 'download', label: 'Download', icon: Download },
+    { id: 'share', label: 'Share', icon: Share2 },
+    { id: 'delete', label: 'Delete', icon: Trash2, variant: 'destructive' }
+  ];
 
-  const getContextualActions = () => {
-    switch (location?.pathname) {
-      case '/quiz-rules-instructions':
-        return (
-          <div className="flex items-center space-x-3">
-            <Button
-              variant="outline"
-              size="sm"
-              iconName="ArrowLeft"
-              iconPosition="left"
-              onClick={() => navigate('/student-dashboard')}
-            >
-              Back to Dashboard
-            </Button>
-            <Button
-              variant="default"
-              size="sm"
-              iconName="ArrowRight"
-              iconPosition="right"
-              onClick={() => navigate('/password-gate-verification')}
-            >
-              Continue to Exam
-            </Button>
-          </div>
-        );
+  const availableActions = actions.length > 0 ? actions : defaultActions;
 
-      case '/password-gate-verification':
-        return (
-          <div className="flex items-center space-x-3">
-            <Button
-              variant="outline"
-              size="sm"
-              iconName="ArrowLeft"
-              iconPosition="left"
-              onClick={() => navigate('/quiz-rules-instructions')}
-            >
-              Back to Instructions
-            </Button>
-          </div>
-        );
-
-      case '/exam-interface':
-        return (
-          <div className="flex items-center space-x-3">
-            {examState?.canSubmit && (
-              <Button
-                variant="success"
-                size="sm"
-                iconName="CheckCircle"
-                iconPosition="left"
-                onClick={() => {
-                  if (window.confirm('Are you sure you want to submit your exam? This action cannot be undone.')) {
-                    onSubmitTest?.();
-                  }
-                }}
-              >
-                Submit Test
-              </Button>
-            )}
-            <Button
-              variant="destructive"
-              size="sm"
-              iconName="AlertTriangle"
-              iconPosition="left"
-              onClick={() => {
-                if (window.confirm('Are you sure you want to exit the exam? Your progress will be lost.')) {
-                  onExitExam?.();
-                  navigate('/student-dashboard');
-                }
-              }}
-            >
-              Exit Exam
-            </Button>
-          </div>
-        );
-
-      case '/student-dashboard':
-        return (
-          <div className="flex items-center space-x-3">
-            <Button
-              variant="outline"
-              size="sm"
-              iconName="RefreshCw"
-              iconPosition="left"
-              onClick={() => window.location?.reload()}
-            >
-              Refresh
-            </Button>
-          </div>
-        );
-
-      case '/authentication-login-register':
-        return (
-          <div className="flex items-center space-x-3">
-            <Button
-              variant="outline"
-              size="sm"
-              iconName="ArrowLeft"
-              iconPosition="left"
-              onClick={() => navigate('/landing-page')}
-            >
-              Back to Home
-            </Button>
-          </div>
-        );
-
-      default:
-        return null;
+  const handleAction = (actionId) => {
+    if (onAction) {
+      onAction(actionId, selectedItems);
     }
   };
 
-  const actions = getContextualActions();
-
-  if (!actions) return null;
-
   return (
-    <div className={`flex items-center ${className}`}>
-      {actions}
+    <div className="fixed bottom-6 left-1/2 transform -translate-x-1/2 bg-card border border-border rounded-lg shadow-lg p-3 z-50">
+      <div className="flex items-center space-x-2">
+        <div className="px-3 py-1 bg-primary/10 text-primary rounded-full text-sm font-medium">
+          {selectedItems.length} selected
+        </div>
+        
+        <div className="h-4 w-px bg-border"></div>
+        
+        <div className="flex space-x-1">
+          {availableActions.map((action) => {
+            const IconComponent = action.icon;
+            return (
+              <Button
+                key={action.id}
+                variant={action.variant || 'ghost'}
+                size="sm"
+                icon={IconComponent ? <IconComponent className="h-4 w-4" /> : null}
+                onClick={() => handleAction(action.id)}
+                className="px-2"
+              >
+                <span className="sr-only">{action.label}</span>
+              </Button>
+            );
+          })}
+        </div>
+        
+        <div className="h-4 w-px bg-border"></div>
+        
+        <Button
+          variant="ghost"
+          size="sm"
+          icon={<X className="h-4 w-4" />}
+          onClick={onClose}
+          className="px-2"
+        >
+          <span className="sr-only">Close</span>
+        </Button>
+      </div>
     </div>
   );
 };

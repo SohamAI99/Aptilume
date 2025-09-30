@@ -1,6 +1,6 @@
 import React from 'react';
-import Button from '../../../components/ui/Button';
-import Icon from '../../../components/AppIcon';
+import { Button } from '../../../components/ui/Button';
+import { Award, X, CheckCircle, Shield, Globe, Download, Link, AlertTriangle, Eye } from 'lucide-react';
 
 const CertificateModal = ({ isOpen, onClose, resultsData }) => {
   if (!isOpen) return null;
@@ -33,13 +33,13 @@ const CertificateModal = ({ isOpen, onClose, resultsData }) => {
           {/* Header */}
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-lg font-semibold text-foreground flex items-center">
-              <Icon name="Award" size={20} className="mr-2 text-primary" />
+              <Award className="h-5 w-5 mr-2 text-primary" />
               Certificate of Achievement
             </h2>
             <Button
               variant="ghost"
               size="sm"
-              iconName="X"
+              icon={<X className="h-4 w-4" />}
               onClick={onClose}
             />
           </div>
@@ -50,7 +50,7 @@ const CertificateModal = ({ isOpen, onClose, resultsData }) => {
               {/* Certificate Header */}
               <div>
                 <div className="w-20 h-20 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Icon name="Award" size={40} className="text-white" />
+                  <Award className="h-10 w-10 text-white" />
                 </div>
                 <h3 className="text-2xl font-bold text-primary mb-2">Certificate of Achievement</h3>
                 <p className="text-muted-foreground">This certifies that</p>
@@ -108,24 +108,24 @@ const CertificateModal = ({ isOpen, onClose, resultsData }) => {
           {/* Certificate Features */}
           <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg">
             <h4 className="font-medium text-green-800 mb-3 flex items-center">
-              <Icon name="CheckCircle" size={18} className="mr-2" />
+              <CheckCircle className="h-4 w-4 mr-2" />
               Certificate Features
             </h4>
             <div className="grid grid-cols-2 gap-3 text-sm text-green-700">
               <div className="flex items-center space-x-2">
-                <Icon name="Shield" size={14} />
+                <Shield className="h-3.5 w-3.5" />
                 <span>Blockchain verified</span>
               </div>
               <div className="flex items-center space-x-2">
-                <Icon name="Globe" size={14} />
+                <Globe className="h-3.5 w-3.5" />
                 <span>Globally recognized</span>
               </div>
               <div className="flex items-center space-x-2">
-                <Icon name="Download" size={14} />
+                <Download className="h-3.5 w-3.5" />
                 <span>High-quality PDF</span>
               </div>
               <div className="flex items-center space-x-2">
-                <Icon name="Link" size={14} />
+                <Link className="h-3.5 w-3.5" />
                 <span>Shareable link</span>
               </div>
             </div>
@@ -135,7 +135,7 @@ const CertificateModal = ({ isOpen, onClose, resultsData }) => {
           {resultsData?.overall?.percentage >= 60 ? (
             <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
               <div className="flex items-start space-x-3">
-                <Icon name="CheckCircle" size={20} className="text-blue-600 mt-0.5" />
+                <CheckCircle className="h-5 w-5 text-blue-600 mt-0.5" />
                 <div>
                   <h4 className="font-medium text-blue-800">Congratulations!</h4>
                   <p className="text-sm text-blue-700">
@@ -147,7 +147,7 @@ const CertificateModal = ({ isOpen, onClose, resultsData }) => {
           ) : (
             <div className="mb-6 p-4 bg-orange-50 border border-orange-200 rounded-lg">
               <div className="flex items-start space-x-3">
-                <Icon name="AlertTriangle" size={20} className="text-orange-600 mt-0.5" />
+                <AlertTriangle className="h-5 w-5 text-orange-600 mt-0.5" />
                 <div>
                   <h4 className="font-medium text-orange-800">Certificate Not Available</h4>
                   <p className="text-sm text-orange-700">
@@ -172,7 +172,7 @@ const CertificateModal = ({ isOpen, onClose, resultsData }) => {
               <>
                 <Button
                   variant="outline"
-                  iconName="Eye"
+                  icon={<Eye className="h-4 w-4" />}
                   iconPosition="left"
                   onClick={() => window.open('#', '_blank')} // Would open certificate preview
                 >
@@ -181,7 +181,7 @@ const CertificateModal = ({ isOpen, onClose, resultsData }) => {
                 
                 <Button
                   variant="success"
-                  iconName="Download"
+                  icon={<Download className="h-4 w-4" />}
                   iconPosition="left"
                   onClick={handleDownload}
                 >

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import Button from '../../../components/ui/Button';
-import Icon from '../../../components/AppIcon';
+import { Button } from '../../../components/ui/Button';
+import { X, AlertCircle, Loader2, Check } from 'lucide-react';
 
 const SubmitConfirmationModal = ({ 
   isOpen, 
@@ -50,7 +50,7 @@ const SubmitConfirmationModal = ({
             <Button
               variant="ghost"
               size="sm"
-              iconName="X"
+              icon={<X className="h-4 w-4" />}
               onClick={onClose}
               className="p-2"
             />
@@ -116,7 +116,7 @@ const SubmitConfirmationModal = ({
           {error && (
             <div className="mb-4 p-3 bg-destructive/10 border border-destructive/20 rounded-lg">
               <div className="flex items-center text-destructive">
-                <Icon name="AlertCircle" size={16} className="mr-2" />
+                <AlertCircle className="h-4 w-4 mr-2" />
                 <span className="text-sm">{error}</span>
               </div>
             </div>
@@ -137,7 +137,7 @@ const SubmitConfirmationModal = ({
               onClick={handleConfirm}
               disabled={isLoading}
               className="flex-1"
-              iconName={isLoading ? "Loader2" : "Check"}
+              icon={isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Check className="h-4 w-4" />}
               iconPosition="left"
             >
               {isLoading ? 'Submitting...' : 'Submit Exam'}

@@ -1,16 +1,16 @@
 import React from 'react';
-import Icon from '../../../components/AppIcon';
+import { Filter, Grid3X3, Star, Zap, Smile, Meh, Frown, Clock, TrendingUp, X } from 'lucide-react';
 
 const FilterChips = ({ activeFilters, onFilterChange }) => {
   const filterOptions = [
-    { id: 'all', label: 'All Tests', icon: 'Grid3X3' },
-    { id: 'faang', label: 'FAANG', icon: 'Star' },
-    { id: 'mango', label: 'Mango', icon: 'Zap' },
-    { id: 'easy', label: 'Easy', icon: 'Smile' },
-    { id: 'medium', label: 'Medium', icon: 'Meh' },
-    { id: 'hard', label: 'Hard', icon: 'Frown' },
-    { id: 'recent', label: 'Recent', icon: 'Clock' },
-    { id: 'popular', label: 'Popular', icon: 'TrendingUp' }
+    { id: 'all', label: 'All Tests', icon: <Grid3X3 size={14} /> },
+    { id: 'faang', label: 'FAANG', icon: <Star size={14} /> },
+    { id: 'mango', label: 'Mango', icon: <Zap size={14} /> },
+    { id: 'easy', label: 'Easy', icon: <Smile size={14} /> },
+    { id: 'medium', label: 'Medium', icon: <Meh size={14} /> },
+    { id: 'hard', label: 'Hard', icon: <Frown size={14} /> },
+    { id: 'recent', label: 'Recent', icon: <Clock size={14} /> },
+    { id: 'popular', label: 'Popular', icon: <TrendingUp size={14} /> }
   ];
 
   const handleFilterClick = (filterId) => {
@@ -34,7 +34,7 @@ const FilterChips = ({ activeFilters, onFilterChange }) => {
   return (
     <div className="mb-6">
       <div className="flex items-center gap-2 mb-3">
-        <Icon name="Filter" size={18} className="text-muted-foreground" />
+        <Filter size={18} className="text-muted-foreground" />
         <span className="text-sm font-medium text-foreground">Filter Tests</span>
       </div>
       <div className="flex flex-wrap gap-2">
@@ -48,7 +48,7 @@ const FilterChips = ({ activeFilters, onFilterChange }) => {
                 : 'bg-muted text-muted-foreground hover:bg-muted/80'
             }`}
           >
-            <Icon name={filter?.icon} size={14} />
+            {filter?.icon}
             <span>{filter?.label}</span>
           </button>
         ))}
@@ -69,7 +69,7 @@ const FilterChips = ({ activeFilters, onFilterChange }) => {
                     onClick={() => handleFilterClick(filterId)}
                     className="hover:bg-primary/20 rounded-full p-0.5"
                   >
-                    <Icon name="X" size={10} />
+                    <X size={10} />
                   </button>
                 </span>
               );

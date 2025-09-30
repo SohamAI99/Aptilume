@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import Button from '../../components/ui/Button';
+import { Button } from '../../components/ui/Button';
 
 import QuestionCard from './components/QuestionCard';
 import QuestionPalette from './components/QuestionPalette';

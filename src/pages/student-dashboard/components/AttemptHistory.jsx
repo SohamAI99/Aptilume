@@ -97,7 +97,7 @@ const AttemptHistory = () => {
                 ? "You haven't taken any quizzes yet." 
                 : `You don't have any ${filter.replace('-', ' ')} attempts.`}
             </p>
-            <Button onClick={() => navigate('/student-dashboard')}>
+            <Button onClick={() => navigate('/student-dashboard/quizzes')}>
               Take a Quiz
             </Button>
           </div>

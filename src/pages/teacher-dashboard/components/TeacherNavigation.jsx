@@ -1,18 +1,18 @@
 import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import Icon from '../../../components/AppIcon';
+import { LayoutDashboard, PlusCircle, FileText, Users, BarChart3, Sparkles, Zap } from 'lucide-react';
 
 const TeacherNavigation = ({ currentUser, onLogout }) => {
   const navigate = useNavigate();
   const location = useLocation();
 
   const menuItems = [
-    { path: '/teacher-dashboard', label: 'Dashboard', icon: 'LayoutDashboard' },
-    { path: '/teacher/create-quiz', label: 'Create Quiz', icon: 'PlusCircle' },
-    { path: '/teacher/quizzes', label: 'My Quizzes', icon: 'FileText' },
-    { path: '/teacher/students', label: 'Students', icon: 'Users' },
-    { path: '/teacher/analytics', label: 'Analytics', icon: 'BarChart3' },
-    { path: '/teacher/ai-assistance', label: 'AI Assistance', icon: 'Sparkles' }
+    { path: '/teacher-dashboard', label: 'Dashboard', icon: <LayoutDashboard size={18} /> },
+    { path: '/teacher/create-quiz', label: 'Create Quiz', icon: <PlusCircle size={18} /> },
+    { path: '/teacher/quizzes', label: 'My Quizzes', icon: <FileText size={18} /> },
+    { path: '/teacher/students', label: 'Students', icon: <Users size={18} /> },
+    { path: '/teacher/analytics', label: 'Analytics', icon: <BarChart3 size={18} /> },
+    { path: '/teacher/ai-assistance', label: 'AI Assistance', icon: <Sparkles size={18} /> }
   ];
 
   const isActive = (path) => {
@@ -26,38 +26,54 @@ const TeacherNavigation = ({ currentUser, onLogout }) => {
         <div className="flex items-center flex-shrink-0 px-6 py-4 border-b border-border">
           <div className="flex items-center space-x-2">
             <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-              <Icon name="Zap" size={18} color="white" />
+              <Zap size={18} color="white" />
             </div>
-            <div>
-              <span className="text-xl font-bold text-foreground">AptiLume</span>
-              <p className="text-xs text-muted-foreground">Teacher Panel</p>
-            </div>
+            <span className="text-xl font-bold text-foreground">AptiLume</span>
           </div>
         </div>
-        <nav className="flex-1 px-2 mt-5 space-y-1 overflow-y-auto">
-          {menuItems.map((item) => (
+
+        <div className="flex-1 flex flex-col overflow-y-auto">
+          <nav className="flex-1 px-4 py-6 space-y-2">
+            {menuItems.map((item) => (
+              <button
+                key={item.path}
+                onClick={() => navigate(item.path)}
+                className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-sm font-medium transition-colors ${
+                  isActive(item.path)
+                    ? 'bg-primary text-primary-foreground'
+                    : 'text-muted-foreground hover:bg-muted hover:text-foreground'
+                }`}
+              >
+                {item.icon}
+                <span>{item.label}</span>
+              </button>
+            ))}
+          </nav>
+
+          {/* Profile Section */}
+          <div className="p-4 border-t border-border">
+            <div className="flex items-center space-x-3">
+              <div className="w-10 h-10 bg-primary rounded-full flex items-center justify-center">
+                <span className="text-primary-foreground font-medium">
+                  {currentUser?.name?.charAt(0)?.toUpperCase() || 'T'}
+                </span>
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-medium text-foreground truncate">
+                  {currentUser?.name || 'Teacher'}
+                </p>
+                <p className="text-xs text-muted-foreground truncate">
+                  {currentUser?.email || 'teacher@aptilume.com'}
+                </p>
+              </div>
+            </div>
             <button
-              key={item.path}
-              onClick={() => navigate(item.path)}
-              className={`flex items-center w-full px-4 py-3 text-sm font-medium rounded-lg transition-colors ${
-                isActive(item.path)
-                  ? 'bg-primary text-white shadow-lg'
-                  : 'text-muted-foreground hover:bg-muted hover:text-foreground'
-              }`}
+              onClick={onLogout}
+              className="w-full mt-4 px-4 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg transition-colors flex items-center space-x-2"
             >
-              <Icon name={item.icon} size={18} className="mr-3" />
-              {item.label}
+              <span>Sign out</span>
             </button>
-          ))}
-        </nav>
-        <div className="flex flex-col p-4 space-y-3 border-t border-border">
-          <button
-            onClick={onLogout}
-            className="flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-red-600 bg-red-50 rounded-lg hover:bg-red-100 transition-colors"
-          >
-            <Icon name="LogOut" size={18} className="mr-2" />
-            Sign out
-          </button>
+          </div>
         </div>
       </div>
     </div>

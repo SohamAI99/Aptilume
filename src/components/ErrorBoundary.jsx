@@ -1,6 +1,6 @@
 import React from 'react';
-import Button from './ui/Button';
-import Icon from './AppIcon';
+import { Button } from './ui/Button';
+import { AlertTriangle, RefreshCw, Home } from 'lucide-react';
 
 class ErrorBoundary extends React.Component {
   constructor(props) {
@@ -45,7 +45,7 @@ class ErrorBoundary extends React.Component {
           <div className="glass-card rounded-2xl p-8 max-w-2xl w-full">
             <div className="text-center">
               <div className="bg-error/10 text-error w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
-                <Icon name="AlertTriangle" size={32} />
+                <AlertTriangle className="h-8 w-8" />
               </div>
               
               <h2 className="text-2xl font-bold mb-2">Something went wrong</h2>
@@ -68,10 +68,10 @@ class ErrorBoundary extends React.Component {
               </div>
               
               <div className="flex flex-col sm:flex-row gap-3 justify-center">
-                <Button onClick={this.handleRetry} iconName="RefreshCw">
+                <Button onClick={this.handleRetry} icon={<RefreshCw className="h-4 w-4" />}>
                   Try Again
                 </Button>
-                <Button variant="outline" onClick={this.handleGoHome} iconName="Home">
+                <Button variant="outline" onClick={this.handleGoHome} icon={<Home className="h-4 w-4" />}>
                   Go Home
                 </Button>
               </div>

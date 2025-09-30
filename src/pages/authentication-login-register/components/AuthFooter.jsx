@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import Button from '../../../components/ui/Button';
+import { Button } from '../../../components/ui/Button';
+import { ArrowLeft } from 'lucide-react';
 
 const AuthFooter = () => {
   const navigate = useNavigate();
@@ -12,7 +13,7 @@ const AuthFooter = () => {
           variant="ghost"
           size="sm"
           onClick={() => navigate('/landing-page')}
-          iconName="ArrowLeft"
+          icon={<ArrowLeft className="h-4 w-4" />}
           iconPosition="left"
         >
           Back to Home

@@ -286,14 +286,7 @@ const ResultsReview = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex flex-col sm:flex-row items-center justify-between space-y-3 sm:space-y-0 sm:space-x-4">
             <div className="flex items-center space-x-3">
-              <Button
-                variant="outline"
-                iconName="ArrowLeft"
-                iconPosition="left"
-                onClick={handleBackToDashboard}
-              >
-                Back to Dashboard
-              </Button>
+              {/* Removed Back to Dashboard button */}
               
               <Button
                 variant="outline"

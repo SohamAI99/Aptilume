@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Icon from '../../../components/AppIcon';
+import { Settings, Shield, Bell, Lock, User, Globe, Clock, Hash, Eye, EyeOff } from 'lucide-react';
 import Button from '../../../components/ui/Button';
 
 const StudentSettings = () => {
@@ -8,10 +8,10 @@ const StudentSettings = () => {
   const [activeTab, setActiveTab] = useState('general');
 
   const tabs = [
-    { id: 'general', label: 'General', icon: 'Settings' },
-    { id: 'security', label: 'Security', icon: 'Shield' },
-    { id: 'notifications', label: 'Notifications', icon: 'Bell' },
-    { id: 'privacy', label: 'Privacy', icon: 'Lock' }
+    { id: 'general', label: 'General', icon: Settings },
+    { id: 'security', label: 'Security', icon: Shield },
+    { id: 'notifications', label: 'Notifications', icon: Bell },
+    { id: 'privacy', label: 'Privacy', icon: Lock }
   ];
 
   const [settings, setSettings] = useState({
@@ -53,47 +53,59 @@ const StudentSettings = () => {
       case 'general':
         return (
           <div className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-sm font-medium text-foreground mb-2">
+                  Language
+                </label>
+                <select
+                  value={settings.language}
+                  onChange={(e) => handleChange('language', e.target.value)}
+                  className="w-full p-3 border border-border rounded-lg bg-background text-foreground focus:ring-2 focus:ring-primary focus:border-primary"
+                >
+                  <option value="en">English</option>
+                  <option value="es">Spanish</option>
+                  <option value="fr">French</option>
+                  <option value="de">German</option>
+                </select>
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-foreground mb-2">
+                  Timezone
+                </label>
+                <select
+                  value={settings.timezone}
+                  onChange={(e) => handleChange('timezone', e.target.value)}
+                  className="w-full p-3 border border-border rounded-lg bg-background text-foreground focus:ring-2 focus:ring-primary focus:border-primary"
+                >
+                  <option value="UTC">UTC</option>
+                  <option value="America/New_York">Eastern Time</option>
+                  <option value="America/Los_Angeles">Pacific Time</option>
+                  <option value="Europe/London">London</option>
+                  <option value="Asia/Tokyo">Tokyo</option>
+                </select>
+              </div>
+            </div>
+            
             <div>
-              <h3 className="text-lg font-semibold mb-4">General Settings</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium mb-2">Language</label>
-                  <select
-                    value={settings.language}
-                    onChange={(e) => handleChange('language', e.target.value)}
-                    className="w-full px-4 py-2 bg-background border border-border rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none transition"
+              <label className="block text-sm font-medium text-foreground mb-2">
+                Theme
+              </label>
+              <div className="grid grid-cols-3 gap-4">
+                {['light', 'dark', 'system'].map((theme) => (
+                  <button
+                    key={theme}
+                    onClick={() => handleChange('theme', theme)}
+                    className={`p-4 border rounded-lg text-center ${
+                      settings.theme === theme
+                        ? 'border-primary bg-primary/10'
+                        : 'border-border hover:bg-muted'
+                    }`}
                   >
-                    <option value="en">English</option>
-                    <option value="es">Spanish</option>
-                    <option value="fr">French</option>
-                  </select>
-                </div>
-                
-                <div>
-                  <label className="block text-sm font-medium mb-2">Timezone</label>
-                  <select
-                    value={settings.timezone}
-                    onChange={(e) => handleChange('timezone', e.target.value)}
-                    className="w-full px-4 py-2 bg-background border border-border rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none transition"
-                  >
-                    <option value="UTC">UTC</option>
-                    <option value="EST">Eastern Time</option>
-                    <option value="PST">Pacific Time</option>
-                  </select>
-                </div>
-                
-                <div>
-                  <label className="block text-sm font-medium mb-2">Theme</label>
-                  <select
-                    value={settings.theme}
-                    onChange={(e) => handleChange('theme', e.target.value)}
-                    className="w-full px-4 py-2 bg-background border border-border rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none transition"
-                  >
-                    <option value="light">Light</option>
-                    <option value="dark">Dark</option>
-                    <option value="system">System Default</option>
-                  </select>
-                </div>
+                    <div className="capitalize font-medium text-foreground">{theme}</div>
+                  </button>
+                ))}
               </div>
             </div>
           </div>
@@ -102,153 +114,85 @@ const StudentSettings = () => {
       case 'security':
         return (
           <div className="space-y-6">
-            <h3 className="text-lg font-semibold">Security Settings</h3>
-            <div className="space-y-4">
-              <div className="flex items-center justify-between p-4 glass-card rounded-lg">
-                <div>
-                  <h4 className="font-medium">Two-Factor Authentication</h4>
-                  <p className="text-sm text-muted-foreground">Add an extra layer of security to your account</p>
-                </div>
-                <label className="relative inline-flex items-center cursor-pointer">
-                  <input
-                    type="checkbox"
-                    checked={settings.twoFactor}
-                    onChange={(e) => handleChange('twoFactor', e.target.checked)}
-                    className="sr-only peer"
-                  />
-                  <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
-                </label>
+            <div className="flex items-center justify-between p-4 bg-muted/30 rounded-lg border border-border">
+              <div>
+                <h3 className="font-medium text-foreground">Two-Factor Authentication</h3>
+                <p className="text-sm text-muted-foreground">
+                  Add an extra layer of security to your account
+                </p>
               </div>
-              
-              <div className="flex items-center justify-between p-4 glass-card rounded-lg">
-                <div>
-                  <h4 className="font-medium">Password Expiry</h4>
-                  <p className="text-sm text-muted-foreground">Require password change every X days</p>
-                </div>
-                <select
-                  value={settings.passwordExpiry}
-                  onChange={(e) => handleChange('passwordExpiry', parseInt(e.target.value))}
-                  className="px-3 py-1 bg-background border border-border rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none transition"
-                >
-                  <option value={30}>30 days</option>
-                  <option value={60}>60 days</option>
-                  <option value={90}>90 days</option>
-                  <option value={180}>180 days</option>
-                </select>
-              </div>
+              <Button
+                variant={settings.twoFactor ? "success" : "outline"}
+                onClick={() => handleChange('twoFactor', !settings.twoFactor)}
+              >
+                {settings.twoFactor ? 'Enabled' : 'Enable'}
+              </Button>
+            </div>
+            
+            <div className="p-4 bg-muted/30 rounded-lg border border-border">
+              <h3 className="font-medium text-foreground mb-2">Password Expiry</h3>
+              <p className="text-sm text-muted-foreground mb-4">
+                Require password change every
+              </p>
+              <select
+                value={settings.passwordExpiry}
+                onChange={(e) => handleChange('passwordExpiry', parseInt(e.target.value))}
+                className="w-full p-3 border border-border rounded-lg bg-background text-foreground focus:ring-2 focus:ring-primary focus:border-primary"
+              >
+                <option value={30}>30 days</option>
+                <option value={60}>60 days</option>
+                <option value={90}>90 days</option>
+                <option value={180}>180 days</option>
+              </select>
             </div>
           </div>
         );
       
       case 'notifications':
         return (
-          <div className="space-y-6">
-            <h3 className="text-lg font-semibold">Notification Settings</h3>
-            <div className="space-y-4">
-              <div className="flex items-center justify-between p-4 glass-card rounded-lg">
+          <div className="space-y-4">
+            {[
+              { id: 'emailNotifications', label: 'Email Notifications', description: 'Receive important updates via email' },
+              { id: 'quizReminders', label: 'Quiz Reminders', description: 'Get reminders before scheduled quizzes' },
+              { id: 'resultNotifications', label: 'Result Notifications', description: 'Be notified when results are available' }
+            ].map((notification) => (
+              <div key={notification.id} className="flex items-center justify-between p-4 bg-muted/30 rounded-lg border border-border">
                 <div>
-                  <h4 className="font-medium">Email Notifications</h4>
-                  <p className="text-sm text-muted-foreground">Receive email updates about platform activity</p>
+                  <h3 className="font-medium text-foreground">{notification.label}</h3>
+                  <p className="text-sm text-muted-foreground">{notification.description}</p>
                 </div>
-                <label className="relative inline-flex items-center cursor-pointer">
-                  <input
-                    type="checkbox"
-                    checked={settings.emailNotifications}
-                    onChange={(e) => handleChange('emailNotifications', e.target.checked)}
-                    className="sr-only peer"
-                  />
-                  <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
-                </label>
+                <Button
+                  variant={settings[notification.id] ? "success" : "outline"}
+                  onClick={() => handleChange(notification.id, !settings[notification.id])}
+                >
+                  {settings[notification.id] ? 'On' : 'Off'}
+                </Button>
               </div>
-              
-              <div className="flex items-center justify-between p-4 glass-card rounded-lg">
-                <div>
-                  <h4 className="font-medium">Quiz Reminders</h4>
-                  <p className="text-sm text-muted-foreground">Receive reminders before upcoming quizzes</p>
-                </div>
-                <label className="relative inline-flex items-center cursor-pointer">
-                  <input
-                    type="checkbox"
-                    checked={settings.quizReminders}
-                    onChange={(e) => handleChange('quizReminders', e.target.checked)}
-                    className="sr-only peer"
-                  />
-                  <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
-                </label>
-              </div>
-              
-              <div className="flex items-center justify-between p-4 glass-card rounded-lg">
-                <div>
-                  <h4 className="font-medium">Result Notifications</h4>
-                  <p className="text-sm text-muted-foreground">Receive notifications when quiz results are available</p>
-                </div>
-                <label className="relative inline-flex items-center cursor-pointer">
-                  <input
-                    type="checkbox"
-                    checked={settings.resultNotifications}
-                    onChange={(e) => handleChange('resultNotifications', e.target.checked)}
-                    className="sr-only peer"
-                  />
-                  <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
-                </label>
-              </div>
-            </div>
+            ))}
           </div>
         );
       
       case 'privacy':
         return (
-          <div className="space-y-6">
-            <h3 className="text-lg font-semibold">Privacy Settings</h3>
-            <div className="space-y-4">
-              <div className="flex items-center justify-between p-4 glass-card rounded-lg">
+          <div className="space-y-4">
+            {[
+              { id: 'showActivity', label: 'Show Activity', description: 'Display your activity to other users' },
+              { id: 'shareProfile', label: 'Share Profile', description: 'Allow others to view your profile' },
+              { id: 'allowRecommendations', label: 'Personalized Recommendations', description: 'Allow personalized content recommendations' }
+            ].map((privacy) => (
+              <div key={privacy.id} className="flex items-center justify-between p-4 bg-muted/30 rounded-lg border border-border">
                 <div>
-                  <h4 className="font-medium">Show Activity History</h4>
-                  <p className="text-sm text-muted-foreground">Display your activity history on your profile</p>
+                  <h3 className="font-medium text-foreground">{privacy.label}</h3>
+                  <p className="text-sm text-muted-foreground">{privacy.description}</p>
                 </div>
-                <label className="relative inline-flex items-center cursor-pointer">
-                  <input
-                    type="checkbox"
-                    checked={settings.showActivity}
-                    onChange={(e) => handleChange('showActivity', e.target.checked)}
-                    className="sr-only peer"
-                  />
-                  <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
-                </label>
+                <Button
+                  variant={settings[privacy.id] ? "success" : "outline"}
+                  onClick={() => handleChange(privacy.id, !settings[privacy.id])}
+                >
+                  {settings[privacy.id] ? 'On' : 'Off'}
+                </Button>
               </div>
-              
-              <div className="flex items-center justify-between p-4 glass-card rounded-lg">
-                <div>
-                  <h4 className="font-medium">Share Profile</h4>
-                  <p className="text-sm text-muted-foreground">Allow other users to view your profile</p>
-                </div>
-                <label className="relative inline-flex items-center cursor-pointer">
-                  <input
-                    type="checkbox"
-                    checked={settings.shareProfile}
-                    onChange={(e) => handleChange('shareProfile', e.target.checked)}
-                    className="sr-only peer"
-                  />
-                  <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
-                </label>
-              </div>
-              
-              <div className="flex items-center justify-between p-4 glass-card rounded-lg">
-                <div>
-                  <h4 className="font-medium">Allow Recommendations</h4>
-                  <p className="text-sm text-muted-foreground">Allow the system to recommend quizzes based on your activity</p>
-                </div>
-                <label className="relative inline-flex items-center cursor-pointer">
-                  <input
-                    type="checkbox"
-                    checked={settings.allowRecommendations}
-                    onChange={(e) => handleChange('allowRecommendations', e.target.checked)}
-                    className="sr-only peer"
-                  />
-                  <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
-                </label>
-              </div>
-            </div>
+            ))}
           </div>
         );
       
@@ -258,42 +202,46 @@ const StudentSettings = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto">
-      <div className="flex items-center justify-between mb-6">
-        <h2 className="text-2xl font-bold">Student Settings</h2>
-        <Button onClick={() => navigate('/student-dashboard')} variant="outline" iconName="ArrowLeft">
-          Back to Dashboard
-        </Button>
+    <div className="glass-card rounded-2xl p-6">
+      <div className="flex items-center space-x-3 mb-6">
+        <Settings className="h-6 w-6 text-primary" />
+        <h2 className="text-xl font-semibold text-foreground">Settings</h2>
       </div>
-
-      <div className="glass-card rounded-2xl overflow-hidden">
-        <div className="border-b border-border">
-          <div className="flex flex-wrap">
-            {tabs.map((tab) => (
-              <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
-                className={`flex items-center gap-2 px-6 py-4 text-sm font-medium border-b-2 transition-colors ${
-                  activeTab === tab.id
-                    ? 'border-primary text-primary bg-primary/5'
-                    : 'border-transparent text-muted-foreground hover:text-foreground'
-                }`}
-              >
-                <Icon name={tab.icon} size={16} />
-                <span>{tab.label}</span>
-              </button>
-            ))}
+      
+      <div className="flex flex-col lg:flex-row gap-6">
+        {/* Sidebar Navigation */}
+        <div className="lg:w-1/4">
+          <div className="space-y-1">
+            {tabs.map((tab) => {
+              const IconComponent = tab.icon;
+              return (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id)}
+                  className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-left transition-colors ${
+                    activeTab === tab.id
+                      ? 'bg-primary/10 text-primary border border-primary/20'
+                      : 'hover:bg-muted text-foreground'
+                  }`}
+                >
+                  <IconComponent className="h-5 w-5" />
+                  <span className="font-medium">{tab.label}</span>
+                </button>
+              );
+            })}
           </div>
         </div>
-
-        <div className="p-6">
-          {renderTabContent()}
-          
-          <div className="flex justify-end gap-3 mt-8">
-            <Button variant="outline">Cancel</Button>
-            <Button onClick={handleSave} iconName="Save">
-              Save Settings
-            </Button>
+        
+        {/* Main Content */}
+        <div className="lg:w-3/4">
+          <div className="bg-muted/20 rounded-lg p-6 border border-border">
+            {renderTabContent()}
+            
+            <div className="mt-8 flex justify-end">
+              <Button variant="primary" onClick={handleSave}>
+                Save Changes
+              </Button>
+            </div>
           </div>
         </div>
       </div>

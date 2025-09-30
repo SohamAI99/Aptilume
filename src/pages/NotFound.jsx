@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import Button from '../components/ui/Button';
-import Icon from '../components/AppIcon';
+import { ArrowLeft, Home } from 'lucide-react';
+import { Button } from '../components/ui/Button';
 
 const NotFound = () => {
   const navigate = useNavigate();
@@ -27,7 +27,7 @@ const NotFound = () => {
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Button
             variant="primary"
-            icon={<Icon name="ArrowLeft" />}
+            icon={<ArrowLeft className="h-4 w-4" />}
             iconPosition="left"
             onClick={() => window.history?.back()}
           >
@@ -36,7 +36,7 @@ const NotFound = () => {
 
           <Button
             variant="outline"
-            icon={<Icon name="Home" />}
+            icon={<Home className="h-4 w-4" />}
             iconPosition="left"
             onClick={handleGoHome}
           >

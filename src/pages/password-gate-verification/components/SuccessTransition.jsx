@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Icon from '../../../components/AppIcon';
+import { CheckCircle } from 'lucide-react';
 
 const SuccessTransition = ({ isVisible, onComplete }) => {
   const navigate = useNavigate();
@@ -23,7 +23,7 @@ const SuccessTransition = ({ isVisible, onComplete }) => {
       <div className="glass-card rounded-2xl p-8 max-w-sm mx-4">
         <div className="text-center">
           <div className="w-20 h-20 bg-success rounded-full flex items-center justify-center mx-auto mb-6 animate-pulse">
-            <Icon name="CheckCircle" size={40} color="white" />
+            <CheckCircle className="h-10 w-10 text-white" />
           </div>
           
           <h3 className="text-xl font-bold text-foreground mb-2">

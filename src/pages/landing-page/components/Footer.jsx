@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import Icon from '../../../components/AppIcon';
+import { Mail, Phone, MapPin, Twitter, Linkedin, Facebook, Instagram, Youtube } from 'lucide-react';
 
 const Footer = () => {
   const navigate = useNavigate();
@@ -35,11 +35,11 @@ const Footer = () => {
   };
 
   const socialLinks = [
-    { name: "Twitter", icon: "Twitter", href: "#twitter" },
-    { name: "LinkedIn", icon: "Linkedin", href: "#linkedin" },
-    { name: "Facebook", icon: "Facebook", href: "#facebook" },
-    { name: "Instagram", icon: "Instagram", href: "#instagram" },
-    { name: "YouTube", icon: "Youtube", href: "#youtube" }
+    { name: "Twitter", icon: <Twitter size={18} />, href: "#twitter" },
+    { name: "LinkedIn", icon: <Linkedin size={18} />, href: "#linkedin" },
+    { name: "Facebook", icon: <Facebook size={18} />, href: "#facebook" },
+    { name: "Instagram", icon: <Instagram size={18} />, href: "#instagram" },
+    { name: "YouTube", icon: <Youtube size={18} />, href: "#youtube" }
   ];
 
   const handleLinkClick = (href) => {
@@ -88,15 +88,15 @@ const Footer = () => {
             {/* Contact Info */}
             <div className="space-y-3">
               <div className="flex items-center space-x-3 text-gray-300">
-                <Icon name="Mail" size={16} />
+                <Mail size={16} />
                 <span>support@aptilume.com</span>
               </div>
               <div className="flex items-center space-x-3 text-gray-300">
-                <Icon name="Phone" size={16} />
+                <Phone size={16} />
                 <span>+1 (555) 123-4567</span>
               </div>
               <div className="flex items-center space-x-3 text-gray-300">
-                <Icon name="MapPin" size={16} />
+                <MapPin size={16} />
                 <span>San Francisco, CA 94105</span>
               </div>
             </div>
@@ -241,7 +241,7 @@ const Footer = () => {
                   className="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center text-gray-300 hover:text-primary hover:bg-gray-700 transition-all duration-200 spring-bounce"
                   aria-label={social?.name}
                 >
-                  <Icon name={social?.icon} size={18} />
+                  {social?.icon}
                 </button>
               ))}
             </div>

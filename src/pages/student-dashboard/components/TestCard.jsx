@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { ArrowRight } from 'lucide-react';
 import Button from '../../../components/ui/Button';
-import Icon from '../../../components/AppIcon';
 
 const TestCard = ({ test, onStartTest }) => {
   const navigate = useNavigate();
@@ -37,80 +37,65 @@ const TestCard = ({ test, onStartTest }) => {
       'FAANG': 'bg-blue-100 text-blue-700',
       'Mango': 'bg-orange-100 text-orange-700'
     };
-    return colors?.[company] || 'bg-gray-100 text-gray-700';
+    return colors[company] || 'bg-gray-100 text-gray-700';
   };
 
   return (
-    <div className="glass-card rounded-2xl p-6 hover:shadow-elevation-3 hover:-translate-y-0.5 transition-all duration-300">
-      <div className="flex items-start justify-between mb-4">
-        <div className="flex-1">
-          <h3 className="text-lg font-semibold text-foreground mb-2 line-clamp-2">
-            {test?.title}
-          </h3>
-          <p className="text-sm text-muted-foreground mb-3 line-clamp-2">
-            {test?.description}
-          </p>
+    <div className="glass-card rounded-2xl p-6 hover:shadow-elevation-2 transition-all duration-200 border border-border">
+      <div className="flex flex-col h-full">
+        {/* Header */}
+        <div className="flex items-start justify-between mb-4">
+          <div>
+            <h3 className="text-lg font-semibold text-foreground mb-1">{test?.title}</h3>
+            <p className="text-sm text-muted-foreground line-clamp-2">{test?.description}</p>
+          </div>
+          <div className={`px-2 py-1 rounded-full text-xs font-medium ${getDifficultyColor(test?.difficulty)}`}>
+            {test?.difficulty}
+          </div>
         </div>
-        {test?.isNew && (
-          <span className="bg-primary/20 text-primary text-xs px-2 py-1 rounded-full font-medium border border-primary/30">
-            New
+
+        {/* Meta Info */}
+        <div className="flex flex-wrap gap-2 mb-4">
+          <span className="text-xs bg-muted/50 text-muted-foreground px-2 py-1 rounded-full">
+            {test?.questionCount} questions
           </span>
-        )}
-      </div>
-      <div className="flex flex-wrap gap-2 mb-4">
-        {test?.companies?.map((company, index) => (
-          <span
-            key={index}
-            className={`text-xs px-2 py-1 rounded-full font-medium ${getCompanyColor(company)} border border-border/60`}
+          <span className="text-xs bg-muted/50 text-muted-foreground px-2 py-1 rounded-full">
+            {test?.duration} min
+          </span>
+          <span className={`text-xs px-2 py-1 rounded-full ${getCompanyColor(test?.company)}`}>
+            {test?.company}
+          </span>
+        </div>
+
+        {/* Stats */}
+        <div className="grid grid-cols-3 gap-2 mb-4 text-center">
+          <div className="bg-muted/30 rounded-lg p-2">
+            <div className="text-sm font-semibold text-foreground">{test?.attempts || 0}</div>
+            <div className="text-xs text-muted-foreground">Attempts</div>
+          </div>
+          <div className="bg-muted/30 rounded-lg p-2">
+            <div className="text-sm font-semibold text-foreground">{test?.avgScore || 0}%</div>
+            <div className="text-xs text-muted-foreground">Avg. Score</div>
+          </div>
+          <div className="bg-muted/30 rounded-lg p-2">
+            <div className="text-sm font-semibold text-foreground">{test?.passRate || 0}%</div>
+            <div className="text-xs text-muted-foreground">Pass Rate</div>
+          </div>
+        </div>
+
+        {/* Action */}
+        <div className="mt-auto">
+          <Button
+            variant="primary"
+            onClick={handleStartTest}
+            className="w-full"
+            icon={<ArrowRight className="h-4 w-4" />}
+            iconPosition="right"
           >
-            {company}
-          </span>
-        ))}
-        <span className={`text-xs px-2 py-1 rounded-full font-medium ${getDifficultyColor(test?.difficulty)} border border-border/60`}>
-          {test?.difficulty}
-        </span>
-      </div>
-      <div className="grid grid-cols-3 gap-4 mb-6">
-        <div className="text-center">
-          <div className="flex items-center justify-center mb-1">
-            <Icon name="Clock" size={16} className="text-muted-foreground" />
-          </div>
-          <div className="text-sm font-medium text-foreground">{test?.duration}</div>
-          <div className="text-xs text-muted-foreground">Duration</div>
-        </div>
-        <div className="text-center">
-          <div className="flex items-center justify-center mb-1">
-            <Icon name="FileText" size={16} className="text-muted-foreground" />
-          </div>
-          <div className="text-sm font-medium text-foreground">{test?.questionCount}</div>
-          <div className="text-xs text-muted-foreground">Questions</div>
-        </div>
-        <div className="text-center">
-          <div className="flex items-center justify-center mb-1">
-            <Icon name="Users" size={16} className="text-muted-foreground" />
-          </div>
-          <div className="text-sm font-medium text-foreground">{test?.attempts}</div>
-          <div className="text-xs text-muted-foreground">Attempts</div>
+            Start Test
+          </Button>
         </div>
       </div>
-      {test?.deadline && (
-        <div className="flex items-center gap-2 mb-4 p-3 bg-warning/10 rounded-lg border border-warning/20">
-          <Icon name="AlertCircle" size={16} className="text-warning" />
-          <span className="text-sm text-warning font-medium">
-            Deadline: {new Date(test.deadline)?.toLocaleDateString()}
-          </span>
-        </div>
-      )}
-      <Button
-        variant="gradient"
-        fullWidth
-        iconName="Play"
-        iconPosition="left"
-        onClick={handleStartTest}
-        className="font-medium"
-      >
-        Start Test
-      </Button>
     </div>
   );
 };

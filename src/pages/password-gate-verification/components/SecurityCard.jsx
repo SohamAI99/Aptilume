@@ -1,5 +1,5 @@
 import React from 'react';
-import Icon from '../../../components/AppIcon';
+import { Shield, Lock } from 'lucide-react';
 
 const SecurityCard = ({ children, className = '' }) => {
   return (
@@ -7,7 +7,7 @@ const SecurityCard = ({ children, className = '' }) => {
       {/* Security Header */}
       <div className="text-center mb-8">
         <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
-          <Icon name="Shield" size={32} color="white" />
+          <Shield className="h-8 w-8 text-white" />
         </div>
         <h1 className="text-2xl font-bold text-foreground mb-2">
           Security Verification
@@ -22,7 +22,7 @@ const SecurityCard = ({ children, className = '' }) => {
       {/* Security Notice */}
       <div className="mt-6 p-4 bg-muted/50 rounded-lg border border-border">
         <div className="flex items-start space-x-3">
-          <Icon name="Lock" size={16} className="text-primary mt-0.5 flex-shrink-0" />
+          <Lock className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
           <div>
             <p className="text-sm font-medium text-foreground mb-1">
               Why is this required?

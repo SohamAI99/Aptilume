@@ -20,13 +20,13 @@ import Leaderboard from './pages/leaderboard';
 import ProfilePage from './pages/profile';
 import AdminProfile from './pages/admin-dashboard/components/AdminProfile';
 import TeacherProfile from './pages/teacher-dashboard/components/TeacherProfile';
-import StudentProfile from './pages/student-dashboard/components/StudentProfile';
+import StudentProfilePage from './pages/student-dashboard/profile';
 
 // Settings pages
 import SettingsPage from './pages/settings';
 import AdminSettings from './pages/admin-dashboard/components/AdminSettings';
 import TeacherSettings from './pages/teacher-dashboard/components/TeacherSettings';
-import StudentSettings from './pages/student-dashboard/components/StudentSettings';
+import StudentSettingsPage from './pages/student-dashboard/settings';
 
 // Attempt history pages
 import AttemptHistory from './pages/student-dashboard/components/AttemptHistory';
@@ -94,13 +94,13 @@ const Routes = () => {
           <Route path="/profile" element={<NavigationGuard><ProfilePage /></NavigationGuard>} />
           <Route path="/admin/profile" element={<NavigationGuard><AdminProfile /></NavigationGuard>} />
           <Route path="/teacher/profile" element={<NavigationGuard><TeacherProfile /></NavigationGuard>} />
-          <Route path="/student/profile" element={<NavigationGuard><StudentProfile /></NavigationGuard>} />
+          <Route path="/student/profile" element={<NavigationGuard><StudentProfilePage /></NavigationGuard>} />
           
           {/* Settings routes */}
           <Route path="/settings" element={<NavigationGuard><SettingsPage /></NavigationGuard>} />
           <Route path="/admin/settings" element={<NavigationGuard><AdminSettings /></NavigationGuard>} />
           <Route path="/teacher/settings" element={<NavigationGuard><TeacherSettings /></NavigationGuard>} />
-          <Route path="/student/settings" element={<NavigationGuard><StudentSettings /></NavigationGuard>} />
+          <Route path="/student/settings" element={<NavigationGuard><StudentSettingsPage /></NavigationGuard>} />
           
           {/* Attempt history routes - only for students */}
           <Route path="/attempt-history" element={<NavigationGuard><AttemptHistory /></NavigationGuard>} />

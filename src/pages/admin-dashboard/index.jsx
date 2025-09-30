@@ -6,11 +6,11 @@ import AnalyticsWidget from './components/AnalyticsWidget';
 import ActivityFeed from './components/ActivityFeed';
 import SystemHealthMonitor from './components/SystemHealthMonitor';
 // Removed embedded components - using separate pages now
-import Icon from '../../components/AppIcon';
-import Button from '../../components/ui/Button';
+import { Button } from '../../components/ui/Button';
 import { listenToUser, listenToQuizzes, listenToUsers } from '../../utils/dbService';
 import * as authService from '../../utils/authService';
 import AccountSection from '../../components/ui/AccountSection';
+import { User, Users, BookOpen, BarChart3, Settings, Database, Shield, FileText } from 'lucide-react';
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
@@ -171,7 +171,7 @@ const AdminDashboard = () => {
                 {users.slice(0, 5).map((user, index) => (
                   <div key={user.id} className="flex items-start gap-4 p-4 rounded-lg hover:bg-muted/50">
                     <div className="bg-muted/50 p-2 rounded-full">
-                      <Icon name="User" size={16} className="text-muted-foreground" />
+                      <User className="h-4 w-4 text-muted-foreground" />
                     </div>
                     <div>
                       <div className="font-medium">{user.name || user.email?.split('@')[0] || 'User'}</div>
@@ -196,76 +196,111 @@ const AdminDashboard = () => {
                 <div className="rounded-2xl p-6 border border-border">
                   <div className="flex items-center gap-4 mb-4">
                     <div className="bg-primary/10 p-3 rounded-lg">
-                      <Icon name="Users" size={24} className="text-primary" />
+                      <Users className="h-6 w-6 text-primary" />
                     </div>
-                    <h3 className="text-lg font-semibold">User Management</h3>
+                    <div>
+                      <h3 className="font-semibold">Users</h3>
+                      <p className="text-sm text-muted-foreground">Manage accounts</p>
+                    </div>
                   </div>
-                  <p className="text-muted-foreground mb-4">
-                    Manage users, roles, and permissions across the platform
-                  </p>
-                  <Button onClick={handleManageUsers} variant="outline" fullWidth>
-                    Manage Users
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    onClick={handleManageUsers}
+                    className="w-full"
+                  >
+                    Manage
                   </Button>
                 </div>
                 
                 <div className="rounded-2xl p-6 border border-border">
                   <div className="flex items-center gap-4 mb-4">
-                    <div className="bg-accent/10 p-3 rounded-lg">
-                      <Icon name="FileText" size={24} className="text-accent" />
+                    <div className="bg-primary/10 p-3 rounded-lg">
+                      <BookOpen className="h-6 w-6 text-primary" />
                     </div>
-                    <h3 className="text-lg font-semibold">Quiz Management</h3>
+                    <div>
+                      <h3 className="font-semibold">Quizzes</h3>
+                      <p className="text-sm text-muted-foreground">Manage content</p>
+                    </div>
                   </div>
-                  <p className="text-muted-foreground mb-4">
-                    Create, edit, and manage all quizzes on the platform
-                  </p>
-                  <Button onClick={handleManageQuizzes} variant="outline" fullWidth>
-                    Manage Quizzes
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    onClick={handleManageQuizzes}
+                    className="w-full"
+                  >
+                    Manage
                   </Button>
                 </div>
                 
                 <div className="rounded-2xl p-6 border border-border">
                   <div className="flex items-center gap-4 mb-4">
-                    <div className="bg-success/10 p-3 rounded-lg">
-                      <Icon name="BarChart3" size={24} className="text-success" />
+                    <div className="bg-primary/10 p-3 rounded-lg">
+                      <BarChart3 className="h-6 w-6 text-primary" />
                     </div>
-                    <h3 className="text-lg font-semibold">Reports & Analytics</h3>
+                    <div>
+                      <h3 className="font-semibold">Reports</h3>
+                      <p className="text-sm text-muted-foreground">View analytics</p>
+                    </div>
                   </div>
-                  <p className="text-muted-foreground mb-4">
-                    View detailed reports and analytics for the platform
-                  </p>
-                  <Button onClick={handleViewReports} variant="outline" fullWidth>
-                    View Reports
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    onClick={handleViewReports}
+                    className="w-full"
+                  >
+                    View
                   </Button>
                 </div>
                 
                 <div className="rounded-2xl p-6 border border-border">
                   <div className="flex items-center gap-4 mb-4">
-                    <div className="bg-warning/10 p-3 rounded-lg">
-                      <Icon name="Database" size={24} className="text-warning" />
+                    <div className="bg-primary/10 p-3 rounded-lg">
+                      <Settings className="h-6 w-6 text-primary" />
                     </div>
-                    <h3 className="text-lg font-semibold">Seed Quizzes</h3>
+                    <div>
+                      <h3 className="font-semibold">Settings</h3>
+                      <p className="text-sm text-muted-foreground">Platform config</p>
+                    </div>
                   </div>
-                  <p className="text-muted-foreground mb-4">
-                    Create or update the two required quizzes (Microsoft and Meta)
-                  </p>
-                  <Button onClick={handleSeedQuizzes} variant="outline" fullWidth>
-                    Seed Quizzes
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    onClick={() => navigate('/admin/settings')}
+                    className="w-full"
+                  >
+                    Configure
                   </Button>
                 </div>
                 
                 <div className="rounded-2xl p-6 border border-border">
                   <div className="flex items-center gap-4 mb-4">
-                    <div className="bg-destructive/10 p-3 rounded-lg">
-                      <Icon name="Bug" size={24} className="text-destructive" />
+                    <div className="bg-primary/10 p-3 rounded-lg">
+                      <Database className="h-6 w-6 text-primary" />
                     </div>
-                    <h3 className="text-lg font-semibold">Debug Quiz</h3>
+                    <div>
+                      <h3 className="font-semibold">Tools</h3>
+                      <p className="text-sm text-muted-foreground">Development</p>
+                    </div>
                   </div>
-                  <p className="text-muted-foreground mb-4">
-                    Inspect quiz data in the database for troubleshooting
-                  </p>
-                  <Button onClick={handleDebugQuiz} variant="outline" fullWidth>
-                    Debug Quiz
-                  </Button>
+                  <div className="flex flex-col gap-2">
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      onClick={handleSeedQuizzes}
+                      className="w-full"
+                    >
+                      Seed Data
+                    </Button>
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      onClick={handleDebugQuiz}
+                      className="w-full"
+                    >
+                      Debug
+                    </Button>
+                  </div>
                 </div>
               </div>
             </div>

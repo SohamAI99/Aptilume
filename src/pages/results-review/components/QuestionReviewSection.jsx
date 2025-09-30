@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import Button from '../../../components/ui/Button';
-import Icon from '../../../components/AppIcon';
+import { Button } from '../../../components/ui/Button';
+import { List, CheckCircle, XCircle, Circle, Maximize2, Minimize2, ChevronUp, ChevronDown, User, Check, Lightbulb } from 'lucide-react';
 import { cn } from '../../../utils/cn';
 
 const QuestionReviewSection = ({ resultsData }) => {
@@ -12,10 +12,10 @@ const QuestionReviewSection = ({ resultsData }) => {
 
   const subjects = ['all', ...new Set(resultsData?.subjects?.map(s => s.name) || [])];
   const statuses = [
-    { value: 'all', label: 'All Questions', icon: 'List' },
-    { value: 'correct', label: 'Correct', icon: 'CheckCircle' },
-    { value: 'incorrect', label: 'Incorrect', icon: 'XCircle' },
-    { value: 'unanswered', label: 'Unanswered', icon: 'Circle' }
+    { value: 'all', label: 'All Questions', icon: List },
+    { value: 'correct', label: 'Correct', icon: CheckCircle },
+    { value: 'incorrect', label: 'Incorrect', icon: XCircle },
+    { value: 'unanswered', label: 'Unanswered', icon: Circle }
   ];
 
   // Filter questions
@@ -59,11 +59,11 @@ const QuestionReviewSection = ({ resultsData }) => {
 
   const getStatusIcon = (question) => {
     if (question?.selectedAnswer === null) {
-      return { name: 'Circle', color: 'text-muted-foreground' };
+      return { icon: Circle, color: 'text-muted-foreground' };
     }
     return question?.isCorrect 
-      ? { name: 'CheckCircle', color: 'text-green-600' }
-      : { name: 'XCircle', color: 'text-red-600' };
+      ? { icon: CheckCircle, color: 'text-green-600' }
+      : { icon: XCircle, color: 'text-red-600' };
   };
 
   const getOptionLabel = (index) => String.fromCharCode(65 + index); // A, B, C, D
@@ -95,22 +95,25 @@ const QuestionReviewSection = ({ resultsData }) => {
           {/* Status Filter */}
           <div className="flex flex-wrap gap-2">
             <span className="text-sm font-medium text-muted-foreground mr-2">Status:</span>
-            {statuses?.map((status) => (
-              <Button
-                key={status?.value}
-                variant={filterStatus === status?.value ? 'default' : 'outline'}
-                size="sm"
-                iconName={status?.icon}
-                iconPosition="left"
-                onClick={() => {
-                  setFilterStatus(status?.value);
-                  setCurrentPage(1);
-                }}
-                className="text-xs"
-              >
-                {status?.label}
-              </Button>
-            ))}
+            {statuses?.map((status) => {
+              const IconComponent = status?.icon;
+              return (
+                <Button
+                  key={status?.value}
+                  variant={filterStatus === status?.value ? 'default' : 'outline'}
+                  size="sm"
+                  icon={<IconComponent className="h-4 w-4" />}
+                  iconPosition="left"
+                  onClick={() => {
+                    setFilterStatus(status?.value);
+                    setCurrentPage(1);
+                  }}
+                  className="text-xs"
+                >
+                  {status?.label}
+                </Button>
+              );
+            })}
           </div>
         </div>
 
@@ -125,7 +128,7 @@ const QuestionReviewSection = ({ resultsData }) => {
             <Button
               variant="ghost"
               size="sm"
-              iconName="Maximize2"
+              icon={<Maximize2 className="h-4 w-4" />}
               onClick={() => setExpandedQuestions(new Set(paginatedQuestions.map(q => q.id)))}
               className="text-xs"
             >
@@ -134,7 +137,7 @@ const QuestionReviewSection = ({ resultsData }) => {
             <Button
               variant="ghost"
               size="sm"
-              iconName="Minimize2"
+              icon={<Minimize2 className="h-4 w-4" />}
               onClick={() => setExpandedQuestions(new Set())}
               className="text-xs"
             >
@@ -148,6 +151,7 @@ const QuestionReviewSection = ({ resultsData }) => {
         {paginatedQuestions?.map((question) => {
           const statusIcon = getStatusIcon(question);
           const isExpanded = expandedQuestions?.has(question?.id);
+          const IconComponent = statusIcon?.icon;
           
           return (
             <div key={question?.id} className="bg-white rounded-lg shadow-elevation-1 border border-border overflow-hidden">
@@ -156,7 +160,7 @@ const QuestionReviewSection = ({ resultsData }) => {
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-3">
                     <div className={cn("w-8 h-8 rounded-full flex items-center justify-center", statusIcon?.color)}>
-                      <Icon name={statusIcon?.name} size={20} />
+                      <IconComponent className="h-5 w-5" />
                     </div>
                     <div>
                       <span className="font-medium text-foreground">Question {question?.id}</span>
@@ -179,7 +183,7 @@ const QuestionReviewSection = ({ resultsData }) => {
                   <Button
                     variant="ghost"
                     size="sm"
-                    iconName={isExpanded ? "ChevronUp" : "ChevronDown"}
+                    icon={isExpanded ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
                     onClick={() => toggleQuestionExpansion(question?.id)}
                   />
                 </div>
@@ -220,8 +224,8 @@ const QuestionReviewSection = ({ resultsData }) => {
                           </span>
                           <span className="text-foreground">{option}</span>
                           <div className="flex items-center space-x-2 ml-auto">
-                            {isSelected && <Icon name="User" size={14} className="text-blue-600" title="Your answer" />}
-                            {isCorrect && <Icon name="Check" size={14} className="text-green-600" title="Correct answer" />}
+                            {isSelected && <User className="h-3.5 w-3.5 text-blue-600" title="Your answer" />}
+                            {isCorrect && <Check className="h-3.5 w-3.5 text-green-600" title="Correct answer" />}
                           </div>
                         </div>
                       </div>
@@ -233,7 +237,7 @@ const QuestionReviewSection = ({ resultsData }) => {
                 {isExpanded && question?.explanation && (
                   <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
                     <div className="flex items-start space-x-2">
-                      <Icon name="Lightbulb" size={18} className="text-blue-600 flex-shrink-0 mt-0.5" />
+                      <Lightbulb className="h-4.5 w-4.5 text-blue-600 flex-shrink-0 mt-0.5" />
                       <div>
                         <h4 className="font-medium text-blue-800 mb-2">Explanation</h4>
                         <p className="text-blue-700 text-sm leading-relaxed">
@@ -255,7 +259,7 @@ const QuestionReviewSection = ({ resultsData }) => {
             <Button
               variant="outline"
               size="sm"
-              iconName="ChevronLeft"
+              icon={<ChevronLeft className="h-4 w-4" />}
               iconPosition="left"
               disabled={currentPage === 1}
               onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
@@ -280,7 +284,7 @@ const QuestionReviewSection = ({ resultsData }) => {
             <Button
               variant="outline"
               size="sm"
-              iconName="ChevronRight"
+              icon={<ChevronRight className="h-4 w-4" />}
               iconPosition="right"
               disabled={currentPage === totalPages}
               onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}

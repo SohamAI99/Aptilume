@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import Input from '../../../components/ui/Input';
-import Button from '../../../components/ui/Button';
+import { Button } from '../../../components/ui/Button';
 import { Checkbox } from '../../../components/ui/Checkbox';
+import { LogIn } from 'lucide-react';
 
 const LoginForm = ({ onSubmit, loading, error, onForgotPassword }) => {
   const [formData, setFormData] = useState({
@@ -104,7 +105,7 @@ const LoginForm = ({ onSubmit, loading, error, onForgotPassword }) => {
         variant="default"
         fullWidth
         loading={loading}
-        iconName="LogIn"
+        icon={<LogIn className="h-4 w-4" />}
         iconPosition="left"
       >
         Sign In

@@ -1,6 +1,6 @@
 import React from 'react';
-import Button from '../../../components/ui/Button';
-import Icon from '../../../components/AppIcon';
+import { Button } from '../../../components/ui/Button';
+import { Trophy, Award, Star, ThumbsUp, Target, User, Clock, Calendar, TrendingUp, CheckCircle, Users, Share2, Download } from 'lucide-react';
 
 const ScoreHeroSection = ({ resultsData, onShare, onCertificate }) => {
   const getGradeColor = (grade) => {
@@ -17,11 +17,11 @@ const ScoreHeroSection = ({ resultsData, onShare, onCertificate }) => {
   };
 
   const getPerformanceIcon = (percentage) => {
-    if (percentage >= 90) return { name: 'Trophy', color: 'text-yellow-500' };
-    if (percentage >= 80) return { name: 'Award', color: 'text-green-500' };
-    if (percentage >= 70) return { name: 'Star', color: 'text-blue-500' };
-    if (percentage >= 60) return { name: 'ThumbsUp', color: 'text-purple-500' };
-    return { name: 'Target', color: 'text-orange-500' };
+    if (percentage >= 90) return { icon: Trophy, color: 'text-yellow-500' };
+    if (percentage >= 80) return { icon: Award, color: 'text-green-500' };
+    if (percentage >= 70) return { icon: Star, color: 'text-blue-500' };
+    if (percentage >= 60) return { icon: ThumbsUp, color: 'text-purple-500' };
+    return { icon: Target, color: 'text-orange-500' };
   };
 
   const performanceIcon = getPerformanceIcon(resultsData?.overall?.percentage);
@@ -33,7 +33,7 @@ const ScoreHeroSection = ({ resultsData, onShare, onCertificate }) => {
           {/* Performance Icon */}
           <div className="mb-6">
             <div className="w-20 h-20 mx-auto bg-white rounded-full shadow-elevation-2 flex items-center justify-center">
-              <Icon name={performanceIcon?.name} size={40} className={performanceIcon?.color} />
+              <performanceIcon.icon className={`h-10 w-10 ${performanceIcon?.color}`} />
             </div>
           </div>
 
@@ -59,15 +59,15 @@ const ScoreHeroSection = ({ resultsData, onShare, onCertificate }) => {
             </h2>
             <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-muted-foreground">
               <div className="flex items-center space-x-2">
-                <Icon name="User" size={16} />
+                <User className="h-4 w-4" />
                 <span>{resultsData?.student?.name}</span>
               </div>
               <div className="flex items-center space-x-2">
-                <Icon name="Clock" size={16} />
+                <Clock className="h-4 w-4" />
                 <span>Time: {Math.floor(resultsData?.timeSpent / 3600)}h {Math.floor((resultsData?.timeSpent % 3600) / 60)}m</span>
               </div>
               <div className="flex items-center space-x-2">
-                <Icon name="Calendar" size={16} />
+                <Calendar className="h-4 w-4" />
                 <span>{resultsData?.submissionTime?.toLocaleDateString()}</span>
               </div>
             </div>
@@ -76,19 +76,19 @@ const ScoreHeroSection = ({ resultsData, onShare, onCertificate }) => {
           {/* Quick Stats Grid */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
             <div className="bg-white rounded-lg p-4 shadow-elevation-1">
-              <Icon name="Target" size={24} className="mx-auto mb-2 text-primary" />
+              <Target className="h-6 w-6 mx-auto mb-2 text-primary" />
               <div className="text-2xl font-bold text-foreground">{resultsData?.overall?.rank}</div>
               <div className="text-xs text-muted-foreground">Rank</div>
             </div>
             
             <div className="bg-white rounded-lg p-4 shadow-elevation-1">
-              <Icon name="TrendingUp" size={24} className="mx-auto mb-2 text-green-500" />
+              <TrendingUp className="h-6 w-6 mx-auto mb-2 text-green-500" />
               <div className="text-2xl font-bold text-foreground">{resultsData?.overall?.percentile}%</div>
               <div className="text-xs text-muted-foreground">Percentile</div>
             </div>
             
             <div className="bg-white rounded-lg p-4 shadow-elevation-1">
-              <Icon name="CheckCircle" size={24} className="mx-auto mb-2 text-blue-500" />
+              <CheckCircle className="h-6 w-6 mx-auto mb-2 text-blue-500" />
               <div className="text-2xl font-bold text-foreground">
                 {resultsData?.questions?.filter(q => q?.isCorrect)?.length}
               </div>
@@ -96,7 +96,7 @@ const ScoreHeroSection = ({ resultsData, onShare, onCertificate }) => {
             </div>
             
             <div className="bg-white rounded-lg p-4 shadow-elevation-1">
-              <Icon name="Users" size={24} className="mx-auto mb-2 text-purple-500" />
+              <Users className="h-6 w-6 mx-auto mb-2 text-purple-500" />
               <div className="text-2xl font-bold text-foreground">
                 {resultsData?.overall?.totalCandidates?.toLocaleString()}
               </div>
@@ -108,7 +108,7 @@ const ScoreHeroSection = ({ resultsData, onShare, onCertificate }) => {
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Button
               variant="outline"
-              iconName="Share2"
+              icon={<Share2 className="h-4 w-4" />}
               iconPosition="left"
               onClick={onShare}
             >
@@ -118,7 +118,7 @@ const ScoreHeroSection = ({ resultsData, onShare, onCertificate }) => {
             {resultsData?.overall?.percentage >= 60 && (
               <Button
                 variant="success"
-                iconName="Download"
+                icon={<Download className="h-4 w-4" />}
                 iconPosition="left"
                 onClick={onCertificate}
               >

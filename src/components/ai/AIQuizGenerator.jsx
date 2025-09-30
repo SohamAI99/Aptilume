@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import Icon from '../AppIcon';
-import Button from '../ui/Button';
+import { Button } from '../ui/Button';
 import Input from '../ui/Input';
 import Select from '../ui/Select';
 import * as authService from '../../utils/authService';
 import { createQuiz } from '../../utils/dbService';
 import aiService from '../../utils/aiService';
+import { Sparkles, X, AlertCircle, Clock, FileText, Users, TrendingUp } from 'lucide-react';
 
 const AIQuizGenerator = ({ onQuizGenerated, onCancel }) => {
   const [quizParams, setQuizParams] = useState({
@@ -103,21 +103,21 @@ const AIQuizGenerator = ({ onQuizGenerated, onCancel }) => {
       <div className="p-6">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-xl font-bold flex items-center gap-2">
-            <Icon name="Sparkles" size={20} className="text-primary" />
+            <Sparkles className="h-5 w-5 text-primary" />
             AI Quiz Generator
           </h2>
           <button 
             onClick={onCancel}
             className="text-muted-foreground hover:text-foreground"
           >
-            <Icon name="X" size={20} />
+            <X className="h-5 w-5" />
           </button>
         </div>
 
         {error && (
           <div className="glass-card rounded-lg p-3 mb-4 bg-error/10 border border-error">
             <div className="flex items-center text-error">
-              <Icon name="AlertCircle" size={16} className="mr-2" />
+              <AlertCircle className="h-4 w-4 mr-2" />
               <span className="text-sm">{error}</span>
             </div>
           </div>
@@ -172,7 +172,7 @@ const AIQuizGenerator = ({ onQuizGenerated, onCancel }) => {
               <Button 
                 onClick={handleGenerateQuiz} 
                 disabled={isGenerating}
-                iconName={isGenerating ? "Loader2" : "Sparkles"}
+                icon={isGenerating ? <Sparkles className="h-4 w-4 animate-spin" /> : <Sparkles className="h-4 w-4" />}
               >
                 {isGenerating ? 'Generating...' : 'Generate Quiz'}
               </Button>
@@ -196,30 +196,44 @@ const AIQuizGenerator = ({ onQuizGenerated, onCancel }) => {
                 <p className="text-sm text-muted-foreground mb-3">{generatedQuiz.description}</p>
                 <div className="flex gap-4 text-sm">
                   <div className="flex items-center">
-                    <Icon name="Clock" size={16} className="mr-1" />
+                    <Clock className="h-4 w-4 mr-1" />
                     {generatedQuiz.duration} min
                   </div>
                   <div className="flex items-center">
-                    <Icon name="HelpCircle" size={16} className="mr-1" />
+                    <FileText className="h-4 w-4 mr-1" />
                     {generatedQuiz.questionCount} questions
+                  </div>
+                  <div className="flex items-center">
+                    <Users className="h-4 w-4 mr-1" />
+                    {generatedQuiz.stats.totalAttempts} attempts
                   </div>
                 </div>
               </div>
-            </div>
-
-            <div className="mb-6">
-              <h3 className="font-semibold mb-2">Questions Preview</h3>
-              <div className="space-y-3 max-h-60 overflow-y-auto">
-                {generatedQuiz.questions.slice(0, 3).map((question, index) => (
-                  <div key={question.id} className="glass-card rounded-lg p-3">
-                    <p className="text-sm">
-                      <span className="font-medium">Q{index + 1}:</span> {question.question}
-                    </p>
+              
+              <div className="mt-4 space-y-3 max-h-60 overflow-y-auto">
+                {generatedQuiz.questions?.slice(0, 5).map((question, index) => (
+                  <div key={index} className="glass-card rounded p-3">
+                    <div className="flex justify-between items-start mb-2">
+                      <span className="text-sm font-medium">Q{index + 1}: {question.question}</span>
+                      <span className="text-xs bg-muted px-2 py-1 rounded">
+                        {question.difficulty}
+                      </span>
+                    </div>
+                    <div className="grid grid-cols-2 gap-2">
+                      {question.options?.map((option, optIndex) => (
+                        <div key={optIndex} className="text-xs p-2 bg-muted/50 rounded">
+                          <span className="font-medium">{String.fromCharCode(65 + optIndex)}:</span> {option}
+                        </div>
+                      ))}
+                    </div>
+                    <div className="mt-2 text-xs text-success">
+                      Correct: {String.fromCharCode(65 + question.correctAnswer)}
+                    </div>
                   </div>
                 ))}
-                {generatedQuiz.questions.length > 3 && (
+                {generatedQuiz.questions?.length > 5 && (
                   <div className="text-center text-sm text-muted-foreground">
-                    + {generatedQuiz.questions.length - 3} more questions
+                    + {generatedQuiz.questions.length - 5} more questions
                   </div>
                 )}
               </div>
@@ -229,7 +243,7 @@ const AIQuizGenerator = ({ onQuizGenerated, onCancel }) => {
               <Button variant="outline" onClick={handleRegenerate}>
                 Regenerate
               </Button>
-              <Button onClick={handleCreateQuiz} iconName="PlusCircle">
+              <Button onClick={handleCreateQuiz} icon={<TrendingUp className="h-4 w-4" />}>
                 Create Quiz
               </Button>
             </div>

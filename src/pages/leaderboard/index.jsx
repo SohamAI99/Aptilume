@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import AppHeader from '../../components/ui/AppHeader';
-import Icon from '../../components/AppIcon';
-import Button from '../../components/ui/Button';
+import { Button } from '../../components/ui/Button';
 import * as authService from '../../utils/authService';
 import { listenToLeaderboardUsers, getAttemptsByUser } from '../../utils/dbService';
 import StudentNavigation from '../student-dashboard/components/StudentNavigation';
 import AccountSection from '../../components/ui/AccountSection';
+import { Trophy, Calendar, BarChart3, Target, TrendingUp, Award } from 'lucide-react';
 
 const Leaderboard = () => {
   const navigate = useNavigate();
@@ -230,12 +229,10 @@ const Leaderboard = () => {
             {/* Page Header */}
             <div className="text-center mb-8">
               <div className="flex justify-between items-center mb-4">
-                <Button onClick={() => navigate('/student-dashboard')} variant="outline" iconName="ArrowLeft">
-                  Back to Dashboard
-                </Button>
+                {/* Removed Back to Dashboard button */}
                 <div className="flex-1">
                   <div className="inline-flex items-center justify-center w-16 h-16 bg-primary rounded-2xl mx-auto">
-                    <Icon name="Trophy" size={32} color="white" />
+                    <Trophy size={32} color="white" />
                   </div>
                 </div>
                 <div className="w-32"></div> {/* Spacer for alignment */}
@@ -258,7 +255,7 @@ const Leaderboard = () => {
                     </div>
                     {getUserRank() && getUserRank() <= 3 && (
                       <div className="absolute -top-2 -right-2 w-8 h-8 bg-yellow-500 rounded-full flex items-center justify-center">
-                        <Icon name="Crown" size={16} color="white" />
+                        <Trophy size={16} color="white" />
                       </div>
                     )}
                   </div>
@@ -366,7 +363,7 @@ const Leaderboard = () => {
                 </div>
               ) : leaderboardData.length === 0 ? (
                 <div className="text-center py-12">
-                  <Icon name="Trophy" size={48} className="text-muted-foreground mx-auto mb-4" />
+                  <Trophy size={48} className="text-muted-foreground mx-auto mb-4" />
                   <h3 className="text-lg font-medium mb-2">No leaderboard data available</h3>
                   <p className="text-muted-foreground">
                     Complete tests to appear on the leaderboard
@@ -438,11 +435,7 @@ const Leaderboard = () => {
                                 {user.rankingScore || 0}
                               </div>
                               {index < 3 && (
-                                <Icon 
-                                  name={index === 0 ? "Crown" : index === 1 ? "Medal" : "Award"} 
-                                  size={16} 
-                                  className={index === 0 ? "text-yellow-500" : index === 1 ? "text-gray-400" : "text-amber-700"} 
-                                />
+                                index === 0 ? <Trophy size={16} className="text-yellow-500" /> : index === 1 ? <Award size={16} className="text-gray-400" /> : <Target size={16} className="text-amber-700" />
                               )}
                             </div>
                           </td>
@@ -482,7 +475,7 @@ const Leaderboard = () => {
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                 <div className="flex items-start space-x-3">
                   <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-                    <Icon name="BarChart3" size={16} className="text-primary" />
+                    <BarChart3 size={16} className="text-primary" />
                   </div>
                   <div>
                     <h4 className="font-medium text-foreground">Average Score (60%)</h4>
@@ -493,7 +486,7 @@ const Leaderboard = () => {
                 </div>
                 <div className="flex items-start space-x-3">
                   <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-                    <Icon name="Activity" size={16} className="text-primary" />
+                    <TrendingUp size={16} className="text-primary" />
                   </div>
                   <div>
                     <h4 className="font-medium text-foreground">Consistency (25%)</h4>
@@ -504,7 +497,7 @@ const Leaderboard = () => {
                 </div>
                 <div className="flex items-start space-x-3">
                   <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-                    <Icon name="Clock" size={16} className="text-primary" />
+                    <Clock size={16} className="text-primary" />
                   </div>
                   <div>
                     <h4 className="font-medium text-foreground">Activity (15%)</h4>
@@ -515,7 +508,7 @@ const Leaderboard = () => {
                 </div>
                 <div className="flex items-start space-x-3">
                   <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-                    <Icon name="Calendar" size={16} className="text-primary" />
+                    <Calendar size={16} className="text-primary" />
                   </div>
                   <div>
                     <h4 className="font-medium text-foreground">Time Weighting</h4>

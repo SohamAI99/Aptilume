@@ -1,8 +1,8 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import Button from '../../../components/ui/Button';
-import Icon from '../../../components/AppIcon';
+import { Button } from '../../../components/ui/Button';
+import { ChevronDown, Play, UserPlus } from 'lucide-react';
 
 const HeroSection = () => {
   const navigate = useNavigate();
@@ -69,7 +69,7 @@ const HeroSection = () => {
             <Button
               variant="default"
               size="lg"
-              iconName="Play"
+              icon={<Play className="h-5 w-5" />}
               iconPosition="left"
               onClick={handleStartTest}
               className="w-full sm:w-auto px-8 py-4 text-lg font-semibold spring-bounce"
@@ -79,7 +79,7 @@ const HeroSection = () => {
             <Button
               variant="outline"
               size="lg"
-              iconName="UserPlus"
+              icon={<UserPlus className="h-5 w-5" />}
               iconPosition="left"
               onClick={handleSignUp}
               className="w-full sm:w-auto px-8 py-4 text-lg font-semibold spring-bounce"
@@ -104,7 +104,7 @@ const HeroSection = () => {
           className="flex flex-col items-center text-muted-foreground"
         >
           <span className="text-sm mb-2">Scroll to explore</span>
-          <Icon name="ChevronDown" size={20} />
+          <ChevronDown className="h-5 w-5" />
         </motion.div>
       </motion.div>
     </section>

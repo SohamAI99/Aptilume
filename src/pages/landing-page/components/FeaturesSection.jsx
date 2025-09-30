@@ -1,47 +1,47 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import Icon from '../../../components/AppIcon';
+import { Brain, Eye, BarChart3, Clock, Shield, Users } from 'lucide-react';
 
 const FeaturesSection = () => {
   const features = [
     {
       id: 1,
-      icon: "Brain",
+      icon: <Brain size={24} />,
       title: "AI-Powered Questions",
       description: "Advanced algorithms generate personalized questions tailored to your skill level and learning pace.",
       color: "primary"
     },
     {
       id: 2,
-      icon: "Eye",
+      icon: <Eye size={24} />,
       title: "Real-Time Proctoring",
       description: "Secure exam environment with webcam monitoring, tab-switch detection, and integrity verification.",
       color: "secondary"
     },
     {
       id: 3,
-      icon: "BarChart3",
+      icon: <BarChart3 size={24} />,
       title: "Comprehensive Analytics",
       description: "Detailed performance insights with difficulty analysis, time tracking, and improvement recommendations.",
       color: "accent"
     },
     {
       id: 4,
-      icon: "Clock",
+      icon: <Clock size={24} />,
       title: "Adaptive Testing",
       description: "Dynamic difficulty adjustment based on your responses for optimal learning and assessment experience.",
       color: "warning"
     },
     {
       id: 5,
-      icon: "Shield",
+      icon: <Shield size={24} />,
       title: "Enterprise Security",
       description: "Bank-grade security with HMAC verification, encrypted data transmission, and secure authentication.",
       color: "error"
     },
     {
       id: 6,
-      icon: "Users",
+      icon: <Users size={24} />,
       title: "Multi-Role Platform",
       description: "Seamless experience for students, educators, and administrators with role-based access control.",
       color: "primary"
@@ -122,7 +122,7 @@ const FeaturesSection = () => {
               <div className="glass-card p-8 h-full hover:shadow-elevation-3 transition-all duration-300 spring-bounce">
                 {/* Icon */}
                 <div className={`w-16 h-16 ${getColorClasses(feature?.color)} rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300`}>
-                  <Icon name={feature?.icon} size={24} />
+                  {feature?.icon}
                 </div>
 
                 {/* Content */}

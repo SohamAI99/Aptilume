@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Icon from '../../../components/AppIcon';
-import Button from '../../../components/ui/Button';
+import { Button } from '../../../components/ui/Button';
+import { ArrowLeft, Camera, Shield, Calendar, Save } from 'lucide-react';
 import * as authService from '../../../utils/authService';
 
 const AdminProfile = ({ currentUser }) => {
@@ -43,7 +43,7 @@ const AdminProfile = ({ currentUser }) => {
     <div className="max-w-4xl mx-auto">
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-2xl font-bold">Admin Profile</h2>
-        <Button onClick={() => navigate('/admin-dashboard')} variant="outline" iconName="ArrowLeft">
+        <Button onClick={() => navigate('/admin-dashboard')} variant="outline" icon={<ArrowLeft className="h-4 w-4" />}>
           Back to Dashboard
         </Button>
       </div>
@@ -59,7 +59,7 @@ const AdminProfile = ({ currentUser }) => {
                 className="w-32 h-32 rounded-full object-cover border-4 border-primary/20"
               />
               <button className="absolute bottom-2 right-2 bg-primary p-2 rounded-full hover:bg-primary/80 transition-colors">
-                <Icon name="Camera" size={16} color="white" />
+                <Camera className="h-4 w-4 text-white" />
               </button>
             </div>
             <div className="mt-4 text-center">
@@ -124,7 +124,7 @@ const AdminProfile = ({ currentUser }) => {
                 <div className="glass-card rounded-lg p-4">
                   <div className="flex items-center gap-3">
                     <div className="bg-primary/10 p-2 rounded-lg">
-                      <Icon name="Shield" size={20} className="text-primary" />
+                      <Shield className="h-5 w-5 text-primary" />
                     </div>
                     <div>
                       <p className="text-sm text-muted-foreground">Role</p>
@@ -136,7 +136,7 @@ const AdminProfile = ({ currentUser }) => {
                 <div className="glass-card rounded-lg p-4">
                   <div className="flex items-center gap-3">
                     <div className="bg-success/10 p-2 rounded-lg">
-                      <Icon name="Calendar" size={20} className="text-success" />
+                      <Calendar className="h-5 w-5 text-success" />
                     </div>
                     <div>
                       <p className="text-sm text-muted-foreground">Member Since</p>
@@ -151,7 +151,7 @@ const AdminProfile = ({ currentUser }) => {
               <Button variant="outline" onClick={() => navigate('/admin/settings')}>
                 Settings
               </Button>
-              <Button onClick={handleSave} iconName="Save">
+              <Button onClick={handleSave} icon={<Save className="h-4 w-4" />}>
                 Save Changes
               </Button>
             </div>

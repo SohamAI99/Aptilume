@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Input from '../../../components/ui/Input';
-import Icon from '../../../components/AppIcon';
+import { Search, X } from 'lucide-react';
 
 const SearchBar = ({ onSearch, placeholder = "Search tests, companies, or topics..." }) => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -26,8 +26,7 @@ const SearchBar = ({ onSearch, placeholder = "Search tests, companies, or topics
           onChange={handleSearchChange}
           className="pl-10 pr-10"
         />
-        <Icon
-          name="Search"
+        <Search
           size={18}
           className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground"
         />
@@ -36,7 +35,7 @@ const SearchBar = ({ onSearch, placeholder = "Search tests, companies, or topics
             onClick={handleClearSearch}
             className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
           >
-            <Icon name="X" size={18} />
+            <X size={18} />
           </button>
         )}
       </div>
@@ -45,7 +44,7 @@ const SearchBar = ({ onSearch, placeholder = "Search tests, companies, or topics
         <div className="absolute top-full left-0 right-0 mt-2 bg-popover border border-border rounded-lg shadow-elevation-3 z-10">
           <div className="p-3">
             <div className="flex items-center gap-2 text-sm text-muted-foreground mb-2">
-              <Icon name="Search" size={14} />
+              <Search size={14} />
               <span>Searching for "{searchQuery}"</span>
             </div>
             <div className="space-y-1">

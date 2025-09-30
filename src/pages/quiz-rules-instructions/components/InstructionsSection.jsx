@@ -1,5 +1,5 @@
 import React from 'react';
-import Icon from '../../../components/AppIcon';
+import { ArrowLeft, ArrowRight, Save, Bookmark } from 'lucide-react';
 
 const InstructionsSection = () => {
   const navigationInstructions = [
@@ -54,83 +54,47 @@ const InstructionsSection = () => {
     }
   ];
 
+  // Map icon names to actual Lucide icons
+  const iconMap = {
+    ArrowLeft: ArrowLeft,
+    ArrowRight: ArrowRight,
+    Save: Save,
+    Bookmark: Bookmark
+  };
+
   return (
-    <div className="space-y-6">
-      {/* Navigation Instructions */}
-      <div className="glass-card rounded-2xl p-6">
-        <div className="flex items-center space-x-3 mb-4">
-          <div className="w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
-            <Icon name="Navigation" size={20} color="white" />
-          </div>
-          <h3 className="text-lg font-semibold text-foreground">Navigation Controls</h3>
-        </div>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {navigationInstructions?.map((instruction, index) => (
-            <div key={index} className="flex items-start space-x-3 p-3 bg-muted/20 rounded-lg">
-              <div className="w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center flex-shrink-0">
-                <Icon name={instruction?.icon} size={16} className="text-primary" />
+    <div className="glass-card rounded-2xl p-6">
+      <h2 className="text-xl font-semibold text-foreground mb-6">Navigation Instructions</h2>
+      
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+        {navigationInstructions.map((item, index) => {
+          const IconComponent = iconMap[item.icon];
+          return (
+            <div key={index} className="bg-muted/30 rounded-lg p-4 border border-border">
+              <div className="flex items-center space-x-3 mb-3">
+                {IconComponent && <IconComponent className="h-5 w-5 text-primary" />}
+                <h3 className="font-medium text-foreground">{item.title}</h3>
               </div>
-              <div>
-                <p className="font-medium text-foreground text-sm">{instruction?.title}</p>
-                <p className="text-xs text-muted-foreground mt-1">{instruction?.description}</p>
-              </div>
+              <p className="text-sm text-muted-foreground">{item.description}</p>
             </div>
-          ))}
-        </div>
+          );
+        })}
       </div>
-      {/* Marking System */}
-      <div className="glass-card rounded-2xl p-6">
-        <div className="flex items-center space-x-3 mb-4">
-          <div className="w-10 h-10 bg-accent rounded-lg flex items-center justify-center">
-            <Icon name="Palette" size={20} color="white" />
+
+      <h3 className="text-lg font-semibold text-foreground mb-4">Question Status Marking System</h3>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
+        {markingSystem.map((item, index) => (
+          <div 
+            key={index} 
+            className={`${item.color} rounded-lg p-3 text-center relative border border-border`}
+          >
+            {item.hasGreenDot && (
+              <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></div>
+            )}
+            <h4 className="font-medium text-foreground text-sm mb-1">{item.label}</h4>
+            <p className="text-xs text-muted-foreground">{item.description}</p>
           </div>
-          <h3 className="text-lg font-semibold text-foreground">Question Palette System</h3>
-        </div>
-        
-        <div className="space-y-3">
-          {markingSystem?.map((mark, index) => (
-            <div key={index} className="flex items-center space-x-3">
-              <div className={`w-6 h-6 rounded ${mark?.color} flex items-center justify-center`}>
-                {mark?.hasGreenDot && (
-                  <div className="w-2 h-2 bg-green-400 rounded-full"></div>
-                )}
-              </div>
-              <div>
-                <span className="font-medium text-foreground text-sm">{mark?.label}</span>
-                <p className="text-xs text-muted-foreground">{mark?.description}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-      {/* Submission Process */}
-      <div className="glass-card rounded-2xl p-6">
-        <div className="flex items-center space-x-3 mb-4">
-          <div className="w-10 h-10 bg-success rounded-lg flex items-center justify-center">
-            <Icon name="CheckCircle" size={20} color="white" />
-          </div>
-          <h3 className="text-lg font-semibold text-foreground">Submission Process</h3>
-        </div>
-        
-        <div className="space-y-3 text-sm text-muted-foreground">
-          <div className="flex items-start space-x-2">
-            <Icon name="Circle" size={4} className="mt-2 flex-shrink-0" />
-            <p>Click 'Submit Test' button when you're ready to finish</p>
-          </div>
-          <div className="flex items-start space-x-2">
-            <Icon name="Circle" size={4} className="mt-2 flex-shrink-0" />
-            <p>Re-enter your login password for security verification</p>
-          </div>
-          <div className="flex items-start space-x-2">
-            <Icon name="Circle" size={4} className="mt-2 flex-shrink-0" />
-            <p>Review your answers in the confirmation modal</p>
-          </div>
-          <div className="flex items-start space-x-2">
-            <Icon name="Circle" size={4} className="mt-2 flex-shrink-0" />
-            <p>Test will auto-submit when timer reaches zero</p>
-          </div>
-        </div>
+        ))}
       </div>
     </div>
   );

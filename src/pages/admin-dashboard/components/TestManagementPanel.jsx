@@ -1,11 +1,21 @@
 import React, { useState } from 'react';
-import Icon from '../../../components/AppIcon';
-import Button from '../../../components/ui/Button';
+import { Button } from '../../../components/ui/Button';
 import Input from '../../../components/ui/Input';
 import Select from '../../../components/ui/Select';
 import { cn } from '../../../utils/cn';
 import { publishQuiz, archiveQuiz } from '../../../utils/dbService';
 import RemoveUnwantedQuizzesButton from '../../../components/admin/RemoveUnwantedQuizzesButton';
+import { 
+  Plus, 
+  Upload, 
+  Search, 
+  Eye, 
+  Edit, 
+  Check, 
+  X, 
+  Archive, 
+  Trash2 
+} from 'lucide-react';
 
 const TestManagementPanel = ({ tests }) => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -145,7 +155,7 @@ const TestManagementPanel = ({ tests }) => {
           <RemoveUnwantedQuizzesButton />
           <Button
             variant="outline"
-            iconName="Plus"
+            icon={<Plus className="h-4 w-4" />}
             iconPosition="left"
             onClick={() => console.log('Create new test')}
           >
@@ -153,7 +163,7 @@ const TestManagementPanel = ({ tests }) => {
           </Button>
           <Button
             variant="outline"
-            iconName="Upload"
+            icon={<Upload className="h-4 w-4" />}
             iconPosition="left"
             onClick={() => console.log('Bulk import tests')}
           >
@@ -172,7 +182,7 @@ const TestManagementPanel = ({ tests }) => {
               value={searchTerm}
               onChange={(e) => setSearchTerm(e?.target?.value)}
               className="w-full"
-              iconName="Search"
+              icon={<Search className="h-4 w-4" />}
             />
           </div>
           <Select
@@ -198,174 +208,110 @@ const TestManagementPanel = ({ tests }) => {
             <div className="flex items-start justify-between mb-4">
               <div className="flex-1">
                 <h3 className="text-lg font-semibold text-foreground mb-2">
-                  {test?.title || 'Untitled Test'}
+                  {test?.title}
                 </h3>
-                <div className="flex items-center gap-2 mb-3">
-                  {getStatusBadge(test?.status)}
-                  {getDifficultyBadge(test?.difficulty)}
-                </div>
+                <p className="text-sm text-muted-foreground line-clamp-2">
+                  {test?.description}
+                </p>
               </div>
-              <div className="flex items-center gap-1">
-                <Button
-                  size="xs"
-                  variant="ghost"
-                  iconName="Edit"
-                  onClick={() => console.log('Edit test', test?.id)}
-                  className="p-2"
-                />
-                <Button
-                  size="xs"
-                  variant="ghost"
-                  iconName="Eye"
-                  onClick={() => console.log('Preview test', test?.id)}
-                  className="p-2"
-                />
-                <Button
-                  size="xs"
-                  variant="ghost"
-                  iconName="MoreVertical"
-                  onClick={() => console.log('More options', test?.id)}
-                  className="p-2"
-                />
-              </div>
-            </div>
-
-            {/* Test Stats */}
-            <div className="grid grid-cols-3 gap-4 mb-4">
-              <div className="text-center p-3 bg-muted/30 rounded-lg">
-                <div className="text-lg font-semibold text-foreground">
-                  {test?.questions || 0}
-                </div>
-                <div className="text-xs text-muted-foreground">Questions</div>
-              </div>
-              <div className="text-center p-3 bg-muted/30 rounded-lg">
-                <div className="text-lg font-semibold text-foreground">
-                  {test?.attempts?.toLocaleString() || 0}
-                </div>
-                <div className="text-xs text-muted-foreground">Attempts</div>
-              </div>
-              <div className="text-center p-3 bg-muted/30 rounded-lg">
-                <div className="text-lg font-semibold text-foreground">
-                  {test?.avgScore ? `${test?.avgScore}%` : 'N/A'}
-                </div>
-                <div className="text-xs text-muted-foreground">Avg Score</div>
+              <div className="flex flex-col items-end gap-2">
+                {getStatusBadge(test?.status)}
+                {getDifficultyBadge(test?.difficulty)}
               </div>
             </div>
 
             {/* Test Metadata */}
-            <div className="flex items-center justify-between text-sm text-muted-foreground mb-4">
-              <span>Created: {formatTimestamp(test?.createdAt)}</span>
-              <span>Updated: {formatTimestamp(test?.updatedAt)}</span>
+            <div className="grid grid-cols-3 gap-2 mb-4 text-center">
+              <div className="bg-muted/30 rounded-lg p-2">
+                <div className="text-sm font-semibold text-foreground">{test?.questionCount}</div>
+                <div className="text-xs text-muted-foreground">Questions</div>
+              </div>
+              <div className="bg-muted/30 rounded-lg p-2">
+                <div className="text-sm font-semibold text-foreground">{test?.duration}m</div>
+                <div className="text-xs text-muted-foreground">Duration</div>
+              </div>
+              <div className="bg-muted/30 rounded-lg p-2">
+                <div className="text-sm font-semibold text-foreground">{test?.attempts || 0}</div>
+                <div className="text-xs text-muted-foreground">Attempts</div>
+              </div>
             </div>
 
-            {/* Action Buttons */}
-            <div className="flex items-center gap-2">
-              {test?.status === 'draft' && (
+            {/* Test Actions */}
+            <div className="flex items-center justify-between pt-4 border-t border-border">
+              <div className="text-xs text-muted-foreground">
+                Updated: {formatTimestamp(test?.updatedAt)}
+              </div>
+              <div className="flex items-center gap-1">
                 <Button
                   size="sm"
-                  variant="outline"
-                  iconName="Send"
-                  onClick={() => handleTestAction(test?.id, 'submit_review')}
-                  className="flex-1"
-                >
-                  Submit for Review
-                </Button>
-              )}
-              
-              {test?.status === 'review_pending' && (
-                <>
-                  <Button
-                    size="sm"
-                    variant="default"
-                    iconName="Check"
-                    onClick={() => handleTestAction(test?.id, 'approve')}
-                    className="flex-1"
-                  >
-                    Approve
-                  </Button>
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    iconName="X"
-                    onClick={() => handleTestAction(test?.id, 'reject')}
-                    className="flex-1"
-                  >
-                    Reject
-                  </Button>
-                </>
-              )}
-              
-              {test?.status === 'published' && (
+                  variant="ghost"
+                  icon={<Eye className="h-4 w-4" />}
+                  onClick={() => console.log('View test', test?.id)}
+                />
                 <Button
                   size="sm"
-                  variant="outline"
-                  iconName="Archive"
-                  onClick={() => handleTestAction(test?.id, 'archive')}
-                  className="flex-1"
-                >
-                  Archive
-                </Button>
-              )}
-
-              <Button
-                size="sm"
-                variant="ghost"
-                iconName="BarChart3"
-                onClick={() => console.log('View analytics', test?.id)}
-              >
-                Analytics
-              </Button>
+                  variant="ghost"
+                  icon={<Edit className="h-4 w-4" />}
+                  onClick={() => console.log('Edit test', test?.id)}
+                />
+                {test?.status === 'review_pending' && (
+                  <>
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      icon={<Check className="h-4 w-4 text-green-600" />}
+                      onClick={() => handleTestAction(test?.id, 'approve')}
+                    />
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      icon={<X className="h-4 w-4 text-red-600" />}
+                      onClick={() => handleTestAction(test?.id, 'reject')}
+                    />
+                  </>
+                )}
+                {test?.status === 'published' && (
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    icon={<Archive className="h-4 w-4 text-yellow-600" />}
+                    onClick={() => handleTestAction(test?.id, 'archive')}
+                  />
+                )}
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  icon={<Trash2 className="h-4 w-4 text-red-600" />}
+                  onClick={() => handleTestAction(test?.id, 'delete')}
+                />
+              </div>
             </div>
           </div>
         ))}
       </div>
 
+      {/* Empty State */}
       {filteredTests?.length === 0 && (
         <div className="glass-card rounded-xl p-12 text-center">
-          <Icon name="BookOpen" size={48} className="mx-auto text-muted-foreground/50 mb-4" />
-          <h3 className="text-lg font-medium text-foreground mb-2">No tests found</h3>
-          <p className="text-muted-foreground mb-6">Try adjusting your search or filter criteria.</p>
+          <div className="mx-auto w-16 h-16 bg-muted rounded-full flex items-center justify-center mb-4">
+            <Search className="h-8 w-8 text-muted-foreground" />
+          </div>
+          <h3 className="text-lg font-medium text-foreground mb-1">No tests found</h3>
+          <p className="text-muted-foreground mb-4">
+            Try adjusting your search or filter criteria
+          </p>
           <Button
-            variant="default"
-            iconName="Plus"
-            iconPosition="left"
-            onClick={() => console.log('Create first test')}
+            variant="outline"
+            onClick={() => {
+              setSearchTerm('');
+              setStatusFilter('all');
+              setDifficultyFilter('all');
+            }}
           >
-            Create Your First Test
+            Clear Filters
           </Button>
         </div>
       )}
-
-      {/* Summary Stats */}
-      <div className="glass-card rounded-xl p-6">
-        <h3 className="text-lg font-semibold text-foreground mb-4">Test Management Summary</h3>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <div className="text-center">
-            <div className="text-2xl font-bold text-green-600">
-              {tests?.filter(t => t?.status === 'published')?.length || 0}
-            </div>
-            <div className="text-sm text-muted-foreground">Published</div>
-          </div>
-          <div className="text-center">
-            <div className="text-2xl font-bold text-yellow-600">
-              {tests?.filter(t => t?.status === 'review_pending')?.length || 0}
-            </div>
-            <div className="text-sm text-muted-foreground">Pending Review</div>
-          </div>
-          <div className="text-center">
-            <div className="text-2xl font-bold text-gray-600">
-              {tests?.filter(t => t?.status === 'draft')?.length || 0}
-            </div>
-            <div className="text-sm text-muted-foreground">Drafts</div>
-          </div>
-          <div className="text-center">
-            <div className="text-2xl font-bold text-red-600">
-              {tests?.filter(t => t?.status === 'archived')?.length || 0}
-            </div>
-            <div className="text-sm text-muted-foreground">Archived</div>
-          </div>
-        </div>
-      </div>
     </div>
   );
 };

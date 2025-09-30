@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import Button from '../../../components/ui/Button';
-import Icon from '../../../components/AppIcon';
+import { Button } from '../../../components/ui/Button';
+import { Bookmark, Clock, Check, CheckCircle } from 'lucide-react';
 
 const QuestionCard = ({
   question,
@@ -132,12 +132,12 @@ const QuestionCard = ({
           <div className="flex items-center space-x-3">
             {isMarkedForReview && (
               <span className="px-2 py-1 bg-warning/10 text-warning text-xs rounded-full font-medium flex items-center">
-                <Icon name="Bookmark" size={12} className="mr-1" />
+                <Bookmark className="h-3 w-3 mr-1" />
                 Marked
               </span>
             )}
             <div className="text-xs text-muted-foreground bg-muted/50 px-2 py-1 rounded">
-              <Icon name="Clock" size={12} className="inline mr-1" />
+              <Clock className="h-3 w-3 inline mr-1" />
               {formatTime(timeSpent)}
             </div>
           </div>
@@ -181,7 +181,7 @@ const QuestionCard = ({
                     : 'border-border'
                 }`}>
                   {selectedAnswer === index ? (
-                    <Icon name="Check" size={16} />
+                    <Check className="h-4 w-4" />
                   ) : (
                     <span className="text-sm font-medium">
                       {String.fromCharCode(65 + index)}
@@ -194,101 +194,67 @@ const QuestionCard = ({
                   </span>
                 </div>
                 {selectedAnswer === index && (
-                  <Icon name="CheckCircle" size={20} className="text-primary" />
+                  <CheckCircle className="h-5 w-5 text-primary" />
                 )}
               </div>
             </button>
           ))}
         </div>
 
-        {/* Explanation Section */}
-        {question?.explanation && (
-          <div className="mt-6">
-            <button
-              onClick={() => setShowExplanation(!showExplanation)}
-              className="flex items-center text-sm font-medium text-primary hover:text-primary/80 mb-2"
-            >
-              <Icon 
-                name={showExplanation ? "ChevronUp" : "ChevronDown"} 
-                size={16} 
-                className="mr-1" 
-              />
-              {showExplanation ? 'Hide Explanation' : 'Show Explanation'}
-            </button>
-            
-            {showExplanation && (
-              <div className="p-4 bg-muted/50 rounded-lg border border-border animate-in slide-in-from-top-2 duration-300">
-                <h4 className="font-medium text-foreground mb-2 flex items-center">
-                  <Icon name="Lightbulb" size={16} className="mr-2 text-warning" />
-                  Explanation
-                </h4>
-                <p className="text-sm text-muted-foreground">
-                  {question.explanation}
-                </p>
-              </div>
-            )}
+        {/* Explanation (if available and toggled) */}
+        {showExplanation && question?.explanation && (
+          <div className="glass-card rounded-lg p-4 mb-6 border border-success/20 bg-success/5">
+            <h4 className="font-medium text-success mb-2 flex items-center">
+              <CheckCircle className="h-4 w-4 mr-2" />
+              Explanation
+            </h4>
+            <p className="text-foreground text-sm">
+              {question.explanation}
+            </p>
           </div>
         )}
-      </div>
 
-      {/* Navigation Buttons */}
-      <div className="glass-card rounded-xl p-4 mt-4">
-        <div className="flex flex-wrap gap-3">
+        {/* Navigation Buttons */}
+        <div className="flex flex-wrap gap-3 pt-4 border-t border-border">
           <Button
             variant="outline"
             onClick={onPrevious}
             disabled={!canGoPrevious}
-            iconName="ArrowLeft"
-            iconPosition="left"
-            size="sm"
           >
             Previous
           </Button>
           
           <Button
-            variant="secondary"
+            variant="outline"
             onClick={onMarkForReview}
-            iconName={isMarkedForReview ? "BookmarkCheck" : "Bookmark"}
-            iconPosition="left"
-            size="sm"
           >
             {isMarkedForReview ? 'Unmark' : 'Mark for Review'}
           </Button>
           
           <Button
             variant="outline"
+            onClick={() => setShowExplanation(!showExplanation)}
+          >
+            {showExplanation ? 'Hide Explanation' : 'Show Explanation'}
+          </Button>
+          
+          <div className="flex-1"></div>
+          
+          <Button
+            variant="outline"
             onClick={onSaveAndNext}
-            disabled={!canGoNext && currentQuestionIndex !== totalQuestions - 1}
-            size="sm"
-            className="ml-auto"
+            disabled={!canGoNext && currentQuestionIndex < totalQuestions - 1}
           >
             Save & Next
           </Button>
           
           <Button
-            variant="default"
+            variant="primary"
             onClick={onNext}
             disabled={!canGoNext}
-            iconName="ArrowRight"
-            iconPosition="right"
-            size="sm"
           >
             Next
           </Button>
-        </div>
-        
-        {/* Progress Bar */}
-        <div className="mt-4">
-          <div className="flex justify-between text-xs text-muted-foreground mb-1">
-            <span>Progress</span>
-            <span>{Math.round(((currentQuestionIndex + 1) / totalQuestions) * 100)}%</span>
-          </div>
-          <div className="w-full bg-muted rounded-full h-2">
-            <div 
-              className="bg-primary h-2 rounded-full transition-all duration-300"
-              style={{ width: `${((currentQuestionIndex + 1) / totalQuestions) * 100}%` }}
-            ></div>
-          </div>
         </div>
       </div>
     </div>
