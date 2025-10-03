@@ -1,5 +1,5 @@
 // Authentication Service - Handles all authentication operations and role management
-import { auth, db } from './firebase';
+import { auth, db, googleProvider, githubProvider } from './firebase';
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
@@ -8,14 +8,14 @@ import {
   sendPasswordResetEmail,
   updateProfile,
   onAuthStateChanged
-} from 'firebase/auth';
+} from './firebase';
 import {
   doc,
   setDoc,
   getDoc,
   updateDoc,
   serverTimestamp
-} from 'firebase/firestore';
+} from './firebase';
 import { seedInitialData } from './seed';
 
 // User roles
@@ -95,7 +95,6 @@ export const loginUser = async (email, password) => {
 // Sign in with Google
 export const signInWithGoogle = async () => {
   try {
-    const { googleProvider } = await import('./firebase');
     const result = await signInWithPopup(auth, googleProvider);
     const user = result.user;
     
@@ -148,7 +147,6 @@ export const signInWithGoogle = async () => {
 // Sign in with GitHub
 export const signInWithGithub = async () => {
   try {
-    const { githubProvider } = await import('./firebase');
     const result = await signInWithPopup(auth, githubProvider);
     const user = result.user;
     
@@ -198,17 +196,17 @@ export const signInWithGithub = async () => {
   }
 };
 
-// Sign out
+// Logout user
 export const logoutUser = async () => {
   try {
     await signOut(auth);
   } catch (error) {
-    console.error('Error signing out:', error);
+    console.error('Error logging out user:', error);
     throw error;
   }
 };
 
-// Send password reset email
+// Reset password
 export const resetPassword = async (email) => {
   try {
     await sendPasswordResetEmail(auth, email);
@@ -218,91 +216,36 @@ export const resetPassword = async (email) => {
   }
 };
 
+// Listen for auth state changes
+export const onUserStateChange = (callback) => {
+  return onAuthStateChanged(auth, callback);
+};
+
 // Get current user
-export const getCurrentUser = () => {
+export const getCurrentUser = async () => {
   return new Promise((resolve, reject) => {
-    const unsubscribe = onAuthStateChanged(
-      auth,
-      async (user) => {
-        unsubscribe();
-        if (user) {
-          try {
-            // Get user document from Firestore
-            const userDoc = await getDoc(doc(db, 'users', user.uid));
-            if (userDoc.exists()) {
-              resolve({
-                ...user,
-                ...userDoc.data(),
-                id: user.uid
-              });
-            } else {
-              resolve(user);
-            }
-          } catch (error) {
-            console.error('Error fetching user data:', error);
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      unsubscribe();
+      if (user) {
+        try {
+          // Get user data from Firestore
+          const userDocSnapshot = await getDoc(doc(db, 'users', user.uid));
+          if (userDocSnapshot.exists()) {
+            resolve({
+              ...user,
+              ...userDocSnapshot.data(),
+              id: user.uid
+            });
+          } else {
             resolve(user);
           }
-        } else {
-          resolve(null);
+        } catch (error) {
+          console.error('Error getting user data:', error);
+          resolve(user);
         }
-      },
-      reject
-    );
+      } else {
+        resolve(null);
+      }
+    }, reject);
   });
-};
-
-// Check if user has a specific role
-export const hasRole = (user, role) => {
-  if (!user) return false;
-  return user.userType === role;
-};
-
-// Check if user is an admin
-export const isAdmin = (user) => {
-  return hasRole(user, USER_ROLES.ADMIN);
-};
-
-// Check if user is a teacher
-export const isTeacher = (user) => {
-  return hasRole(user, USER_ROLES.TEACHER);
-};
-
-// Check if user is a student
-export const isStudent = (user) => {
-  return hasRole(user, USER_ROLES.STUDENT);
-};
-
-// Check if user has any of the specified roles
-export const hasAnyRole = (user, roles) => {
-  if (!user || !roles || !Array.isArray(roles)) return false;
-  return roles.includes(user.userType);
-};
-
-// Manual seed function for development
-export const manuallySeedData = async () => {
-  try {
-    const user = await getCurrentUser();
-    await seedInitialData(user);
-    console.log('Data seeded successfully');
-  } catch (error) {
-    console.error('Error seeding data:', error);
-  }
-};
-
-export default {
-  USER_ROLES,
-  auth, // Export auth object in default export as well
-  registerUser,
-  loginUser,
-  signInWithGoogle,
-  signInWithGithub,
-  logoutUser,
-  resetPassword,
-  getCurrentUser,
-  hasRole,
-  isAdmin,
-  isTeacher,
-  isStudent,
-  hasAnyRole,
-  manuallySeedData
 };

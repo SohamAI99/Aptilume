@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Environment Variables Test</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f5f7fa;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .status {
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+        .success { background: #e8f5e9; border-left: 5px solid #4caf50; color: #2e7d32; }
+        .error { background: #ffebee; border-left: 5px solid #f44336; color: #c62828; }
+        .info { background: #e3f2fd; border-left: 5px solid #2196f3; color: #1565c0; }
+        .warning { background: #fff8e1; border-left: 5px solid #ffc107; color: #ef6c00; }
+        button {
+            background: #1976d2;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            margin: 10px 5px;
+        }
+        button:hover { background: #1565c0; }
+        #results {
+            min-height: 100px;
+        }
+        .log-entry {
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            padding: 10px;
+            margin: 8px 0;
+            border-radius: 4px;
+            background: #f1f3f4;
+            word-break: break-word;
+        }
+        .env-var {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px;
+            border-bottom: 1px solid #eee;
+        }
+        .env-var.missing {
+            background: #ffebee;
+        }
+        .env-var.present {
+            background: #e8f5e9;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>⚙️ Environment Variables Test</h1>
+        <p>This test checks if environment variables are properly loaded.</p>
+        
+        <div id="status" class="status info">
+            <strong>Status:</strong> Ready to test. Click "Run Environment Test" to begin.
+        </div>
+        
+        <button onclick="runEnvTest()">Run Environment Test</button>
+        <button onclick="clearResults()">Clear Results</button>
+        
+        <h3>Environment Variables:</h3>
+        <div id="results">
+            <p>No results yet. Click "Run Environment Test" to begin.</p>
+        </div>
+    </div>
+
+    <script type="module">
+        function updateStatus(message, type = 'info') {
+            const statusDiv = document.getElementById('status');
+            statusDiv.className = `status ${type}`;
+            statusDiv.innerHTML = `<strong>Status:</strong> ${message}`;
+        }
+        
+        function addResult(message, type = 'info') {
+            const resultsDiv = document.getElementById('results');
+            const resultElement = document.createElement('div');
+            resultElement.className = `status ${type}`;
+            resultElement.innerHTML = `<strong>${type.toUpperCase()}:</strong> ${message}`;
+            resultsDiv.appendChild(resultElement);
+        }
+        
+        function addLog(message) {
+            const resultsDiv = document.getElementById('results');
+            const logElement = document.createElement('div');
+            logElement.className = 'log-entry';
+            logElement.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            resultsDiv.appendChild(logElement);
+        }
+        
+        function clearResults() {
+            document.getElementById('results').innerHTML = '<p>Results cleared.</p>';
+        }
+        
+        function displayEnvVars(envVars) {
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = '';
+            
+            const container = document.createElement('div');
+            container.innerHTML = '<h4>Firebase Environment Variables:</h4>';
+            
+            Object.entries(envVars).forEach(([key, value]) => {
+                const varDiv = document.createElement('div');
+                varDiv.className = `env-var ${value ? 'present' : 'missing'}`;
+                varDiv.innerHTML = `
+                    <span>${key}</span>
+                    <span>${value ? '✓ Present' : '✗ Missing'}</span>
+                `;
+                container.appendChild(varDiv);
+            });
+            
+            resultsDiv.appendChild(container);
+        }
+        
+        function runEnvTest() {
+            clearResults();
+            updateStatus('Testing environment variables...', 'info');
+            addResult('Starting environment variables test...', 'info');
+            
+            try {
+                // List of required Firebase environment variables
+                const requiredEnvVars = [
+                    'VITE_FIREBASE_API_KEY',
+                    'VITE_FIREBASE_AUTH_DOMAIN',
+                    'VITE_FIREBASE_PROJECT_ID',
+                    'VITE_FIREBASE_STORAGE_BUCKET',
+                    'VITE_FIREBASE_MESSAGING_SENDER_ID',
+                    'VITE_FIREBASE_APP_ID'
+                ];
+                
+                addLog('Checking environment variables...');
+                
+                const envVars = {};
+                let missingVars = [];
+                
+                requiredEnvVars.forEach(varName => {
+                    const value = import.meta.env[varName];
+                    envVars[varName] = value;
+                    if (!value) {
+                        missingVars.push(varName);
+                    }
+                });
+                
+                displayEnvVars(envVars);
+                
+                if (missingVars.length === 0) {
+                    addResult('All Firebase environment variables are present', 'success');
+                    updateStatus('Environment variables test passed', 'success');
+                } else {
+                    addResult(`Missing environment variables: ${missingVars.join(', ')}`, 'error');
+                    updateStatus('Missing environment variables', 'error');
+                }
+                
+                // Show all VITE_ prefixed environment variables
+                addLog('All VITE_ prefixed environment variables:');
+                const viteVars = {};
+                Object.keys(import.meta.env).forEach(key => {
+                    if (key.startsWith('VITE_')) {
+                        viteVars[key] = import.meta.env[key];
+                    }
+                });
+                
+                const allVarsDiv = document.createElement('div');
+                allVarsDiv.innerHTML = '<h4 style="margin-top: 20px;">All VITE_ Environment Variables:</h4>';
+                
+                Object.entries(viteVars).forEach(([key, value]) => {
+                    const varDiv = document.createElement('div');
+                    varDiv.className = 'env-var';
+                    varDiv.innerHTML = `
+                        <span>${key}</span>
+                        <span style="font-family: monospace; font-size: 12px; max-width: 300px; overflow: hidden; text-overflow: ellipsis;">${value || 'undefined'}</span>
+                    `;
+                    allVarsDiv.appendChild(varDiv);
+                });
+                
+                document.getElementById('results').appendChild(allVarsDiv);
+                
+            } catch (error) {
+                addLog(`Test error: ${error.message}`);
+                addResult(`Environment variables test failed: ${error.message}`, 'error');
+                updateStatus('Environment variables test failed', 'error');
+                console.error('Environment test error:', error);
+            }
+        }
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            updateStatus('Environment variables test page loaded successfully', 'success');
+        });
+    </script>
+</body>
+</html>

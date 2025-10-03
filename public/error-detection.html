@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Error Detection Test</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f5f7fa;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .status {
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+        .success { background: #e8f5e9; border-left: 5px solid #4caf50; color: #2e7d32; }
+        .error { background: #ffebee; border-left: 5px solid #f44336; color: #c62828; }
+        .info { background: #e3f2fd; border-left: 5px solid #2196f3; color: #1565c0; }
+        .warning { background: #fff8e1; border-left: 5px solid #ffc107; color: #ef6c00; }
+        button {
+            background: #1976d2;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            margin: 10px 5px;
+        }
+        button:hover { background: #1565c0; }
+        #root {
+            min-height: 200px;
+            border: 2px dashed #ccc;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            background: #fafafa;
+        }
+        #console-output {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            max-height: 300px;
+            overflow-y: auto;
+            margin: 20px 0;
+        }
+        .console-error { color: #f48771; }
+        .console-warn { color: #cca700; }
+        .console-log { color: #d4d4d4; }
+        .console-info { color: #75beff; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 Error Detection Test</h1>
+        <p>This test will capture console errors to help identify what's causing the blank screen.</p>
+        
+        <div id="status" class="status info">
+            <strong>Status:</strong> Ready to test. Click "Run Test" to begin.
+        </div>
+        
+        <button onclick="runTest()">Run Test</button>
+        <button onclick="clearConsole()">Clear Console</button>
+        
+        <h3>Console Output:</h3>
+        <div id="console-output">
+            <p>No output yet. Click "Run Test" to begin.</p>
+        </div>
+        
+        <h3>Root Element:</h3>
+        <div id="root">
+            <p style="color: #666; text-align: center;">This is where your React app should mount</p>
+        </div>
+    </div>
+
+    <script>
+        // Capture console output
+        const consoleOutput = document.getElementById('console-output');
+        
+        function addToConsole(message, type = 'log') {
+            const entry = document.createElement('div');
+            entry.className = `console-${type}`;
+            entry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            consoleOutput.appendChild(entry);
+            consoleOutput.scrollTop = consoleOutput.scrollHeight;
+        }
+        
+        // Override console methods
+        const originalConsole = {
+            log: console.log,
+            warn: console.warn,
+            error: console.error,
+            info: console.info
+        };
+        
+        console.log = function(...args) {
+            addToConsole(args.join(' '), 'log');
+            originalConsole.log.apply(console, args);
+        };
+        
+        console.warn = function(...args) {
+            addToConsole(args.join(' '), 'warn');
+            originalConsole.warn.apply(console, args);
+        };
+        
+        console.error = function(...args) {
+            addToConsole(args.join(' '), 'error');
+            originalConsole.error.apply(console, args);
+        };
+        
+        console.info = function(...args) {
+            addToConsole(args.join(' '), 'info');
+            originalConsole.info.apply(console, args);
+        };
+        
+        function updateStatus(message, type = 'info') {
+            const statusDiv = document.getElementById('status');
+            statusDiv.className = `status ${type}`;
+            statusDiv.innerHTML = `<strong>Status:</strong> ${message}`;
+        }
+        
+        function clearConsole() {
+            consoleOutput.innerHTML = '<p>Console cleared.</p>';
+        }
+        
+        function runTest() {
+            updateStatus('Running test...', 'info');
+            clearConsole();
+            addToConsole('Starting error detection test...', 'info');
+            
+            // Clear the root element
+            const rootElement = document.getElementById('root');
+            rootElement.innerHTML = '<p style="color: #666; text-align: center;">Loading React app...</p>';
+            
+            // Try to load the React app
+            fetch('./index.html')
+                .then(response => response.text())
+                .then(html => {
+                    addToConsole('Successfully fetched index.html', 'info');
+                    
+                    // Extract the script src from the HTML
+                    const match = html.match(/<script[^>]*src="([^"]*)"[^>]*>/i);
+                    if (match && match[1]) {
+                        const scriptSrc = match[1];
+                        addToConsole(`Found app bundle: ${scriptSrc}`, 'info');
+                        
+                        // Load the script
+                        const script = document.createElement('script');
+                        script.src = scriptSrc;
+                        script.type = 'module';
+                        
+                        script.onload = function() {
+                            addToConsole('App bundle loaded successfully', 'success');
+                            updateStatus('App bundle loaded - check console for errors', 'success');
+                            
+                            // Wait a bit to see if there are any errors
+                            setTimeout(() => {
+                                const rootElement = document.getElementById('root');
+                                if (rootElement && rootElement.children.length > 0) {
+                                    addToConsole('App appears to have mounted successfully!', 'success');
+                                    updateStatus('Test completed - check console output', 'success');
+                                } else {
+                                    addToConsole('App bundle loaded but app did not mount - check for errors above', 'warning');
+                                    updateStatus('App did not mount - check console for errors', 'warning');
+                                }
+                            }, 2000);
+                        };
+                        
+                        script.onerror = function(e) {
+                            addToConsole(`Failed to load app bundle: ${e.message}`, 'error');
+                            updateStatus('Failed to load app bundle', 'error');
+                        };
+                        
+                        document.head.appendChild(script);
+                    } else {
+                        addToConsole('Could not find app bundle in index.html', 'error');
+                        updateStatus('Could not find app bundle', 'error');
+                    }
+                })
+                .catch(error => {
+                    addToConsole(`Error reading index.html: ${error.message}`, 'error');
+                    updateStatus('Error reading index.html', 'error');
+                });
+        }
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            updateStatus('Test page loaded successfully', 'success');
+        });
+    </script>
+</body>
+</html>

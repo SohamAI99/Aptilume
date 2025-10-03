@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { reauthenticateWithCredential, EmailAuthProvider } from 'firebase/auth';
-import { auth } from '../../../utils/firebase';
+import { auth } from '../../../utils/firebase'; // Import auth directly
+import { reauthenticateWithCredential, EmailAuthProvider } from '../../../utils/firebase'; // Import Firebase auth functions directly
 import Input from '../../../components/ui/Input';
 import { Button } from '../../../components/ui/Button';
 import { Eye, EyeOff, Clock, Shield, Lock } from 'lucide-react';

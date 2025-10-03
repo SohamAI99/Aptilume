@@ -8,7 +8,8 @@ import ExamHeader from './components/ExamHeader';
 import SubmitConfirmationModal from './components/SubmitConfirmationModal';
 import MobilePaletteModal from './components/MobilePaletteModal';
 import ProctoringSidebar from './components/ProctoringSidebar';
-import { auth } from '../../utils/firebase'; // Import auth directly
+import { auth, db } from '../../utils/firebase'; // Import auth and db directly
+import { doc, getDoc, collection, getDocs, orderBy, query, updateDoc, serverTimestamp } from 'firebase/firestore'; // Import Firestore functions directly
 
 const ExamInterface = () => {
   const navigate = useNavigate();
@@ -52,9 +53,6 @@ const ExamInterface = () => {
         if (!attemptId || !testId) {
           throw new Error('Missing attempt or test ID');
         }
-
-        const { db, auth } = await import('../../utils/firebase');
-        const { doc, getDoc, collection, getDocs, orderBy, query, updateDoc, serverTimestamp } = await import('firebase/firestore');
 
         // Load attempt data to get test reference
         const attemptDoc = await getDoc(doc(db, 'attempts', attemptId));

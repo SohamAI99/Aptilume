@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Minimal React Test</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f5f7fa;
+        }
+        .test-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .status {
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+        .success { background: #e8f5e9; border-left: 5px solid #4caf50; color: #2e7d32; }
+        .error { background: #ffebee; border-left: 5px solid #f44336; color: #c62828; }
+        .info { background: #e3f2fd; border-left: 5px solid #2196f3; color: #1565c0; }
+        button {
+            background: #1976d2;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            margin: 10px 5px;
+        }
+        button:hover { background: #1565c0; }
+        #root {
+            min-height: 200px;
+            border: 2px dashed #ccc;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            background: #fafafa;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>⚛️ Minimal React Test</h1>
+        <p>This test loads your actual React app bundle to see if it works.</p>
+        
+        <div id="status" class="status info">
+            <strong>Status:</strong> Waiting to test React app...
+        </div>
+        
+        <button onclick="loadAndTestReactApp()">Load and Test React App</button>
+        <button onclick="manualMountTest()">Manual Mount Test</button>
+        
+        <h3>Root Element:</h3>
+        <div id="root">
+            <p style="color: #666; text-align: center;">This is where your React app should mount</p>
+        </div>
+        
+        <div id="results"></div>
+    </div>
+
+    <script>
+        function updateStatus(message, type = 'info') {
+            const statusDiv = document.getElementById('status');
+            statusDiv.className = `status ${type}`;
+            statusDiv.innerHTML = `<strong>Status:</strong> ${message}`;
+        }
+        
+        function addResult(message, type = 'info') {
+            const resultsDiv = document.getElementById('results');
+            const resultElement = document.createElement('div');
+            resultElement.className = `status ${type}`;
+            resultElement.innerHTML = `<strong>${type.toUpperCase()}:</strong> ${message}`;
+            resultsDiv.appendChild(resultElement);
+        }
+        
+        function loadAndTestReactApp() {
+            updateStatus('Loading React app bundle...', 'info');
+            addResult('Attempting to load your React app bundle...', 'info');
+            
+            // Get the main app bundle URL from the built index.html
+            fetch('./index.html')
+                .then(response => response.text())
+                .then(html => {
+                    // Extract the script src from the HTML
+                    const match = html.match(/<script[^>]*src="([^"]*)"[^>]*>/i);
+                    if (match && match[1]) {
+                        const scriptSrc = match[1];
+                        addResult(`Found app bundle: ${scriptSrc}`, 'success');
+                        
+                        // Load the script
+                        const script = document.createElement('script');
+                        script.src = scriptSrc;
+                        script.type = 'module';
+                        
+                        script.onload = function() {
+                            addResult('App bundle loaded successfully', 'success');
+                            updateStatus('App bundle loaded - check if app mounted', 'success');
+                            
+                            // Wait a bit to see if the app mounts
+                            setTimeout(() => {
+                                const rootElement = document.getElementById('root');
+                                if (rootElement && rootElement.children.length > 0) {
+                                    addResult('App appears to have mounted successfully!', 'success');
+                                } else {
+                                    addResult('App bundle loaded but app did not mount', 'warning');
+                                    addResult('This suggests an error during app initialization', 'warning');
+                                }
+                            }, 1000);
+                        };
+                        
+                        script.onerror = function(e) {
+                            addResult(`Failed to load app bundle: ${e.message}`, 'error');
+                            updateStatus('Failed to load app bundle', 'error');
+                        };
+                        
+                        document.head.appendChild(script);
+                    } else {
+                        addResult('Could not find app bundle in index.html', 'error');
+                        updateStatus('Could not find app bundle', 'error');
+                    }
+                })
+                .catch(error => {
+                    addResult(`Error reading index.html: ${error.message}`, 'error');
+                    updateStatus('Error reading index.html', 'error');
+                });
+        }
+        
+        function manualMountTest() {
+            updateStatus('Running manual mount test...', 'info');
+            addResult('Starting manual mount test...', 'info');
+            
+            // Clear the root element
+            const rootElement = document.getElementById('root');
+            if (rootElement) {
+                rootElement.innerHTML = '';
+                
+                // Create a simple test component
+                const testDiv = document.createElement('div');
+                testDiv.style.cssText = `
+                    padding: 20px;
+                    background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+                    border-left: 5px solid #4caf50;
+                    border-radius: 8px;
+                    text-align: center;
+                `;
+                testDiv.innerHTML = `
+                    <h2 style="margin-top: 0; color: #2e7d32;">✅ Manual Mount Success!</h2>
+                    <p>If you can see this, DOM manipulation is working correctly.</p>
+                    <p>This means the issue is specifically with your React app initialization.</p>
+                `;
+                
+                rootElement.appendChild(testDiv);
+                addResult('Successfully manually mounted test component', 'success');
+                updateStatus('Manual mount test successful', 'success');
+            } else {
+                addResult('Root element not found', 'error');
+                updateStatus('Root element not found', 'error');
+            }
+        }
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            updateStatus('Test page loaded successfully', 'success');
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>React Test</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f7fa;
+            color: #333;
+        }
+        .container {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            margin: 20px 0;
+        }
+        .status {
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+            display: flex;
+            align-items: center;
+        }
+        .status-icon {
+            margin-right: 15px;
+            font-size: 24px;
+        }
+        .error { background: #ffebee; border-left: 5px solid #f44336; color: #c62828; }
+        .success { background: #e8f5e9; border-left: 5px solid #4caf50; color: #2e7d32; }
+        .info { background: #e3f2fd; border-left: 5px solid #2196f3; color: #1565c0; }
+        .warning { background: #fff8e1; border-left: 5px solid #ffc107; color: #ef6c00; }
+        button {
+            background: #1976d2;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            margin: 10px 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            transition: all 0.2s ease;
+        }
+        button:hover {
+            background: #1565c0;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+        button:active {
+            transform: translateY(0);
+        }
+        .test-section {
+            margin: 25px 0;
+            padding: 20px;
+            border-radius: 8px;
+            background: #f8f9fa;
+        }
+        #results {
+            min-height: 100px;
+        }
+        .log-entry {
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            padding: 10px;
+            margin: 8px 0;
+            border-radius: 4px;
+            background: #f1f3f4;
+            word-break: break-word;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>⚛️ React Application Test</h1>
+        <p>Diagnostic tool to identify React application startup issues</p>
+        
+        <div id="status" class="status info">
+            <div class="status-icon">ℹ️</div>
+            <div><strong>Status:</strong> Initializing test...</div>
+        </div>
+        
+        <div class="test-section">
+            <h3>📋 Test Options</h3>
+            <button onclick="testReactLoad()">Test React Load</button>
+            <button onclick="testAppMount()">Test App Mount</button>
+            <button onclick="testFullSequence()">Test Full Sequence</button>
+            <button onclick="showCurrentState()">Show Current State</button>
+        </div>
+        
+        <div class="test-section">
+            <h3>📊 Results</h3>
+            <div id="results">
+                <p>Click a test button to begin diagnostics...</p>
+            </div>
+        </div>
+        
+        <div class="test-section hidden" id="debug-section">
+            <h3>🐛 Debug Information</h3>
+            <div id="debug-info"></div>
+        </div>
+    </div>
+
+    <script>
+        // Global state tracking
+        let testState = {
+            domReady: false,
+            scriptsLoaded: [],
+            errors: [],
+            warnings: [],
+            timestamp: new Date()
+        };
+        
+        // Utility functions
+        function addResult(message, type = 'info', icon = 'ℹ️') {
+            const resultsDiv = document.getElementById('results');
+            const resultElement = document.createElement('div');
+            resultElement.className = `status ${type}`;
+            resultElement.innerHTML = `
+                <div class="status-icon">${icon}</div>
+                <div><strong>${type.toUpperCase()}:</strong> ${message}</div>
+            `;
+            resultsDiv.appendChild(resultElement);
+            
+            // Scroll to bottom
+            resultsDiv.scrollTop = resultsDiv.scrollHeight;
+        }
+        
+        function addLog(message, type = 'info') {
+            const resultsDiv = document.getElementById('results');
+            const logElement = document.createElement('div');
+            logElement.className = `log-entry log-${type}`;
+            logElement.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            resultsDiv.appendChild(logElement);
+            testState.errors.push({ message, type, time: new Date() });
+        }
+        
+        function clearResults() {
+            document.getElementById('results').innerHTML = '';
+        }
+        
+        function updateStatus(message, type = 'info', icon = 'ℹ️') {
+            const statusDiv = document.getElementById('status');
+            statusDiv.className = `status ${type}`;
+            statusDiv.innerHTML = `
+                <div class="status-icon">${icon}</div>
+                <div><strong>Status:</strong> ${message}</div>
+            `;
+        }
+        
+        function showDebugInfo() {
+            const debugDiv = document.getElementById('debug-info');
+            debugDiv.innerHTML = `
+                <div style="background: #e8f5e9; padding: 15px; border-radius: 8px;">
+                    <h4>Current Test State:</h4>
+                    <pre style="background: white; padding: 10px; border-radius: 4px; overflow: auto;">${JSON.stringify(testState, null, 2)}</pre>
+                </div>
+            `;
+            document.getElementById('debug-section').classList.remove('hidden');
+        }
+        
+        // Test functions
+        function testReactLoad() {
+            clearResults();
+            updateStatus('Testing React loading...', 'info', '🔬');
+            addResult('Starting React loading test...', 'info', '🔬');
+            
+            // Check if React-related globals exist
+            const reactGlobals = ['React', 'ReactDOM'];
+            reactGlobals.forEach(global => {
+                if (typeof window[global] !== 'undefined') {
+                    addResult(`${global} is available in global scope`, 'success', '✅');
+                    testState.scriptsLoaded.push(global);
+                } else {
+                    addResult(`${global} is NOT available in global scope`, 'warning', '⚠️');
+                }
+            });
+            
+            // Check what scripts are actually loaded
+            const scripts = Array.from(document.getElementsByTagName('script'));
+            addResult(`Found ${scripts.length} script tags in document`, 'info', '📜');
+            
+            scripts.forEach((script, index) => {
+                if (script.src) {
+                    addLog(`Script ${index + 1}: ${script.src} (${script.readyState || 'loaded'})`);
+                }
+            });
+            
+            // Try to access the main app bundle
+            const appScripts = scripts.filter(script => 
+                script.src && (script.src.includes('index') || script.src.includes('app') || script.src.includes('main'))
+            );
+            
+            if (appScripts.length > 0) {
+                addResult(`Found ${appScripts.length} potential app scripts`, 'success', '✅');
+                appScripts.forEach((script, index) => {
+                    addResult(`App script ${index + 1}: ${script.src}`, 'info', '🔗');
+                });
+            } else {
+                addResult('No obvious app scripts found', 'warning', '⚠️');
+            }
+            
+            updateStatus('React loading test completed', 'info', '✅');
+            showDebugInfo();
+        }
+        
+        function testAppMount() {
+            clearResults();
+            updateStatus('Testing app mounting...', 'info', '🔬');
+            addResult('Starting app mounting test...', 'info', '🔬');
+            
+            // Check for root element
+            const rootElement = document.getElementById('root');
+            if (rootElement) {
+                addResult('Root element found', 'success', '✅');
+                addResult(`Root element ID: ${rootElement.id}`, 'info', '🆔');
+                addResult(`Root element tag: ${rootElement.tagName}`, 'info', '🏷️');
+                
+                // Check computed styles
+                const computedStyle = window.getComputedStyle(rootElement);
+                addResult(`Display: ${computedStyle.display}`, 'info', '👁️');
+                addResult(`Visibility: ${computedStyle.visibility}`, 'info', '👁️');
+                addResult(`Opacity: ${computedStyle.opacity}`, 'info', '👁️');
+                addResult(`Dimensions: ${computedStyle.width} x ${computedStyle.height}`, 'info', '📐');
+                
+                // Try to mount a simple test component
+                try {
+                    rootElement.innerHTML = '';
+                    const testDiv = document.createElement('div');
+                    testDiv.style.cssText = `
+                        padding: 20px;
+                        background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+                        border-left: 5px solid #4caf50;
+                        border-radius: 8px;
+                        margin: 20px 0;
+                        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+                    `;
+                    testDiv.innerHTML = `
+                        <h2 style="margin-top: 0; color: #2e7d32;">🎉 DOM Mounting Success!</h2>
+                        <p>If you can see this message, the DOM mounting is working correctly.</p>
+                        <p>This suggests the issue might be with your React application initialization.</p>
+                        <button onclick="this.parentElement.style.display='none'" style="
+                            background: #1976d2;
+                            color: white;
+                            border: none;
+                            padding: 8px 16px;
+                            border-radius: 4px;
+                            cursor: pointer;
+                            font-family: inherit;
+                        ">Close</button>
+                    `;
+                    rootElement.appendChild(testDiv);
+                    addResult('Successfully mounted test component to root element', 'success', '✅');
+                } catch (e) {
+                    addResult(`Error mounting test component: ${e.message}`, 'error', '❌');
+                    addLog(`Mount error: ${e.message}`, 'error');
+                }
+            } else {
+                addResult('CRITICAL: Root element NOT found!', 'error', '❌');
+                addResult('This is likely the cause of your blank screen', 'error', '🚨');
+            }
+            
+            updateStatus('App mounting test completed', 'info', '✅');
+            showDebugInfo();
+        }
+        
+        function testFullSequence() {
+            clearResults();
+            updateStatus('Running full diagnostic sequence...', 'info', '🔬');
+            addResult('Starting full diagnostic sequence...', 'info', '🔬');
+            
+            // Step 1: Check DOM readiness
+            addResult('Step 1: Checking DOM readiness', 'info', '1️⃣');
+            testState.domReady = document.readyState === 'complete' || document.readyState === 'interactive';
+            addResult(`DOM ready state: ${document.readyState}`, testState.domReady ? 'success' : 'warning', testState.domReady ? '✅' : '⚠️');
+            
+            // Step 2: Check React availability
+            addResult('Step 2: Checking React availability', 'info', '2️⃣');
+            const hasReact = typeof React !== 'undefined';
+            const hasReactDOM = typeof ReactDOM !== 'undefined';
+            addResult(`React available: ${hasReact}`, hasReact ? 'success' : 'warning', hasReact ? '✅' : '⚠️');
+            addResult(`ReactDOM available: ${hasReactDOM}`, hasReactDOM ? 'success' : 'warning', hasReactDOM ? '✅' : '⚠️');
+            
+            // Step 3: Check root element
+            addResult('Step 3: Checking root element', 'info', '3️⃣');
+            const rootElement = document.getElementById('root');
+            const hasRoot = !!rootElement;
+            addResult(`Root element exists: ${hasRoot}`, hasRoot ? 'success' : 'error', hasRoot ? '✅' : '❌');
+            
+            if (rootElement) {
+                const computedStyle = window.getComputedStyle(rootElement);
+                const isVisible = computedStyle.display !== 'none' && computedStyle.visibility !== 'hidden';
+                addResult(`Root element visible: ${isVisible}`, isVisible ? 'success' : 'warning', isVisible ? '✅' : '⚠️');
+            }
+            
+            // Step 4: Check loaded scripts
+            addResult('Step 4: Checking loaded scripts', 'info', '4️⃣');
+            const scripts = Array.from(document.getElementsByTagName('script'));
+            const appScripts = scripts.filter(script => 
+                script.src && (script.src.includes('index') || script.src.includes('app') || script.src.includes('main'))
+            );
+            
+            addResult(`Total scripts: ${scripts.length}`, 'info', '📜');
+            addResult(`App scripts: ${appScripts.length}`, appScripts.length > 0 ? 'success' : 'warning', appScripts.length > 0 ? '✅' : '⚠️');
+            
+            // Step 5: Try to simulate React app
+            addResult('Step 5: Simulating React app', 'info', '5️⃣');
+            if (rootElement) {
+                try {
+                    // Create a simple React-like app
+                    rootElement.innerHTML = `
+                        <div style="
+                            min-height: 100vh;
+                            background: linear-gradient(135deg, #f0f4f8 0%, #d9e2ec 100%);
+                            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                        ">
+                            <div style="
+                                background: white;
+                                border-radius: 16px;
+                                padding: 40px;
+                                box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+                                text-align: center;
+                                max-width: 500px;
+                                width: 90%;
+                            ">
+                                <div style="
+                                    width: 60px;
+                                    height: 60px;
+                                    background: #1976d2;
+                                    border-radius: 50%;
+                                    display: flex;
+                                    align-items: center;
+                                    justify-content: center;
+                                    margin: 0 auto 20px;
+                                    color: white;
+                                    font-size: 24px;
+                                ">⚛️</div>
+                                <h1 style="color: #1a237e; margin-bottom: 15px;">React Test Success!</h1>
+                                <p style="color: #6c757d; margin-bottom: 25px; line-height: 1.6;">
+                                    If you can see this message, your browser can successfully render React-like content.
+                                </p>
+                                <div style="display: flex; gap: 10px; justify-content: center;">
+                                    <button onclick="window.location.reload()" style="
+                                        background: #1976d2;
+                                        color: white;
+                                        border: none;
+                                        padding: 12px 24px;
+                                        border-radius: 8px;
+                                        cursor: pointer;
+                                        font-weight: 500;
+                                        font-family: inherit;
+                                    ">Refresh Test</button>
+                                    <button onclick="window.location.href='/'" style="
+                                        background: white;
+                                        color: #1976d2;
+                                        border: 2px solid #1976d2;
+                                        padding: 12px 24px;
+                                        border-radius: 8px;
+                                        cursor: pointer;
+                                        font-weight: 500;
+                                        font-family: inherit;
+                                    ">Try Main App</button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    addResult('Successfully simulated React app', 'success', '✅');
+                } catch (e) {
+                    addResult(`Error simulating React app: ${e.message}`, 'error', '❌');
+                    addLog(`Simulation error: ${e.message}`, 'error');
+                }
+            }
+            
+            updateStatus('Full diagnostic sequence completed', 'info', '✅');
+            showDebugInfo();
+        }
+        
+        function showCurrentState() {
+            clearResults();
+            updateStatus('Showing current state...', 'info', 'ℹ️');
+            
+            // Show current DOM state
+            addResult('Current DOM State', 'info', '📄');
+            addResult(`Document readyState: ${document.readyState}`, 'info', '📊');
+            addResult(`Window dimensions: ${window.innerWidth}x${window.innerHeight}`, 'info', '📐');
+            
+            // Show loaded scripts
+            const scripts = Array.from(document.getElementsByTagName('script'));
+            addResult(`Loaded scripts: ${scripts.length}`, 'info', '📜');
+            scripts.forEach((script, index) => {
+                if (script.src) {
+                    addLog(`Script ${index + 1}: ${script.src}`);
+                }
+            });
+            
+            // Show root element status
+            const rootElement = document.getElementById('root');
+            if (rootElement) {
+                addResult('Root element found', 'success', '✅');
+                const computedStyle = window.getComputedStyle(rootElement);
+                addResult(`Root styles - Display: ${computedStyle.display}, Visibility: ${computedStyle.visibility}`, 'info', '🎨');
+            } else {
+                addResult('Root element NOT found', 'error', '❌');
+            }
+            
+            showDebugInfo();
+        }
+        
+        // Global error handlers
+        window.addEventListener('error', function(e) {
+            addLog(`Global error: ${e.message} at ${e.filename}:${e.lineno}`, 'error');
+            updateStatus('Global error detected', 'error', '❌');
+        });
+        
+        window.addEventListener('unhandledrejection', function(e) {
+            addLog(`Unhandled promise rejection: ${e.reason}`, 'error');
+            updateStatus('Unhandled promise rejection', 'error', '❌');
+        });
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            testState.domReady = true;
+            updateStatus('React test page loaded successfully', 'success', '✅');
+            addResult('Page DOM loaded successfully', 'success', '✅');
+        });
+    </script>
+</body>
+</html>
