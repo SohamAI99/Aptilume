@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Aptilume Debug</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f7fa;
+            color: #333;
+        }
+        .container {
+            background: white;
+            border-radius: 8px;
+            padding: 24px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin: 20px 0;
+        }
+        .status {
+            padding: 12px;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+        .error {
+            background: #ffebee;
+            border-left: 4px solid #f44336;
+            color: #c62828;
+        }
+        .success {
+            background: #e8f5e9;
+            border-left: 4px solid #4caf50;
+            color: #2e7d32;
+        }
+        .info {
+            background: #e3f2fd;
+            border-left: 4px solid #2196f3;
+            color: #1565c0;
+        }
+        .warning {
+            background: #fff8e1;
+            border-left: 4px solid #ffc107;
+            color: #ef6c00;
+        }
+        h1, h2 { color: #1a237e; }
+        code { 
+            background: #f1f3f4; 
+            padding: 2px 4px; 
+            border-radius: 3px; 
+            font-family: 'Courier New', monospace;
+        }
+        button {
+            background: #1976d2;
+            color: white;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        button:hover { background: #1565c0; }
+        #results { margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Aptilume Application Debug</h1>
+        <p>This page helps diagnose issues with your Aptilume deployment.</p>
+        
+        <div class="status info">
+            <strong>Status:</strong> Initializing debug checks...
+        </div>
+        
+        <div id="results"></div>
+        
+        <button onclick="runFullTest()">Run Full Diagnostics</button>
+        <button onclick="checkFirebase()">Check Firebase</button>
+        <button onclick="checkDOM()">Check DOM Elements</button>
+    </div>
+
+    <script>
+        // Global variables
+        let testResults = [];
+        
+        // Utility functions
+        function addResult(message, type = 'info') {
+            const resultsDiv = document.getElementById('results');
+            const resultElement = document.createElement('div');
+            resultElement.className = `status ${type}`;
+            resultElement.innerHTML = `<strong>${type.toUpperCase()}:</strong> ${message}`;
+            resultsDiv.appendChild(resultElement);
+            testResults.push({ message, type });
+        }
+        
+        function clearResults() {
+            document.getElementById('results').innerHTML = '';
+            testResults = [];
+        }
+        
+        // Test functions
+        function checkDOM() {
+            clearResults();
+            addResult('Starting DOM element checks...', 'info');
+            
+            // Check if root element exists
+            const rootElement = document.getElementById('root');
+            if (rootElement) {
+                addResult('Root element found', 'success');
+            } else {
+                addResult('Root element NOT found - this is critical!', 'error');
+            }
+            
+            // Check if required scripts are loaded
+            const scripts = Array.from(document.getElementsByTagName('script'));
+            const appScripts = scripts.filter(script => script.src && script.src.includes('index'));
+            
+            if (appScripts.length > 0) {
+                addResult(`Found ${appScripts.length} application script(s)`, 'success');
+                appScripts.forEach((script, index) => {
+                    addResult(`Script ${index + 1}: ${script.src}`, 'info');
+                });
+            } else {
+                addResult('No application scripts found!', 'error');
+            }
+            
+            // Check CSS
+            const stylesheets = Array.from(document.getElementsByTagName('link'))
+                .filter(link => link.rel === 'stylesheet');
+            
+            if (stylesheets.length > 0) {
+                addResult(`Found ${stylesheets.length} stylesheet(s)`, 'success');
+            } else {
+                addResult('No stylesheets found', 'warning');
+            }
+        }
+        
+        function checkFirebase() {
+            clearResults();
+            addResult('Starting Firebase checks...', 'info');
+            
+            // Try to access Firebase
+            try {
+                if (typeof firebase !== 'undefined') {
+                    addResult('Firebase SDK loaded', 'success');
+                } else {
+                    addResult('Firebase SDK not loaded', 'warning');
+                }
+            } catch (e) {
+                addResult(`Firebase check error: ${e.message}`, 'error');
+            }
+        }
+        
+        function runFullTest() {
+            clearResults();
+            addResult('Starting full diagnostics...', 'info');
+            
+            // Basic environment checks
+            addResult(`User Agent: ${navigator.userAgent}`, 'info');
+            addResult(`Platform: ${navigator.platform}`, 'info');
+            addResult(`Cookies enabled: ${navigator.cookieEnabled}`, 'info');
+            
+            // Check DOM
+            checkDOM();
+            
+            // Check for JavaScript errors
+            window.addEventListener('error', function(e) {
+                addResult(`JavaScript Error: ${e.message} at ${e.filename}:${e.lineno}`, 'error');
+            });
+            
+            // Check for unhandled promise rejections
+            window.addEventListener('unhandledrejection', function(e) {
+                addResult(`Unhandled Promise Rejection: ${e.reason}`, 'error');
+            });
+            
+            addResult('Full diagnostics completed. Check results above.', 'info');
+        }
+        
+        // Run initial checks when page loads
+        window.addEventListener('DOMContentLoaded', function() {
+            document.querySelector('.status').innerHTML = '<strong>Status:</strong> Debug page loaded successfully';
+            addResult('Debug page loaded successfully', 'success');
+        });
+        
+        // Catch any global errors
+        window.onerror = function(message, source, lineno, colno, error) {
+            addResult(`Global Error: ${message} at ${source}:${lineno}`, 'error');
+        };
+    </script>
+</body>
+</html>

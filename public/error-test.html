@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Error Test</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body { 
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f7fa;
+        }
+        .container {
+            background: white;
+            border-radius: 8px;
+            padding: 24px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin: 20px 0;
+        }
+        .status {
+            padding: 12px;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+        .error { background: #ffebee; border-left: 4px solid #f44336; color: #c62828; }
+        .success { background: #e8f5e9; border-left: 4px solid #4caf50; color: #2e7d32; }
+        .info { background: #e3f2fd; border-left: 4px solid #2196f3; color: #1565c0; }
+        .warning { background: #fff8e1; border-left: 4px solid #ffc107; color: #ef6c00; }
+        button {
+            background: #1976d2;
+            color: white;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            margin: 5px;
+        }
+        button:hover { background: #1565c0; }
+        #error-display {
+            background: #ffebee;
+            border-left: 4px solid #f44336;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 15px 0;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Error Test</h1>
+        <div id="status" class="status info">
+            <strong>Status:</strong> Initializing...
+        </div>
+        
+        <div id="error-display">
+            <h3>Caught Error:</h3>
+            <pre id="error-message" style="white-space: pre-wrap; word-break: break-word;"></pre>
+            <h3>Error Stack:</h3>
+            <pre id="error-stack" style="white-space: pre-wrap; word-break: break-word;"></pre>
+        </div>
+        
+        <div id="results"></div>
+        
+        <button onclick="testWithErrorHandling()">Test with Error Handling</button>
+        <button onclick="forceError()">Force Error</button>
+        <button onclick="testFirebaseConfig()">Test Firebase Config</button>
+    </div>
+
+    <script>
+        function addResult(message, type = 'info') {
+            const resultsDiv = document.getElementById('results');
+            const resultElement = document.createElement('div');
+            resultElement.className = `status ${type}`;
+            resultElement.innerHTML = `<strong>${type.toUpperCase()}:</strong> ${message}`;
+            resultsDiv.appendChild(resultElement);
+        }
+        
+        function clearResults() {
+            document.getElementById('results').innerHTML = '';
+        }
+        
+        function updateStatus(message, type = 'info') {
+            const statusDiv = document.getElementById('status');
+            statusDiv.className = `status ${type}`;
+            statusDiv.innerHTML = `<strong>Status:</strong> ${message}`;
+        }
+        
+        function showError(error) {
+            document.getElementById('error-message').textContent = error.message || error;
+            document.getElementById('error-stack').textContent = error.stack || 'No stack trace available';
+            document.getElementById('error-display').style.display = 'block';
+        }
+        
+        function hideError() {
+            document.getElementById('error-display').style.display = 'none';
+        }
+        
+        function testWithErrorHandling() {
+            clearResults();
+            hideError();
+            updateStatus('Testing with error handling...', 'info');
+            addResult('Starting test with error handling...', 'info');
+            
+            try {
+                // Simulate what might happen in your app
+                addResult('Attempting to access root element...', 'info');
+                const rootElement = document.getElementById('root');
+                
+                if (!rootElement) {
+                    throw new Error('Root element not found!');
+                }
+                
+                addResult('Root element found', 'success');
+                
+                // Try to simulate React app mounting
+                addResult('Simulating React app mounting...', 'info');
+                rootElement.innerHTML = '<div style="padding: 20px; background: #e8f5e9; border-left: 4px solid #4caf50;"><h2>Test Success!</h2><p>If you can see this, DOM manipulation is working.</p></div>';
+                addResult('React app simulation successful', 'success');
+                
+                updateStatus('Test completed successfully', 'success');
+            } catch (error) {
+                addResult(`Caught error: ${error.message}`, 'error');
+                showError(error);
+                updateStatus('Test failed with error', 'error');
+            }
+        }
+        
+        function forceError() {
+            clearResults();
+            hideError();
+            updateStatus('Forcing error...', 'info');
+            addResult('About to force an error...', 'info');
+            
+            try {
+                // This will cause an error
+                throw new Error('This is a forced error for testing purposes');
+            } catch (error) {
+                addResult(`Caught forced error: ${error.message}`, 'error');
+                showError(error);
+                updateStatus('Forced error caught', 'error');
+            }
+        }
+        
+        function testFirebaseConfig() {
+            clearResults();
+            hideError();
+            updateStatus('Testing Firebase config...', 'info');
+            addResult('Starting Firebase config test...', 'info');
+            
+            try {
+                // Check if environment variables are accessible
+                const envVars = [
+                    'VITE_FIREBASE_API_KEY',
+                    'VITE_FIREBASE_AUTH_DOMAIN',
+                    'VITE_FIREBASE_PROJECT_ID',
+                    'VITE_FIREBASE_STORAGE_BUCKET',
+                    'VITE_FIREBASE_MESSAGING_SENDER_ID',
+                    'VITE_FIREBASE_APP_ID',
+                    'VITE_FIREBASE_MEASUREMENT_ID'
+                ];
+                
+                addResult('Checking environment variables...', 'info');
+                
+                let allPresent = true;
+                envVars.forEach(varName => {
+                    // In a real app, these would be accessed via import.meta.env
+                    // But in this test, we're just checking if the concept works
+                    addResult(`${varName}: Would be checked in real app`, 'info');
+                });
+                
+                addResult('Firebase config test completed (simulated)', 'success');
+                updateStatus('Firebase config test completed', 'success');
+            } catch (error) {
+                addResult(`Firebase config error: ${error.message}`, 'error');
+                showError(error);
+                updateStatus('Firebase config test failed', 'error');
+            }
+        }
+        
+        // Global error handlers
+        window.addEventListener('error', function(e) {
+            addResult(`Global error: ${e.message} at ${e.filename}:${e.lineno}`, 'error');
+            showError({
+                message: e.message,
+                stack: `Error at ${e.filename}:${e.lineno}`
+            });
+        });
+        
+        window.addEventListener('unhandledrejection', function(e) {
+            addResult(`Unhandled promise rejection: ${e.reason}`, 'error');
+            showError({
+                message: e.reason,
+                stack: 'Unhandled promise rejection'
+            });
+        });
+        
+        // Initialize
+        window.addEventListener('DOMContentLoaded', function() {
+            updateStatus('Error test page loaded successfully', 'success');
+            addResult('Page loaded successfully', 'success');
+        });
+    </script>
+</body>
+</html>

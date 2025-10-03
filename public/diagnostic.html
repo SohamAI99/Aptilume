@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Aptilume Diagnostic Tool</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf9 100%);
+            color: #333;
+            line-height: 1.6;
+        }
+        .container {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin: 20px 0;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        .header h1 {
+            color: #1a237e;
+            margin-bottom: 10px;
+        }
+        .status {
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+            display: flex;
+            align-items: center;
+        }
+        .status-icon {
+            margin-right: 15px;
+            font-size: 24px;
+        }
+        .error { 
+            background: linear-gradient(to right, #ffebee, #ffcdd2); 
+            border-left: 5px solid #f44336; 
+            color: #c62828; 
+        }
+        .success { 
+            background: linear-gradient(to right, #e8f5e9, #c8e6c9); 
+            border-left: 5px solid #4caf50; 
+            color: #2e7d32; 
+        }
+        .info { 
+            background: linear-gradient(to right, #e3f2fd, #bbdefb); 
+            border-left: 5px solid #2196f3; 
+            color: #1565c0; 
+        }
+        .warning { 
+            background: linear-gradient(to right, #fff8e1, #ffecb3); 
+            border-left: 5px solid #ffc107; 
+            color: #ef6c00; 
+        }
+        .critical { 
+            background: linear-gradient(to right, #ffebee, #ffcdd2); 
+            border-left: 5px solid #d32f2f; 
+            color: #c62828; 
+            font-weight: bold;
+        }
+        button {
+            background: linear-gradient(to right, #1976d2, #1565c0);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            margin: 10px 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+        }
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+        button:active {
+            transform: translateY(0);
+        }
+        .test-section {
+            margin: 25px 0;
+            padding: 20px;
+            border-radius: 8px;
+            background: #f8f9fa;
+        }
+        .test-section h3 {
+            margin-top: 0;
+            color: #1a237e;
+        }
+        #results {
+            min-height: 100px;
+        }
+        .log-entry {
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            padding: 8px;
+            margin: 5px 0;
+            border-radius: 4px;
+            background: #f1f3f4;
+        }
+        .log-error {
+            background: #ffebee;
+            border-left: 3px solid #f44336;
+        }
+        .log-warning {
+            background: #fff8e1;
+            border-left: 3px solid #ffc107;
+        }
+        .hidden {
+            display: none;
+        }
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: #e0e0e0;
+            border-radius: 5px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(to right, #4caf50, #8bc34a);
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+        .solution {
+            background: #e3f2fd;
+            border-left: 5px solid #2196f3;
+            padding: 15px;
+            border-radius: 0 8px 8px 0;
+            margin: 15px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔧 Aptilume Diagnostic Tool</h1>
+            <p>Comprehensive diagnostics for your application deployment issues</p>
+        </div>
+        
+        <div id="status" class="status info">
+            <div class="status-icon">ℹ️</div>
+            <div>
+                <strong>Status:</strong> Diagnostic tool loaded successfully
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h3>📋 Diagnostic Tests</h3>
+            <p>Run these tests to identify the root cause of your blank screen issue:</p>
+            
+            <button onclick="runAllTests()">Run All Diagnostics</button>
+            <button onclick="testEnvironment()">Test Environment</button>
+            <button onclick="testDOM()">Test DOM Structure</button>
+            <button onclick="testJavaScript()">Test JavaScript</button>
+            <button onclick="testNetwork()">Test Network Resources</button>
+            <button onclick="testReact()">Test React Initialization</button>
+        </div>
+        
+        <div class="test-section">
+            <h3>📊 Results</h3>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress-fill"></div>
+            </div>
+            <div id="results">
+                <p>Click a test button above to begin diagnostics...</p>
+            </div>
+        </div>
+        
+        <div class="test-section hidden" id="solutions-section">
+            <h3>💡 Potential Solutions</h3>
+            <div id="solutions"></div>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let testResults = [];
+        let errorLog = [];
+        
+        // Utility functions
+        function addResult(message, type = 'info', icon = 'ℹ️') {
+            const resultsDiv = document.getElementById('results');
+            const resultElement = document.createElement('div');
+            resultElement.className = `status ${type}`;
+            resultElement.innerHTML = `
+                <div class="status-icon">${icon}</div>
+                <div><strong>${type.toUpperCase()}:</strong> ${message}</div>
+            `;
+            resultsDiv.appendChild(resultElement);
+            testResults.push({ message, type, icon });
+            
+            // Scroll to bottom
+            resultsDiv.scrollTop = resultsDiv.scrollHeight;
+        }
+        
+        function addLog(message, type = 'info') {
+            const resultsDiv = document.getElementById('results');
+            const logElement = document.createElement('div');
+            logElement.className = `log-entry log-${type}`;
+            logElement.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            resultsDiv.appendChild(logElement);
+            errorLog.push({ message, type, time: new Date() });
+        }
+        
+        function clearResults() {
+            document.getElementById('results').innerHTML = '';
+            testResults = [];
+            errorLog = [];
+        }
+        
+        function updateProgress(percent) {
+            document.getElementById('progress-fill').style.width = `${percent}%`;
+        }
+        
+        function showSolutions(solutions) {
+            const solutionsDiv = document.getElementById('solutions');
+            solutionsDiv.innerHTML = '';
+            
+            solutions.forEach((solution, index) => {
+                const solutionElement = document.createElement('div');
+                solutionElement.className = 'solution';
+                solutionElement.innerHTML = `
+                    <h4>Solution ${index + 1}: ${solution.title}</h4>
+                    <p>${solution.description}</p>
+                    ${solution.steps ? `
+                        <p><strong>Steps:</strong></p>
+                        <ol>
+                            ${solution.steps.map(step => `<li>${step}</li>`).join('')}
+                        </ol>
+                    ` : ''}
+                `;
+                solutionsDiv.appendChild(solutionElement);
+            });
+            
+            document.getElementById('solutions-section').classList.remove('hidden');
+        }
+        
+        // Test functions
+        function testEnvironment() {
+            clearResults();
+            updateProgress(20);
+            addResult('Starting environment diagnostics...', 'info', '🔬');
+            
+            // Browser information
+            addResult(`Browser: ${navigator.userAgent}`, 'info', '🌐');
+            addResult(`Platform: ${navigator.platform}`, 'info', '💻');
+            addResult(`Cookies enabled: ${navigator.cookieEnabled}`, 'info', '🍪');
+            addResult(`Online status: ${navigator.onLine ? 'Online' : 'Offline'}`, 'info', '📶');
+            
+            // Screen information
+            addResult(`Screen size: ${screen.width}x${screen.height}`, 'info', '🖥️');
+            addResult(`Window size: ${window.innerWidth}x${window.innerHeight}`, 'info', '📐');
+            
+            // JavaScript capabilities
+            const features = {
+                'ES6 Support': typeof Promise !== 'undefined',
+                'Fetch API': typeof fetch !== 'undefined',
+                'LocalStorage': typeof Storage !== 'undefined',
+                'Service Worker': 'serviceWorker' in navigator,
+                'Web Workers': typeof Worker !== 'undefined'
+            };
+            
+            Object.entries(features).forEach(([feature, supported]) => {
+                if (supported) {
+                    addResult(`${feature}: Supported`, 'success', '✅');
+                } else {
+                    addResult(`${feature}: Not supported`, 'warning', '⚠️');
+                }
+            });
+            
+            updateProgress(100);
+            addResult('Environment diagnostics completed', 'info', '✅');
+        }
+        
+        function testDOM() {
+            clearResults();
+            updateProgress(20);
+            addResult('Starting DOM diagnostics...', 'info', '🔬');
+            
+            // Check root element
+            const rootElement = document.getElementById('root');
+            if (rootElement) {
+                addResult('Root element found', 'success', '✅');
+                addResult(`Root element tag: ${rootElement.tagName}`, 'info', '🏷️');
+                addResult(`Root element ID: ${rootElement.id}`, 'info', '🆔');
+                addResult(`Root element classes: ${rootElement.className || 'none'}`, 'info', '🎨');
+                
+                // Check if it's visible
+                const computedStyle = window.getComputedStyle(rootElement);
+                if (computedStyle.display === 'none') {
+                    addResult('Root element is hidden (display: none)', 'warning', '👁️');
+                }
+                if (parseInt(computedStyle.width) === 0 || parseInt(computedStyle.height) === 0) {
+                    addResult('Root element has zero dimensions', 'warning', '📏');
+                }
+                addResult(`Root element dimensions: ${computedStyle.width} x ${computedStyle.height}`, 'info', '📐');
+            } else {
+                addResult('CRITICAL: Root element NOT found!', 'critical', '❌');
+                addResult('This is the most likely cause of your blank screen', 'critical', '🚨');
+            }
+            
+            // Check for other important elements
+            const metaTags = document.querySelectorAll('meta[name="viewport"]');
+            if (metaTags.length > 0) {
+                addResult('Viewport meta tag found', 'success', '✅');
+            } else {
+                addResult('Viewport meta tag missing', 'warning', '⚠️');
+            }
+            
+            updateProgress(100);
+            addResult('DOM diagnostics completed', 'info', '✅');
+        }
+        
+        function testJavaScript() {
+            clearResults();
+            updateProgress(20);
+            addResult('Starting JavaScript diagnostics...', 'info', '🔬');
+            
+            // Test basic JavaScript functionality
+            try {
+                // ES6 features
+                const testArrow = () => 'Arrow function works';
+                addResult(testArrow(), 'success', '✅');
+                
+                // Promises
+                Promise.resolve('Promise works').then(result => {
+                    addResult(result, 'success', '✅');
+                });
+                
+                // Destructuring
+                const obj = { a: 1, b: 2 };
+                const { a, b } = obj;
+                addResult(`Destructuring works: a=${a}, b=${b}`, 'success', '✅');
+                
+                // Template literals
+                const name = 'Test';
+                addResult(`Template literals work: Hello ${name}`, 'success', '✅');
+                
+                addResult('Basic JavaScript features working', 'success', '✅');
+            } catch (e) {
+                addResult(`JavaScript error: ${e.message}`, 'error', '❌');
+                addLog(`JavaScript error: ${e.message}`, 'error');
+            }
+            
+            // Test global error handling
+            window.addEventListener('error', function(e) {
+                addResult(`Global error caught: ${e.message}`, 'error', '❌');
+                addLog(`Global error: ${e.message} at ${e.filename}:${e.lineno}`, 'error');
+            });
+            
+            updateProgress(100);
+            addResult('JavaScript diagnostics completed', 'info', '✅');
+        }
+        
+        function testNetwork() {
+            clearResults();
+            updateProgress(20);
+            addResult('Starting network diagnostics...', 'info', '🔬');
+            
+            // Check what scripts are loaded
+            const scripts = Array.from(document.getElementsByTagName('script'));
+            addResult(`Found ${scripts.length} script tags`, 'info', '📜');
+            
+            scripts.forEach((script, index) => {
+                if (script.src) {
+                    addResult(`Script ${index + 1}: ${script.src}`, 'info', '🔗');
+                    
+                    // Check if it's loaded
+                    if (script.readyState) {
+                        addResult(`  Status: ${script.readyState}`, 'info', '📊');
+                    }
+                } else {
+                    const contentLength = script.textContent ? script.textContent.length : 0;
+                    addResult(`Script ${index + 1}: Inline script (${contentLength} chars)`, 'info', '📝');
+                }
+            });
+            
+            // Check stylesheets
+            const stylesheets = Array.from(document.getElementsByTagName('link'))
+                .filter(link => link.rel === 'stylesheet');
+            addResult(`Found ${stylesheets.length} stylesheets`, 'info', '🎨');
+            
+            stylesheets.forEach((sheet, index) => {
+                addResult(`Stylesheet ${index + 1}: ${sheet.href}`, 'info', '🔗');
+            });
+            
+            updateProgress(100);
+            addResult('Network diagnostics completed', 'info', '✅');
+        }
+        
+        function testReact() {
+            clearResults();
+            updateProgress(20);
+            addResult('Starting React diagnostics...', 'info', '🔬');
+            
+            // Check if React-related globals exist
+            const reactGlobals = ['React', 'ReactDOM'];
+            reactGlobals.forEach(global => {
+                if (typeof window[global] !== 'undefined') {
+                    addResult(`${global} is available`, 'success', '✅');
+                } else {
+                    addResult(`${global} is NOT available`, 'warning', '⚠️');
+                }
+            });
+            
+            // Try to simulate React app mounting
+            const rootElement = document.getElementById('root');
+            if (rootElement) {
+                try {
+                    // Clear the root element
+                    rootElement.innerHTML = '';
+                    
+                    // Create a simple test element to simulate React rendering
+                    const testDiv = document.createElement('div');
+                    testDiv.style.cssText = `
+                        padding: 20px;
+                        background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+                        border-left: 5px solid #4caf50;
+                        border-radius: 8px;
+                        margin: 20px 0;
+                        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+                    `;
+                    testDiv.innerHTML = `
+                        <h2 style="margin-top: 0; color: #2e7d32;">🎉 React Simulation Success!</h2>
+                        <p>If you can see this message, basic DOM manipulation is working correctly.</p>
+                        <p>This suggests the issue might be with your React application initialization.</p>
+                        <button onclick="this.parentElement.style.display='none'" style="
+                            background: #1976d2;
+                            color: white;
+                            border: none;
+                            padding: 8px 16px;
+                            border-radius: 4px;
+                            cursor: pointer;
+                        ">Close</button>
+                    `;
+                    
+                    rootElement.appendChild(testDiv);
+                    addResult('Successfully simulated React rendering', 'success', '✅');
+                } catch (e) {
+                    addResult(`Error during React simulation: ${e.message}`, 'error', '❌');
+                    addLog(`React simulation error: ${e.message}`, 'error');
+                }
+            } else {
+                addResult('Cannot simulate React - root element not found', 'error', '❌');
+            }
+            
+            updateProgress(100);
+            addResult('React diagnostics completed', 'info', '✅');
+        }
+        
+        function runAllTests() {
+            clearResults();
+            addResult('Running all diagnostics...', 'info', '🔬');
+            
+            // Run tests in sequence
+            setTimeout(() => {
+                testEnvironment();
+                setTimeout(() => {
+                    testDOM();
+                    setTimeout(() => {
+                        testJavaScript();
+                        setTimeout(() => {
+                            testNetwork();
+                            setTimeout(() => {
+                                testReact();
+                                addResult('All diagnostics completed!', 'success', '🎉');
+                                
+                                // Show potential solutions based on common issues
+                                showSolutions([
+                                    {
+                                        title: "Missing Root Element",
+                                        description: "The most common cause of a blank screen is a missing root element with id='root'.",
+                                        steps: [
+                                            "Check that your index.html contains <div id='root'></div>",
+                                            "Verify that the root element is not hidden by CSS",
+                                            "Ensure the root element has proper dimensions"
+                                        ]
+                                    },
+                                    {
+                                        title: "JavaScript Errors",
+                                        description: "Uncaught JavaScript errors can prevent your app from rendering.",
+                                        steps: [
+                                            "Open browser developer tools (F12)",
+                                            "Check the Console tab for error messages",
+                                            "Look for syntax errors or missing dependencies",
+                                            "Check Network tab for failed resource loads"
+                                        ]
+                                    },
+                                    {
+                                        title: "React Initialization Issues",
+                                        description: "Problems with React app initialization can cause blank screens.",
+                                        steps: [
+                                            "Verify index.jsx properly mounts the React app",
+                                            "Check that all required dependencies are installed",
+                                            "Ensure Firebase configuration is correct",
+                                            "Look for errors in your App.jsx or Routes.jsx components"
+                                        ]
+                                    }
+                                ]);
+                            }, 500);
+                        }, 500);
+                    }, 500);
+                }, 500);
+            }, 500);
+        }
+        
+        // Global error handlers
+        window.addEventListener('error', function(e) {
+            addLog(`Global error: ${e.message} at ${e.filename}:${e.lineno}`, 'error');
+        });
+        
+        window.addEventListener('unhandledrejection', function(e) {
+            addLog(`Unhandled promise rejection: ${e.reason}`, 'error');
+        });
+        
+        // Initialize
+        window.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('status').innerHTML = `
+                <div class="status-icon">✅</div>
+                <div><strong>Status:</strong> Diagnostic tool loaded successfully</div>
+            `;
+            document.getElementById('status').className = 'status success';
+        });
+    </script>
+</body>
+</html>

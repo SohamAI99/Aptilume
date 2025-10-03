@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Debug Page</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .error { color: red; }
+        .success { color: green; }
+        .info { color: blue; }
+    </style>
+</head>
+<body>
+    <h1>Aptilume Debug Page</h1>
+    <div id="status">Checking application status...</div>
+    <div id="errors"></div>
+    
+    <script>
+        // Check if required elements exist
+        document.addEventListener('DOMContentLoaded', function() {
+            const statusDiv = document.getElementById('status');
+            const errorsDiv = document.getElementById('errors');
+            
+            // Check if root element exists
+            const rootElement = document.getElementById('root');
+            if (!rootElement) {
+                errorsDiv.innerHTML += '<p class="error">Root element not found!</p>';
+            } else {
+                errorsDiv.innerHTML += '<p class="info">Root element found</p>';
+            }
+            
+            // Check if JavaScript is loaded
+            errorsDiv.innerHTML += '<p class="info">JavaScript is enabled</p>';
+            
+            // Check for any JavaScript errors
+            window.addEventListener('error', function(e) {
+                errorsDiv.innerHTML += `<p class="error">JavaScript Error: ${e.message} at ${e.filename}:${e.lineno}</p>`;
+            });
+            
+            // Try to load the main app
+            try {
+                statusDiv.innerHTML = 'Attempting to load application...';
+                
+                // Check if required scripts are loaded
+                const scripts = document.getElementsByTagName('script');
+                let appScriptLoaded = false;
+                for (let script of scripts) {
+                    if (script.src && script.src.includes('index')) {
+                        appScriptLoaded = true;
+                        errorsDiv.innerHTML += '<p class="info">App script found in page</p>';
+                        break;
+                    }
+                }
+                
+                if (!appScriptLoaded) {
+                    errorsDiv.innerHTML += '<p class="error">App script not found!</p>';
+                }
+                
+                statusDiv.innerHTML = 'Debug complete. Check results above.';
+            } catch (e) {
+                errorsDiv.innerHTML += `<p class="error">Debug error: ${e.message}</p>`;
+            }
+        });
+    </script>
+</body>
+</html>

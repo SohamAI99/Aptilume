@@ -1,7 +1,7 @@
 import React from "react";
 import { BrowserRouter, Routes as RouterRoutes, Route } from "react-router-dom";
 import ScrollToTop from "./components/ScrollToTop";
-import ErrorBoundary from "./components/ErrorBoundary";
+import ErrorBoundary from "./components/FixedErrorBoundary";
 import NotFound from "./pages/NotFound";
 import AuthenticationPage from './pages/authentication-login-register';
 import QuizRulesInstructions from './pages/quiz-rules-instructions';
@@ -52,6 +52,9 @@ import AdminReportsPage from './pages/admin-dashboard/reports';
 
 // Quiz editor page
 import QuizEditor from './pages/teacher-dashboard/quiz-editor';
+
+// Health check
+import FirebaseHealthCheck from './components/FirebaseHealthCheck';
 
 const Routes = () => {
   return (
@@ -109,6 +112,9 @@ const Routes = () => {
           <Route path="/admin/users" element={<NavigationGuard><AdminUsersPage /></NavigationGuard>} />
           <Route path="/admin/quizzes" element={<NavigationGuard><AdminQuizzesPage /></NavigationGuard>} />
           <Route path="/admin/reports" element={<NavigationGuard><AdminReportsPage /></NavigationGuard>} />
+
+          {/* Health check route */}
+          <Route path="/health/firebase" element={<FirebaseHealthCheck />} />
 
           <Route path="*" element={<NotFound />} />
         </RouterRoutes>
