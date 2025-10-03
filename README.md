@@ -195,6 +195,24 @@ We love contributions! Here's how you can help:
 4. Push to the branch (`git push origin feature/AmazingFeature`)
 5. Open a pull request
 
+## ☁️ Deployment
+
+### Vercel Deployment
+
+This project can be deployed to Vercel. For detailed instructions, see [VERCEL_DEPLOYMENT.md](VERCEL_DEPLOYMENT.md).
+
+### Firebase Deployment
+
+The project can also be deployed using Firebase Hosting:
+
+```bash
+# Build the project
+npm run build
+
+# Deploy to Firebase
+npm run deploy
+```
+
 ## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.

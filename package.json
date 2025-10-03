@@ -21,7 +21,8 @@
     "debug-app": "node src/utils/debugApp.js",
     "test-firebase-connection": "node src/utils/testFirebaseConnection.js",
     "health-check": "node src/utils/healthCheck.js",
-    "seed-aptitude": "node src/utils/createAptitudeQuiz.js"
+    "seed-aptitude": "node src/utils/createAptitudeQuiz.js",
+    "deploy": "node deploy.js"
   },
   "dependencies": {
     "@radix-ui/react-select": "^2.2.6",

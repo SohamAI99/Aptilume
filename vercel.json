@@ -1,0 +1,46 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "build"
+      }
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/health",
+      "dest": "api/health.js"
+    },
+    {
+      "src": "/api/users(.*)",
+      "dest": "api/users.js"
+    },
+    {
+      "src": "/api/quizzes(.*)",
+      "dest": "api/quizzes.js"
+    },
+    {
+      "src": "/api/attempts(.*)",
+      "dest": "api/attempts.js"
+    },
+    {
+      "src": "/api/results(.*)",
+      "dest": "api/results.js"
+    },
+    {
+      "src": "/api/ai(.*)",
+      "dest": "api/ai.js"
+    },
+    {
+      "src": "/api(.*)",
+      "dest": "api/index.js"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/build/$1"
+    }
+  ]
+}
