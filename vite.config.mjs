@@ -13,9 +13,13 @@ export default defineConfig({
   plugins: [tsconfigPaths(), react()],
   server: {
     port: 4030,
-    host: "0.0.0.0",
+    host: "localhost",
     strictPort: false,
-    allowedHosts: ['.amazonaws.com', '.builtwithrocket.new']
+    allowedHosts: ['.amazonaws.com', '.builtwithrocket.new'],
+    hmr: {
+      host: "localhost",
+      protocol: "ws"
+    }
   },
   base: './'
 });

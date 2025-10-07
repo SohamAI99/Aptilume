@@ -40,17 +40,37 @@ const Button = React.forwardRef(({
     size, 
     asChild = false, 
     icon,
+    iconName, // Accept iconName prop but don't pass it to DOM element
     iconPosition = 'left',
     children,
+    fullWidth, // Accept fullWidth prop but don't pass it to DOM element
+    loading, // Handle loading prop correctly
     ...props 
 }, ref) => {
     const Comp = asChild ? Slot : "button";
     
+    // Remove custom props that shouldn't be passed to DOM elements
+    const customProps = { fullWidth, iconName, loading };
+    const domProps = Object.keys(props).reduce((acc, key) => {
+        if (!customProps.hasOwnProperty(key)) {
+            acc[key] = props[key];
+        }
+        return acc;
+    }, {});
+    
+    // Handle loading prop correctly
+    if (loading !== undefined) {
+        domProps['data-loading'] = loading ? 'true' : 'false';
+    }
+    
     return (
         <Comp
-            className={cn(buttonVariants({ variant, size, className }))}
+            className={cn(
+                buttonVariants({ variant, size, className }),
+                fullWidth && 'w-full'
+            )}
             ref={ref}
-            {...props}
+            {...domProps}
         >
             {icon && iconPosition === 'left' && (
                 <span className="mr-2 flex items-center">

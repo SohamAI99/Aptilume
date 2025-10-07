@@ -24,6 +24,11 @@ const FilterChips = ({ activeFilters, onFilterChange }) => {
     }
   };
 
+  const removeFilter = (filterId) => {
+    const newFilters = activeFilters?.filter(f => f !== filterId);
+    onFilterChange(newFilters);
+  };
+
   const isActive = (filterId) => {
     if (filterId === 'all') {
       return activeFilters?.length === 0;
@@ -66,7 +71,7 @@ const FilterChips = ({ activeFilters, onFilterChange }) => {
                 >
                   {filter?.label}
                   <button
-                    onClick={() => handleFilterClick(filterId)}
+                    onClick={() => removeFilter(filterId)}
                     className="hover:bg-primary/20 rounded-full p-0.5"
                   >
                     <X size={10} />

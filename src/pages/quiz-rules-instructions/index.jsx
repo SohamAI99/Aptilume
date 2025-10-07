@@ -28,7 +28,7 @@ const QuizRulesInstructions = () => {
     })();
   }, []);
 
-  // Load test data from Firestore using testId from navigation state
+  // Load test data from navigation state (mock data) or Firestore
   const [testData, setTestData] = useState(null);
   const [companyData, setCompanyData] = useState(null);
   const [testStats, setTestStats] = useState({
@@ -43,21 +43,32 @@ const QuizRulesInstructions = () => {
   useEffect(() => {
     (async () => {
       try {
+        // First check if test data is passed in location state (from TestCard)
         const navTest = location?.state?.test;
         const testId = location?.state?.testId || navTest?.id;
-        if (!testId && !navTest) return; // Will render default states
+        
         let data = navTest;
-        if (!data) {
-          const { db } = await import('../../utils/firebase');
-          const { doc, getDoc } = await import('firebase/firestore');
-          // Fixed: Use 'quizzes' collection instead of 'tests'
-          const snap = await getDoc(doc(db, 'quizzes', testId));
-          if (snap.exists()) data = { id: snap.id, ...snap.data() };
+        
+        // If no test data in navigation state, try to load from Firestore
+        if (!data && testId) {
+          try {
+            const { db } = await import('../../utils/firebase');
+            const { doc, getDoc } = await import('firebase/firestore');
+            // Use 'quizzes' collection instead of 'tests'
+            const snap = await getDoc(doc(db, 'quizzes', testId));
+            if (snap.exists()) {
+              data = { id: snap.id, ...snap.data() };
+            }
+          } catch (firestoreError) {
+            console.warn('Failed to load test from Firestore:', firestoreError?.message);
+          }
         }
+        
+        // If we have test data (either from navigation state or Firestore), use it
         if (data) {
           setTestData(data);
           setCompanyData({
-            name: data?.companies?.[0] || 'Company',
+            name: data?.company || data?.companies?.[0] || 'Company',
             category: data?.category || 'General',
             level: data?.difficulty || '—',
             logo: 'https://images.unsplash.com/photo-1573804633927-bfcbcd909acd?w=100&h=100&fit=crop&crop=center',
@@ -65,13 +76,60 @@ const QuizRulesInstructions = () => {
           });
           setTestStats((prev) => ({
             ...prev,
-            totalAttempts: data?.stats?.totalAttempts || 0,
+            totalAttempts: data?.attempts || data?.stats?.totalAttempts || 0,
             averageTime: data?.duration || 0,
             lastUpdated: new Date()
           }));
+        } else {
+          // Set default test data for mock quizzes
+          const defaultTestData = {
+            id: testId || 'mock-1',
+            title: 'Mock Quiz',
+            description: 'This is a mock quiz for demonstration purposes.',
+            difficulty: 'medium',
+            duration: 30,
+            questionCount: 25,
+            company: 'AptiLume',
+            attempts: 0,
+            avgScore: 0,
+            passRate: 0,
+            companies: ['AptiLume'],
+            category: 'General'
+          };
+          setTestData(defaultTestData);
+          setCompanyData({
+            name: 'AptiLume',
+            category: 'General',
+            level: 'Medium',
+            logo: 'https://images.unsplash.com/photo-1573804633927-bfcbcd909acd?w=100&h=100&fit=crop&crop=center',
+            description: 'This is a mock quiz for demonstration purposes.'
+          });
         }
       } catch (e) {
         console.warn('Failed to load test:', e?.message);
+        // Set default test data as fallback
+        const defaultTestData = {
+          id: 'mock-1',
+          title: 'Mock Quiz',
+          description: 'This is a mock quiz for demonstration purposes.',
+          difficulty: 'medium',
+          duration: 30,
+          questionCount: 25,
+          company: 'AptiLume',
+          attempts: 0,
+          avgScore: 0,
+          passRate: 0,
+          companies: ['AptiLume'],
+          category: 'General'
+        };
+        setTestData(defaultTestData);
+        setCompanyData({
+          name: 'AptiLume',
+          category: 'General',
+          level: 'Medium',
+          logo: 'https://images.unsplash.com/photo-1573804633927-bfcbcd909acd?w=100&h=100&fit=crop&crop=center',
+          description: 'This is a mock quiz for demonstration purposes.'
+        });
       }
     })();
   }, [location?.state?.testId, location?.state?.test]);
@@ -93,6 +151,8 @@ const QuizRulesInstructions = () => {
     // Store test data in session/context for next screen
     sessionStorage.setItem('currentTest', JSON.stringify(testData));
     sessionStorage.setItem('fromRules', '1');
+    // Set the fullscreen requirement flag
+    sessionStorage.setItem('examFullscreenRequired', 'true');
     navigate('/password-gate-verification', { state: { fromRules: true, testId: testData?.id } });
   };
 
@@ -140,7 +200,7 @@ const QuizRulesInstructions = () => {
               </div>
               <div>
                 <h2 className="text-xl font-semibold text-foreground">{testData?.title}</h2>
-                <p className="text-sm text-muted-foreground">{testData?.companies?.[0]} • {testData?.difficulty} Level</p>
+                <p className="text-sm text-muted-foreground">{testData?.company || testData?.companies?.[0]} • {testData?.difficulty} Level</p>
               </div>
             </div>
             <p className="text-sm text-muted-foreground max-w-3xl mx-auto">

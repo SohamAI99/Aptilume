@@ -136,7 +136,7 @@ const PasswordVerificationForm = ({
           type="submit"
           variant="default"
           disabled={!canSubmit}
-          loading={isLoading}
+          loading={isLoading ? 'true' : undefined}
           icon={<Shield className="h-4 w-4" />}
           iconPosition="left"
           className="order-1 sm:order-2 flex-1"

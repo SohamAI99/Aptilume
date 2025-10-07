@@ -1,6 +1,6 @@
 import React from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
-import { FileText, TrendingUp, Clock, Target } from 'lucide-react';
+import { FileText, TrendingUp, Clock, Target, AlertTriangle } from 'lucide-react';
 
 const OverviewSection = ({ resultsData }) => {
   const COLORS = ['#10B981', '#3B82F6', '#8B5CF6', '#F59E0B', '#EF4444'];
@@ -10,6 +10,9 @@ const OverviewSection = ({ resultsData }) => {
   const correctAnswers = resultsData?.questions?.filter(q => q?.isCorrect)?.length || 0;
   const incorrectAnswers = resultsData?.questions?.filter(q => !q?.isCorrect && q?.selectedAnswer !== null)?.length || 0;
   const unanswered = resultsData?.questions?.filter(q => q?.selectedAnswer === null)?.length || 0;
+  
+  // Get violations from location state or resultsData
+  const violations = resultsData?.violations || [];
 
   const accuracyData = [
     { name: 'Correct', value: correctAnswers, color: '#10B981' },
@@ -70,6 +73,35 @@ const OverviewSection = ({ resultsData }) => {
           </div>
         ))}
       </div>
+
+      {/* Violations Section */}
+      {violations.length > 0 && (
+        <div className="glass-card rounded-2xl p-6">
+          <h3 className="text-lg font-semibold text-foreground mb-4 flex items-center">
+            <AlertTriangle className="h-5 w-5 text-warning mr-2" />
+            Proctoring Violations
+          </h3>
+          <div className="space-y-3">
+            {violations.map((violation, index) => (
+              <div key={index} className="p-3 bg-warning/10 rounded-lg border border-warning/20">
+                <div className="flex justify-between">
+                  <span className="font-medium text-warning">{violation.type}</span>
+                  <span className="text-xs text-muted-foreground">
+                    {new Date(violation.timestamp).toLocaleTimeString()}
+                  </span>
+                </div>
+                <p className="text-sm text-foreground mt-1">{violation.description}</p>
+              </div>
+            ))}
+          </div>
+          <div className="mt-4 p-3 bg-destructive/10 rounded-lg border border-destructive/20">
+            <p className="text-sm text-destructive">
+              <AlertTriangle className="h-4 w-4 inline mr-1" />
+              This exam had {violations.length} proctoring violation(s). This may affect your results.
+            </p>
+          </div>
+        </div>
+      )}
 
       {/* Charts Section */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">

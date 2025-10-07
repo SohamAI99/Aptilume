@@ -10,7 +10,13 @@ const TestCard = ({ test, onStartTest }) => {
     if (onStartTest) {
       onStartTest(test);
     }
-    navigate('/quiz-rules-instructions', { state: { testId: test?.id, test } });
+    // Navigate to quiz rules with the test data
+    navigate('/quiz-rules-instructions', { 
+      state: { 
+        testId: test?.id, 
+        test: test  // Pass the entire test object
+      } 
+    });
   };
 
   const getDifficultyColor = (difficulty) => {
@@ -35,10 +41,15 @@ const TestCard = ({ test, onStartTest }) => {
       'Meta': 'bg-purple-100 text-purple-700',
       'Netflix': 'bg-red-100 text-red-700',
       'FAANG': 'bg-blue-100 text-blue-700',
-      'Mango': 'bg-orange-100 text-orange-700'
+      'Mango': 'bg-orange-100 text-orange-700',
+      'TechCorp': 'bg-indigo-100 text-indigo-700',
+      'General': 'bg-gray-100 text-gray-700'
     };
     return colors[company] || 'bg-gray-100 text-gray-700';
   };
+
+  // Extract companies array or use a default
+  const companies = Array.isArray(test?.companies) ? test.companies : ['General'];
 
   return (
     <div className="glass-card rounded-2xl p-6 hover:shadow-elevation-2 transition-all duration-200 border border-border">
@@ -62,23 +73,24 @@ const TestCard = ({ test, onStartTest }) => {
           <span className="text-xs bg-muted/50 text-muted-foreground px-2 py-1 rounded-full">
             {test?.duration} min
           </span>
-          <span className={`text-xs px-2 py-1 rounded-full ${getCompanyColor(test?.company)}`}>
-            {test?.company}
+          <span className={`text-xs px-2 py-1 rounded-full ${getCompanyColor(companies[0])}`}>
+            {companies[0]}
           </span>
         </div>
 
         {/* Stats */}
         <div className="grid grid-cols-3 gap-2 mb-4 text-center">
           <div className="bg-muted/30 rounded-lg p-2">
-            <div className="text-sm font-semibold text-foreground">{test?.attempts || 0}</div>
+            <div className="text-sm font-semibold text-foreground">{test?.stats?.totalAttempts || 0}</div>
             <div className="text-xs text-muted-foreground">Attempts</div>
           </div>
           <div className="bg-muted/30 rounded-lg p-2">
-            <div className="text-sm font-semibold text-foreground">{test?.avgScore || 0}%</div>
+            <div className="text-sm font-semibold text-foreground">{test?.stats?.averageScore || 0}%</div>
             <div className="text-xs text-muted-foreground">Avg. Score</div>
           </div>
           <div className="bg-muted/30 rounded-lg p-2">
-            <div className="text-sm font-semibold text-foreground">{test?.passRate || 0}%</div>
+            {/* Using the passRate from stats or calculate based on averageScore */}
+            <div className="text-sm font-semibold text-foreground">{test?.stats?.passRate || Math.round((test?.stats?.averageScore || 0) * 0.8)}%</div>
             <div className="text-xs text-muted-foreground">Pass Rate</div>
           </div>
         </div>

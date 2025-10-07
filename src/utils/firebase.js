@@ -28,8 +28,13 @@ const firebaseConfig = {
   measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID,
 };
 
-// Initialize app once
-const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
+// Initialize app only once
+let app;
+if (getApps().length === 0) {
+  app = initializeApp(firebaseConfig);
+} else {
+  app = getApp();
+}
 
 // Services
 export const auth = getAuth(app);

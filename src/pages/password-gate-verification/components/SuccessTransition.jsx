@@ -1,43 +1,35 @@
 import React, { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { CheckCircle } from 'lucide-react';
+import { CheckCircle, Loader } from 'lucide-react';
 
 const SuccessTransition = ({ isVisible, onComplete }) => {
-  const navigate = useNavigate();
-
   useEffect(() => {
     if (isVisible) {
+      // Set a flag in sessionStorage to indicate that fullscreen should be enabled
+      sessionStorage.setItem('examFullscreenRequired', 'true');
+      
       const timer = setTimeout(() => {
-        onComplete?.();
-        navigate('/exam-interface');
-      }, 2000);
+        if (onComplete) {
+          onComplete();
+        }
+      }, 1000);
 
       return () => clearTimeout(timer);
     }
-  }, [isVisible, onComplete, navigate]);
+  }, [isVisible, onComplete]);
 
   if (!isVisible) return null;
 
   return (
-    <div className="fixed inset-0 bg-background/90 backdrop-blur-sm z-50 flex items-center justify-center">
-      <div className="glass-card rounded-2xl p-8 max-w-sm mx-4">
-        <div className="text-center">
-          <div className="w-20 h-20 bg-success rounded-full flex items-center justify-center mx-auto mb-6 animate-pulse">
-            <CheckCircle className="h-10 w-10 text-white" />
-          </div>
-          
-          <h3 className="text-xl font-bold text-foreground mb-2">
-            Verification Successful!
-          </h3>
-          <p className="text-sm text-muted-foreground mb-4">
-            Redirecting to exam interface...
-          </p>
-          
-          <div className="flex items-center justify-center space-x-2">
-            <div className="w-2 h-2 bg-success rounded-full animate-bounce"></div>
-            <div className="w-2 h-2 bg-success rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
-            <div className="w-2 h-2 bg-success rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
-          </div>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm">
+      <div className="text-center">
+        <div className="w-20 h-20 bg-success rounded-full flex items-center justify-center mx-auto mb-4 animate-pulse">
+          <CheckCircle className="h-10 w-10 text-white" />
+        </div>
+        <h2 className="text-2xl font-bold text-foreground mb-2">Verification Successful</h2>
+        <p className="text-muted-foreground mb-4">Initializing secure exam environment...</p>
+        <div className="flex items-center justify-center space-x-2">
+          <Loader className="h-5 w-5 text-primary animate-spin" />
+          <span className="text-sm text-muted-foreground">Preparing proctoring system</span>
         </div>
       </div>
     </div>

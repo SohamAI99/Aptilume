@@ -90,11 +90,11 @@ const StudentDashboard = () => {
     let unsubscribe;
     const setupTestsListener = () => {
       unsubscribe = listenToQuizzes((tests) => {
-        // Filter out the unwanted quizzes
+        // Filter out the unwanted quizzes and keep only the ones we want
         const filteredTests = tests.filter(test => 
-          !test.title.includes("Startup Technical Challenge") &&
-          !test.title.includes("Amazon Leadership Principles Quiz") &&
-          !test.title.includes("Google Software Engineer Assessment")
+          (test.title === "Quantitative Aptitude Test" || 
+           test.title === "Logical Reasoning Challenge" || 
+           test.title === "Verbal Ability Assessment")
         );
         setActiveTests(filteredTests);
       }, { isPublished: true });
@@ -141,13 +141,13 @@ const StudentDashboard = () => {
       const unsubscribe = auth.onAuthStateChanged((u) => {
         if (unsub) unsub();
         if (!u) return setRecommendedTests([]);
-        // Filter out the unwanted quizzes from recommended tests as well
+        // Filter to only include the quizzes we want
         const unsubscribeTests = listenToQuizzes((tests) => {
           const filteredTests = tests.filter(test => 
             test.isRecommended && test.isPublished &&
-            !test.title.includes("Startup Technical Challenge") &&
-            !test.title.includes("Amazon Leadership Principles Quiz") &&
-            !test.title.includes("Google Software Engineer Assessment")
+            (test.title === "Quantitative Aptitude Test" || 
+             test.title === "Logical Reasoning Challenge" || 
+             test.title === "Verbal Ability Assessment")
           );
           setRecommendedTests(filteredTests);
         });
@@ -178,12 +178,12 @@ const StudentDashboard = () => {
   const filteredTests = activeTests.filter(test => {
     const matchesSearch = test.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
                           test.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                          test.companies?.some(company => company.toLowerCase().includes(searchQuery.toLowerCase()));
+                          (test.companies && test.companies.some(company => company.toLowerCase().includes(searchQuery.toLowerCase())));
     
     const matchesFilters = activeFilters.length === 0 || 
                           activeFilters.some(filter => 
                             test.difficulty === filter || 
-                            test.companies?.includes(filter)
+                            (test.companies && test.companies.includes(filter))
                           );
     
     return matchesSearch && matchesFilters;
@@ -192,12 +192,12 @@ const StudentDashboard = () => {
   const filteredRecommendedTests = recommendedTests.filter(test => {
     const matchesSearch = test.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
                           test.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                          test.companies?.some(company => company.toLowerCase().includes(searchQuery.toLowerCase()));
+                          (test.companies && test.companies.some(company => company.toLowerCase().includes(searchQuery.toLowerCase())));
     
     const matchesFilters = activeFilters.length === 0 || 
                           activeFilters.some(filter => 
                             test.difficulty === filter || 
-                            test.companies?.includes(filter)
+                            (test.companies && test.companies.includes(filter))
                           );
     
     return matchesSearch && matchesFilters;

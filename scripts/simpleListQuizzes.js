@@ -1,8 +1,12 @@
-// Import the Firebase app initialization
+// Load environment variables
+import dotenv from 'dotenv';
+dotenv.config();
+
+// Firebase initialization
 import { initializeApp } from 'firebase/app';
 import { getFirestore, collection, getDocs } from 'firebase/firestore';
 
-// Firebase config - same as in firebase.js
+// Firebase config using environment variables
 const firebaseConfig = {
   apiKey: process.env.VITE_FIREBASE_API_KEY,
   authDomain: process.env.VITE_FIREBASE_AUTH_DOMAIN,
@@ -17,7 +21,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-export async function listQuizzes() {
+async function listQuizzes() {
   try {
     console.log('Listing all quizzes...');
     
@@ -57,17 +61,13 @@ export async function listQuizzes() {
   }
 }
 
-// Run the function if this file is executed directly (Node.js environment only)
-if (typeof process !== 'undefined' && process.argv && import.meta.url === `file://${process.argv[1]}`) {
-  listQuizzes()
-    .then(quizzes => {
-      console.log('Quizzes listed successfully!');
-      process.exit(0);
-    })
-    .catch(error => {
-      console.error('Failed to list quizzes:', error);
-      process.exit(1);
-    });
-}
-
-export default { listQuizzes };
+// Run the function
+listQuizzes()
+  .then(quizzes => {
+    console.log('Quizzes listed successfully!');
+    process.exit(0);
+  })
+  .catch(error => {
+    console.error('Failed to list quizzes:', error);
+    process.exit(1);
+  });

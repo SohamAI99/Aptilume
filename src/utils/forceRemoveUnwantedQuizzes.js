@@ -1,23 +1,24 @@
-import { initializeApp } from 'firebase/app';
+import { getApp, getApps } from 'firebase/app';
 import { getFirestore, collection, getDocs, deleteDoc, query, where, doc } from 'firebase/firestore';
 
-// Firebase configuration from .env
-const firebaseConfig = {
-  apiKey: "AIzaSyA4LziZrzJH428rCYEPaojdrsjgcGRDwCw",
-  authDomain: "qkie-34136.firebaseapp.com",
-  projectId: "qkie-34136",
-  storageBucket: "qkie-34136.appspot.com",
-  messagingSenderId: "399296096924",
-  appId: "1:399296096924:web:1958478e9ab011e799db59",
-  measurementId: "G-MDSK70WS4H"
-};
+// Use the existing Firebase app instead of initializing a new one
+let app;
+let db;
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+// Function to initialize Firebase connection
+function initializeFirebase() {
+  if (getApps().length === 0) {
+    throw new Error('Firebase app not initialized. Please initialize Firebase in your main application first.');
+  }
+  app = getApp();
+  db = getFirestore(app);
+}
 
 // List of quizzes to remove (with possible variations)
 const quizzesToRemove = [
+  "Quantitative Aptitude Test",
+  "Logical Reasoning Challenge",
+  "Verbal Ability Assessment",
   "Startup Technical Challenge",
   "Amazon Leadership Principles Quiz",
   "Google Software Engineer Assessment"
@@ -30,11 +31,17 @@ const partialMatches = [
   "Google",
   "Technical Challenge",
   "Leadership Principles",
-  "Software Engineer"
+  "Software Engineer",
+  "Quantitative Aptitude",
+  "Logical Reasoning",
+  "Verbal Ability"
 ];
 
 export async function forceRemoveUnwantedQuizzes() {
   try {
+    // Initialize Firebase connection
+    initializeFirebase();
+    
     console.log('Force removing unwanted quizzes...');
     
     // First, get all quizzes

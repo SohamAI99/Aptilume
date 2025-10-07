@@ -9,13 +9,15 @@ import FilterChips from '../components/FilterChips';
 import EmptyState from '../components/EmptyState';
 import AccountSection from '../../../components/ui/AccountSection';
 import * as authService from '../../../utils/authService';
-import { listenToUser } from '../../../utils/dbService';
+import { listenToUser, getQuizzes } from '../../../utils/dbService';
 
 const MyQuizzes = () => {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState('');
   const [activeFilters, setActiveFilters] = useState([]);
   const [quizzes, setQuizzes] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [currentUser, setCurrentUser] = useState(null);
 
   useEffect(() => {
@@ -29,53 +31,18 @@ const MyQuizzes = () => {
           // Update user data if needed
         });
         
-        // Fetch quizzes data
-        // This would typically come from your database
-        const mockQuizzes = [
-          {
-            id: '1',
-            title: 'Quantitative Aptitude Test',
-            description: 'Comprehensive assessment of mathematical reasoning and problem-solving skills',
-            questionCount: 25,
-            duration: 30,
-            difficulty: 'medium',
-            company: 'General',
-            attempts: 124,
-            avgScore: 72,
-            passRate: 68
-          },
-          {
-            id: '2',
-            title: 'Logical Reasoning Challenge',
-            description: 'Test your analytical and logical thinking abilities',
-            questionCount: 20,
-            duration: 25,
-            difficulty: 'hard',
-            company: 'TechCorp',
-            attempts: 89,
-            avgScore: 65,
-            passRate: 55
-          },
-          {
-            id: '3',
-            title: 'Verbal Ability Assessment',
-            description: 'Evaluate your command of English language and comprehension skills',
-            questionCount: 30,
-            duration: 35,
-            difficulty: 'easy',
-            company: 'EduSoft',
-            attempts: 156,
-            avgScore: 78,
-            passRate: 82
-          }
-        ];
-        setQuizzes(mockQuizzes);
+        // Fetch quizzes data from database
+        const fetchedQuizzes = await getQuizzes({ isPublished: true }, 50);
+        setQuizzes(fetchedQuizzes);
+        setLoading(false);
         
         return () => {
           unsubscribeUser();
         };
       } catch (error) {
         console.error('Error fetching user data:', error);
+        setError('Failed to load quizzes. Please try again later.');
+        setLoading(false);
       }
     };
 
@@ -86,22 +53,47 @@ const MyQuizzes = () => {
     setSearchQuery(query);
   };
 
-  const handleFilterChange = (filter) => {
-    if (activeFilters.includes(filter)) {
-      setActiveFilters(activeFilters.filter(f => f !== filter));
-    } else {
-      setActiveFilters([...activeFilters, filter]);
-    }
+  const handleFilterChange = (filters) => {
+    setActiveFilters(filters);
   };
 
   // Filter quizzes based on search and filters
   const filteredQuizzes = quizzes.filter(quiz => {
+    // Search filter
     const matchesSearch = quiz.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
                           quiz.description.toLowerCase().includes(searchQuery.toLowerCase());
     
-    // For demo purposes, we're not implementing filter logic
-    // In a real app, you would filter based on activeFilters
-    return matchesSearch;
+    // If no filters are active, show all quizzes that match search
+    if (activeFilters.length === 0) {
+      return matchesSearch;
+    }
+    
+    // Apply filters
+    const matchesFilters = activeFilters.some(filter => {
+      switch (filter) {
+        case 'faang':
+          return ['Google', 'Microsoft', 'Meta', 'Amazon', 'Apple', 'Facebook'].some(company => 
+            quiz.companies?.includes(company));
+        case 'mango':
+          return quiz.companies?.includes('Mango');
+        case 'easy':
+          return quiz.difficulty?.toLowerCase() === 'easy';
+        case 'medium':
+          return quiz.difficulty?.toLowerCase() === 'medium';
+        case 'hard':
+          return quiz.difficulty?.toLowerCase() === 'hard';
+        case 'recent':
+          // For demo purposes, we'll just return true for recently created quizzes
+          return true;
+        case 'popular':
+          // Consider quizzes with > 50 attempts as popular
+          return quiz.stats?.totalAttempts > 50;
+        default:
+          return true;
+      }
+    });
+    
+    return matchesSearch && matchesFilters;
   });
 
   const handleLogout = async () => {
@@ -112,6 +104,74 @@ const MyQuizzes = () => {
       console.error('Error logging out:', error);
     }
   };
+
+  if (loading) {
+    return (
+      <div className="flex min-h-screen bg-background">
+        {/* Sidebar Navigation */}
+        <StudentNavigation currentUser={currentUser} onLogout={handleLogout} />
+        
+        {/* Main Content Area */}
+        <div className="flex-1 flex flex-col md:ml-64">
+          <header className="border-b border-border bg-background">
+            <div className="flex items-center justify-between px-6 py-4">
+              <div>
+                <h1 className="text-2xl font-bold text-foreground">My Quizzes</h1>
+              </div>
+              <AccountSection currentUser={currentUser} onLogout={handleLogout} />
+            </div>
+          </header>
+          
+          <main className="flex-1 pt-6">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6">
+              <div className="glass-card rounded-2xl p-6">
+                <div className="flex items-center justify-center h-64">
+                  <div className="text-center">
+                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+                    <p className="text-muted-foreground">Loading quizzes...</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </main>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex min-h-screen bg-background">
+        {/* Sidebar Navigation */}
+        <StudentNavigation currentUser={currentUser} onLogout={handleLogout} />
+        
+        {/* Main Content Area */}
+        <div className="flex-1 flex flex-col md:ml-64">
+          <header className="border-b border-border bg-background">
+            <div className="flex items-center justify-between px-6 py-4">
+              <div>
+                <h1 className="text-2xl font-bold text-foreground">My Quizzes</h1>
+              </div>
+              <AccountSection currentUser={currentUser} onLogout={handleLogout} />
+            </div>
+          </header>
+          
+          <main className="flex-1 pt-6">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6">
+              <div className="glass-card rounded-2xl p-6">
+                <div className="flex items-center justify-center h-64">
+                  <div className="text-center">
+                    <p className="text-destructive mb-4">{error}</p>
+                    <Button onClick={() => window.location.reload()}>Retry</Button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </main>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex min-h-screen bg-background">

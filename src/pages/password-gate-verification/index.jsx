@@ -58,10 +58,15 @@ const PasswordGateVerification = () => {
         const { addDoc, collection, serverTimestamp } = await import('firebase/firestore');
         const { auth } = await import('../../utils/firebase');
         const testId = location?.state?.testId;
+        
+        // Get test data from session storage
+        const currentTest = JSON.parse(sessionStorage.getItem('currentTest') || '{}');
+        const testTitle = currentTest?.title || 'Mock Quiz';
+        
         const attemptRef = await addDoc(collection(db, 'attempts'), {
           userId: auth.currentUser?.uid,
           testId,
-          testTitle: sessionStorage.getItem('currentTest') ? JSON.parse(sessionStorage.getItem('currentTest')).title : 'Test',
+          testTitle: testTitle,
           status: 'in_progress',
           startedAt: serverTimestamp(),
           createdAt: serverTimestamp(),

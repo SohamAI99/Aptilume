@@ -91,9 +91,9 @@ const StudentNavigation = ({ currentUser, onLogout }) => {
           <Button
             variant="outline"
             size="sm"
-            fullWidth
+            className="w-full"
             onClick={onLogout}
-            iconName="LogOut"
+            icon={<Icon name="LogOut" size={18} />}
           >
             Sign out
           </Button>

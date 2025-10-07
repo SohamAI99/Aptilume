@@ -1,4 +1,7 @@
 import React, { useEffect, useState } from 'react';
+import { getApp, getApps } from 'firebase/app';
+import { getAuth } from 'firebase/auth';
+import { getFirestore } from 'firebase/firestore';
 
 const FirebaseHealthCheck = () => {
   const [status, setStatus] = useState('Initializing...');
@@ -8,13 +11,7 @@ const FirebaseHealthCheck = () => {
   useEffect(() => {
     const checkFirebase = async () => {
       try {
-        setStatus('Loading Firebase modules...');
-        
-        // Dynamically import Firebase modules to avoid blocking
-        const firebaseApp = await import('firebase/app');
-        const { initializeApp, getApps, getApp } = firebaseApp;
-        
-        setStatus('Firebase core loaded');
+        setStatus('Checking Firebase configuration...');
         
         // Check if app is already initialized
         if (getApps().length > 0) {
@@ -55,33 +52,16 @@ const FirebaseHealthCheck = () => {
         
         setStatus('Environment variables verified');
         
-        // Try to initialize Firebase (this will fail if already initialized, which is fine)
+        // Use existing app instead of trying to initialize a new one
         try {
-          const firebaseConfig = {
-            apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
-            authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
-            projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
-            storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
-            messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
-            appId: import.meta.env.VITE_FIREBASE_APP_ID,
-            measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID,
-          };
-          
-          let app;
-          if (getApps().length === 0) {
-            app = initializeApp(firebaseConfig);
-            setStatus('Firebase app initialized successfully');
-          } else {
-            app = getApp();
-            setStatus('Using existing Firebase app');
-          }
+          const app = getApp();
+          setStatus('Using existing Firebase app');
           
           setDetails(prev => ({ ...prev, appInitialization: 'Success' }));
           
-          // Try to load Firestore
+          // Try to access Firestore
           try {
-            const firestore = await import('firebase/firestore');
-            const db = firestore.getFirestore(app);
+            const db = getFirestore(app);
             setDetails(prev => ({ ...prev, firestore: 'Connected' }));
             setStatus('Firebase Firestore connected');
           } catch (firestoreError) {
@@ -89,10 +69,9 @@ const FirebaseHealthCheck = () => {
             console.warn('Firestore connection warning:', firestoreError);
           }
           
-          // Try to load Auth
+          // Try to access Auth
           try {
-            const auth = await import('firebase/auth');
-            const authInstance = auth.getAuth(app);
+            const authInstance = getAuth(app);
             setDetails(prev => ({ ...prev, auth: 'Connected' }));
             setStatus('Firebase Auth connected');
           } catch (authError) {

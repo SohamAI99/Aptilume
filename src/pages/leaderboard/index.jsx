@@ -137,7 +137,7 @@ const Leaderboard = () => {
               
               return {
                 ...user,
-                attempts,
+                attempts: attempts || [],
                 rankingScore,
                 avgScore,
                 consistency,
@@ -158,7 +158,7 @@ const Leaderboard = () => {
           
           // Sort by ranking score descending
           const sortedUsers = usersWithScores.sort((a, b) => 
-            b.rankingScore - a.rankingScore
+            (b.rankingScore || 0) - (a.rankingScore || 0)
           );
           
           // Add rank to each user

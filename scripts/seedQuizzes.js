@@ -17,15 +17,15 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// Sample quiz data
+// Sample quiz data with proper stats
 const sampleQuizzes = [
   {
     title: "Quantitative Aptitude Mastery",
     description: "Comprehensive assessment covering mathematics, numerical reasoning, and problem-solving skills essential for competitive exams.",
-    duration: 60,
-    questionCount: 50,
+    duration: 30,
+    questionCount: 25,
     difficulty: "Medium",
-    companies: ["General", "Competitive Exams"],
+    companies: ["General"],
     category: "Quantitative Aptitude",
     isPublished: true,
     isRecommended: true,
@@ -33,18 +33,19 @@ const sampleQuizzes = [
     createdAt: serverTimestamp(),
     updatedAt: serverTimestamp(),
     stats: {
-      totalAttempts: 0,
-      averageScore: 0,
-      highestScore: 0
+      totalAttempts: 124,
+      averageScore: 68,
+      highestScore: 95,
+      passRate: 72
     }
   },
   {
     title: "Logical Reasoning Challenge",
-    description: "Test your logical thinking and analytical skills with puzzles, sequences, and deductive reasoning questions.",
-    duration: 45,
-    questionCount: 50,
+    description: "Test your analytical and logical thinking abilities",
+    duration: 25,
+    questionCount: 20,
     difficulty: "Hard",
-    companies: ["General", "Competitive Exams"],
+    companies: ["TechCorp"],
     category: "Logical Reasoning",
     isPublished: true,
     isRecommended: true,
@@ -52,18 +53,19 @@ const sampleQuizzes = [
     createdAt: serverTimestamp(),
     updatedAt: serverTimestamp(),
     stats: {
-      totalAttempts: 0,
-      averageScore: 0,
-      highestScore: 0
+      totalAttempts: 89,
+      averageScore: 55,
+      highestScore: 88,
+      passRate: 65
     }
   },
   {
     title: "Verbal Ability & Reading Comprehension",
     description: "Assess your command of English language, vocabulary, grammar, and reading comprehension skills.",
-    duration: 50,
-    questionCount: 50,
+    duration: 35,
+    questionCount: 30,
     difficulty: "Medium",
-    companies: ["General", "Competitive Exams"],
+    companies: ["General"],
     category: "Verbal Ability",
     isPublished: true,
     isRecommended: true,
@@ -71,9 +73,10 @@ const sampleQuizzes = [
     createdAt: serverTimestamp(),
     updatedAt: serverTimestamp(),
     stats: {
-      totalAttempts: 0,
-      averageScore: 0,
-      highestScore: 0
+      totalAttempts: 156,
+      averageScore: 62,
+      highestScore: 92,
+      passRate: 68
     }
   },
   {
@@ -92,7 +95,8 @@ const sampleQuizzes = [
     stats: {
       totalAttempts: 0,
       averageScore: 0,
-      highestScore: 0
+      highestScore: 0,
+      passRate: 0
     }
   },
   {
@@ -111,7 +115,8 @@ const sampleQuizzes = [
     stats: {
       totalAttempts: 0,
       averageScore: 0,
-      highestScore: 0
+      highestScore: 0,
+      passRate: 0
     }
   }
 ];

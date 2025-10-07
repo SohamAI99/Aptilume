@@ -128,7 +128,8 @@ export const createQuiz = async (quizData) => {
       stats: {
         totalAttempts: 0,
         averageScore: 0,
-        highestScore: 0
+        highestScore: 0,
+        passRate: 0
       }
     });
     return quizRef.id;
@@ -262,7 +263,8 @@ export const getAttemptsByUser = async (userId, limitCount = 10) => {
     return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
   } catch (error) {
     console.error('Error fetching user attempts:', error);
-    throw error;
+    // Return empty array as fallback instead of throwing error
+    return [];
   }
 };
 
@@ -278,7 +280,8 @@ export const getAttemptsByQuiz = async (quizId, limitCount = 50) => {
     return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
   } catch (error) {
     console.error('Error fetching quiz attempts:', error);
-    throw error;
+    // Return empty array as fallback instead of throwing error
+    return [];
   }
 };
 
@@ -289,7 +292,7 @@ export const getResult = async (resultId) => {
     return resultDoc.exists() ? { id: resultDoc.id, ...resultDoc.data() } : null;
   } catch (error) {
     console.error('Error fetching result:', error);
-    throw error;
+    return null;
   }
 };
 
@@ -320,7 +323,8 @@ export const getResultsByUser = async (userId, limitCount = 10) => {
     return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
   } catch (error) {
     console.error('Error fetching user results:', error);
-    throw error;
+    // Return empty array as fallback instead of throwing error
+    return [];
   }
 };
 
@@ -336,7 +340,8 @@ export const getResultsByQuiz = async (quizId, limitCount = 50) => {
     return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
   } catch (error) {
     console.error('Error fetching quiz results:', error);
-    throw error;
+    // Return empty array as fallback instead of throwing error
+    return [];
   }
 };
 

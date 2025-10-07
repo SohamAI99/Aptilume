@@ -2,15 +2,55 @@
 import { collection, addDoc, serverTimestamp, updateDoc } from 'firebase/firestore';
 import { db } from './firebase.js';
 
-// Sample quiz data
+// Updated sample quiz data with proper stats
 const sampleQuizzes = [
+  {
+    title: "Microsoft Technical Interview Prep",
+    description: "Practice test focusing on technical concepts, coding challenges, and behavioral questions commonly asked at Microsoft.",
+    duration: 60,
+    questionCount: 51,
+    difficulty: "Medium",
+    companies: ["Microsoft"],
+    category: "Technical Interview",
+    isPublished: true,
+    isRecommended: true,
+    tags: ["microsoft", "technical-interview", "coding", "behavioral"],
+    createdAt: serverTimestamp(),
+    updatedAt: serverTimestamp(),
+    stats: {
+      totalAttempts: 0,
+      averageScore: 0,
+      highestScore: 0,
+      passRate: 0
+    }
+  },
+  {
+    title: "Meta Product Sense Assessment",
+    description: "Evaluate your product thinking and design skills with scenarios and challenges typical at Meta.",
+    duration: 45,
+    questionCount: 30,
+    difficulty: "Hard",
+    companies: ["Meta"],
+    category: "Product Sense",
+    isPublished: true,
+    isRecommended: true,
+    tags: ["meta", "product-sense", "product-design", "interview-prep"],
+    createdAt: serverTimestamp(),
+    updatedAt: serverTimestamp(),
+    stats: {
+      totalAttempts: 0,
+      averageScore: 0,
+      highestScore: 0,
+      passRate: 0
+    }
+  },
   {
     title: "Quantitative Aptitude Mastery",
     description: "Comprehensive assessment covering mathematics, numerical reasoning, and problem-solving skills essential for competitive exams.",
-    duration: 60,
-    questionCount: 50,
+    duration: 30,
+    questionCount: 25,
     difficulty: "Medium",
-    companies: ["General", "Competitive Exams"],
+    companies: ["General"],
     category: "Quantitative Aptitude",
     isPublished: true,
     isRecommended: true,
@@ -18,18 +58,19 @@ const sampleQuizzes = [
     createdAt: serverTimestamp(),
     updatedAt: serverTimestamp(),
     stats: {
-      totalAttempts: 0,
-      averageScore: 0,
-      highestScore: 0
+      totalAttempts: 124,
+      averageScore: 68,
+      highestScore: 95,
+      passRate: 72
     }
   },
   {
     title: "Logical Reasoning Challenge",
-    description: "Test your logical thinking and analytical skills with puzzles, sequences, and deductive reasoning questions.",
-    duration: 45,
-    questionCount: 50,
+    description: "Test your analytical and logical thinking abilities",
+    duration: 25,
+    questionCount: 20,
     difficulty: "Hard",
-    companies: ["General", "Competitive Exams"],
+    companies: ["TechCorp"],
     category: "Logical Reasoning",
     isPublished: true,
     isRecommended: true,
@@ -37,18 +78,19 @@ const sampleQuizzes = [
     createdAt: serverTimestamp(),
     updatedAt: serverTimestamp(),
     stats: {
-      totalAttempts: 0,
-      averageScore: 0,
-      highestScore: 0
+      totalAttempts: 89,
+      averageScore: 55,
+      highestScore: 88,
+      passRate: 65
     }
   },
   {
     title: "Verbal Ability & Reading Comprehension",
     description: "Assess your command of English language, vocabulary, grammar, and reading comprehension skills.",
-    duration: 50,
-    questionCount: 50,
+    duration: 35,
+    questionCount: 30,
     difficulty: "Medium",
-    companies: ["General", "Competitive Exams"],
+    companies: ["General"],
     category: "Verbal Ability",
     isPublished: true,
     isRecommended: true,
@@ -56,47 +98,10 @@ const sampleQuizzes = [
     createdAt: serverTimestamp(),
     updatedAt: serverTimestamp(),
     stats: {
-      totalAttempts: 0,
-      averageScore: 0,
-      highestScore: 0
-    }
-  },
-  {
-    title: "Data Interpretation & Analysis",
-    description: "Evaluate your ability to interpret data from charts, graphs, and tables to make informed decisions.",
-    duration: 40,
-    questionCount: 50,
-    difficulty: "Hard",
-    companies: ["General", "Competitive Exams"],
-    category: "Data Interpretation",
-    isPublished: true,
-    isRecommended: false,
-    tags: ["data-interpretation", "charts", "graphs", "analysis"],
-    createdAt: serverTimestamp(),
-    updatedAt: serverTimestamp(),
-    stats: {
-      totalAttempts: 0,
-      averageScore: 0,
-      highestScore: 0
-    }
-  },
-  {
-    title: "Technical Interview Preparation",
-    description: "Prepare for technical interviews with questions on algorithms, data structures, and system design.",
-    duration: 90,
-    questionCount: 50,
-    difficulty: "Hard",
-    companies: ["Tech Companies", "FAANG"],
-    category: "Technical Interview",
-    isPublished: true,
-    isRecommended: true,
-    tags: ["algorithms", "data-structures", "system-design"],
-    createdAt: serverTimestamp(),
-    updatedAt: serverTimestamp(),
-    stats: {
-      totalAttempts: 0,
-      averageScore: 0,
-      highestScore: 0
+      totalAttempts: 156,
+      averageScore: 62,
+      highestScore: 92,
+      passRate: 68
     }
   }
 ];
@@ -140,8 +145,164 @@ const generateAdditionalQuestions = (baseQuestions, count) => {
 
 // Comprehensive questions for each quiz
 const sampleQuestions = {
-  // Quantitative Aptitude Mastery questions
+  // Microsoft Technical Interview Prep questions
   0: [
+    {
+      text: "What is the time complexity of binary search in a sorted array?",
+      options: [
+        "O(n)",
+        "O(log n)",
+        "O(n log n)",
+        "O(1)"
+      ],
+      correctAnswer: 1,
+      explanation: "Binary search divides the search space in half at each step, resulting in O(log n) time complexity.",
+      category: "Algorithms",
+      difficulty: "Medium",
+      marks: 4,
+      topic: "Data Structures"
+    },
+    {
+      text: "Which data structure is most appropriate for implementing a function call stack?",
+      options: [
+        "Queue",
+        "Stack",
+        "Array",
+        "Linked List"
+      ],
+      correctAnswer: 1,
+      explanation: "Function call stack follows LIFO (Last In, First Out) principle, which is exactly how a stack data structure works.",
+      category: "Data Structures",
+      difficulty: "Easy",
+      marks: 4,
+      topic: "Data Structures"
+    },
+    {
+      text: "In a REST API, which HTTP method is typically used to update a resource?",
+      options: [
+        "POST",
+        "GET",
+        "PUT",
+        "DELETE"
+      ],
+      correctAnswer: 2,
+      explanation: "PUT is used to update an entire resource, while PATCH is used for partial updates.",
+      category: "Web Development",
+      difficulty: "Easy",
+      marks: 4,
+      topic: "APIs"
+    },
+    {
+      text: "What is the primary advantage of using a hash table?",
+      options: [
+        "Ordered storage",
+        "Fast access time",
+        "Memory efficiency",
+        "Sorted elements"
+      ],
+      correctAnswer: 1,
+      explanation: "Hash tables provide average O(1) time complexity for search, insert, and delete operations, making them very efficient for fast access.",
+      category: "Data Structures",
+      difficulty: "Easy",
+      marks: 4,
+      topic: "Data Structures"
+    },
+    {
+      text: "In object-oriented programming, what does 'inheritance' allow?",
+      options: [
+        "Creating multiple instances of a class",
+        "Reusing code from parent classes",
+        "Hiding implementation details",
+        "Defining multiple methods with the same name"
+      ],
+      correctAnswer: 1,
+      explanation: "Inheritance allows a class to inherit properties and methods from another class, promoting code reusability.",
+      category: "Object-Oriented Programming",
+      difficulty: "Easy",
+      marks: 4,
+      topic: "Programming Concepts"
+    }
+  ],
+  // Meta Product Sense Assessment questions
+  1: [
+    {
+      text: "When designing a product for a new social media platform, which factor should be prioritized?",
+      options: [
+        "Monetization strategy",
+        "User engagement",
+        "Technical scalability",
+        "Competitive features"
+      ],
+      correctAnswer: 1,
+      explanation: "User engagement is fundamental for a social media platform's success as it drives retention and growth.",
+      category: "Product Design",
+      difficulty: "Medium",
+      marks: 4,
+      topic: "Product Management"
+    },
+    {
+      text: "What is the primary purpose of conducting user interviews in product development?",
+      options: [
+        "Validate technical feasibility",
+        "Gather user needs and pain points",
+        "Test marketing messages",
+        "Estimate development costs"
+      ],
+      correctAnswer: 1,
+      explanation: "User interviews help understand user needs, behaviors, and pain points to inform product decisions.",
+      category: "User Research",
+      difficulty: "Easy",
+      marks: 4,
+      topic: "Product Management"
+    },
+    {
+      text: "Which metric is most important for measuring the success of a social media platform?",
+      options: [
+        "Daily Active Users (DAU)",
+        "Revenue per user",
+        "Server uptime",
+        "Number of features"
+      ],
+      correctAnswer: 0,
+      explanation: "DAU measures user engagement and retention, which are critical for social media platforms.",
+      category: "Product Metrics",
+      difficulty: "Medium",
+      marks: 4,
+      topic: "Product Management"
+    },
+    {
+      text: "When prioritizing product features, what framework considers both impact and effort?",
+      options: [
+        "MoSCoW method",
+        "Impact/Effort matrix",
+        "Kano model",
+        "RICE scoring"
+      ],
+      correctAnswer: 1,
+      explanation: "The Impact/Effort matrix helps prioritize features based on their potential impact and implementation effort.",
+      category: "Product Prioritization",
+      difficulty: "Medium",
+      marks: 4,
+      topic: "Product Management"
+    },
+    {
+      text: "What is the main goal of an MVP (Minimum Viable Product)?",
+      options: [
+        "Launch with all planned features",
+        "Test core assumptions with minimal resources",
+        "Achieve maximum market share",
+        "Generate immediate revenue"
+      ],
+      correctAnswer: 1,
+      explanation: "An MVP is designed to test core product assumptions with minimal development effort and resources.",
+      category: "Product Development",
+      difficulty: "Easy",
+      marks: 4,
+      topic: "Product Management"
+    }
+  ],
+  // Quantitative Aptitude Mastery questions
+  2: [
     {
       text: "A train 150 meters long is running at a speed of 90 km/hr. How long will it take to cross a bridge 300 meters long?",
       options: [
@@ -219,7 +380,7 @@ const sampleQuestions = {
     }
   ],
   // Logical Reasoning Challenge questions
-  1: [
+  3: [
     {
       text: "If 'P $ Q' means 'P is the father of Q'; 'P # Q' means 'P is the mother of Q'; 'P * Q' means 'P is the sister of Q', then how is D related to N in N # A $ B * D?",
       options: [
@@ -297,7 +458,7 @@ const sampleQuestions = {
     }
   ],
   // Verbal Ability & Reading Comprehension questions
-  2: [
+  4: [
     {
       text: "Choose the word most similar in meaning to 'EMBEZZLE':",
       options: [
@@ -372,117 +533,6 @@ const sampleQuestions = {
       difficulty: "Easy",
       marks: 4,
       topic: "Verbal Ability"
-    }
-  ],
-  // Data Interpretation & Analysis questions
-  3: [
-    {
-      text: "[Based on a bar chart showing sales of different products over 5 years] In which year was the percentage increase in sales of Product A the highest compared to the previous year?",
-      options: [
-        "Year 2",
-        "Year 3",
-        "Year 4",
-        "Year 5"
-      ],
-      correctAnswer: 1,
-      explanation: "To find the percentage increase, we calculate ((Current Year Sales - Previous Year Sales)/Previous Year Sales) × 100 for each year and compare.",
-      category: "Bar Graphs",
-      difficulty: "Hard",
-      marks: 4,
-      topic: "Data Interpretation"
-    },
-    {
-      text: "[Based on a pie chart showing market share of different companies] If the total market size is $10 million, what is the revenue of Company C?",
-      options: [
-        "$1.5 million",
-        "$2 million",
-        "$2.5 million",
-        "$3 million"
-      ],
-      correctAnswer: 2,
-      explanation: "If Company C has 25% market share, its revenue = 25% of $10 million = $2.5 million.",
-      category: "Pie Charts",
-      difficulty: "Medium",
-      marks: 4,
-      topic: "Data Interpretation"
-    }
-  ],
-  // Technical Interview Preparation questions
-  4: [
-    {
-      text: "What is the time complexity of searching for an element in a balanced binary search tree?",
-      options: [
-        "O(1)",
-        "O(log n)",
-        "O(n)",
-        "O(n log n)"
-      ],
-      correctAnswer: 1,
-      explanation: "In a balanced binary search tree, the height is log n, and searching involves traversing from root to leaf, which takes O(log n) time.",
-      category: "Data Structures",
-      difficulty: "Medium",
-      marks: 4,
-      topic: "Algorithms"
-    },
-    {
-      text: "Which data structure is most appropriate for implementing a function call stack?",
-      options: [
-        "Queue",
-        "Stack",
-        "Array",
-        "Linked List"
-      ],
-      correctAnswer: 1,
-      explanation: "Function call stack follows LIFO (Last In, First Out) principle, which is exactly how a stack data structure works.",
-      category: "Data Structures",
-      difficulty: "Easy",
-      marks: 4,
-      topic: "Data Structures"
-    },
-    {
-      text: "What is the primary advantage of using a hash table?",
-      options: [
-        "Ordered storage",
-        "Fast access time",
-        "Memory efficiency",
-        "Sorted elements"
-      ],
-      correctAnswer: 1,
-      explanation: "Hash tables provide average O(1) time complexity for search, insert, and delete operations, making them very efficient for fast access.",
-      category: "Data Structures",
-      difficulty: "Easy",
-      marks: 4,
-      topic: "Data Structures"
-    },
-    {
-      text: "In object-oriented programming, what does 'inheritance' allow?",
-      options: [
-        "Creating multiple instances of a class",
-        "Reusing code from parent classes",
-        "Hiding implementation details",
-        "Defining multiple methods with the same name"
-      ],
-      correctAnswer: 1,
-      explanation: "Inheritance allows a class to inherit properties and methods from another class, promoting code reusability.",
-      category: "Object-Oriented Programming",
-      difficulty: "Easy",
-      marks: 4,
-      topic: "Programming Concepts"
-    },
-    {
-      text: "What is the purpose of a database index?",
-      options: [
-        "To store data in a sorted order",
-        "To improve query performance",
-        "To reduce storage space",
-        "To enforce data integrity"
-      ],
-      correctAnswer: 1,
-      explanation: "Database indexes are used to speed up data retrieval operations by creating a data structure that allows faster lookups.",
-      category: "Databases",
-      difficulty: "Medium",
-      marks: 4,
-      topic: "Database Management"
     }
   ]
 };
