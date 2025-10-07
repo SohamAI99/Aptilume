@@ -249,3 +249,9 @@ export const getCurrentUser = async () => {
     }, reject);
   });
 };
+
+// Get current user ID
+export const getCurrentUserId = () => {
+  const user = auth.currentUser;
+  return user ? user.uid : null;
+};

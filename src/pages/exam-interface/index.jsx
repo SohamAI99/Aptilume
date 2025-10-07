@@ -7,7 +7,7 @@ import QuestionCard from './components/QuestionCard';
 import Timer from './components/Timer';
 import ProgressBar from './components/ProgressBar';
 import NavigationControls from './components/NavigationControls';
-import SubmitConfirmationModal from '../../submit-confirmation-modal/components/SubmitConfirmationModal';
+import SubmitConfirmationModal from './components/SubmitConfirmationModal';
 import FullscreenMonitor from './components/FullscreenMonitor';
 import Icon from '../../components/AppIcon';
 
