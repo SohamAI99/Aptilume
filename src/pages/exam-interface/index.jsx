@@ -23,7 +23,7 @@ const ExamInterface = () => {
   const [showSubmitModal, setShowSubmitModal] = useState(false);
   const [user, setUser] = useState(null);
   const [violations, setViolations] = useState([]);
-  const [showProctoringInfo, setShowProctoringInfo] = useState(true); // Toggle state
+  const [showProctoringInfo, setShowProctoringInfo] = useState(false); // Simplified interface - always show question blocks
 
   // Load current user
   useEffect(() => {
@@ -391,17 +391,14 @@ const ExamInterface = () => {
     navigate('/authentication-login-register');
   };
 
-  // Toggle between proctoring info and question blocks view
-  const handleToggleView = () => {
-    setShowProctoringInfo(!showProctoringInfo);
-  };
+  // Remove the toggle view function as we're simplifying the interface
 
-  // Render question blocks view
+  // Render question blocks view - optimized for bottom palette
   const renderQuestionBlocks = () => {
     if (!examData?.questions) return null;
 
     return (
-      <div className="grid grid-cols-5 sm:grid-cols-10 gap-2 max-h-96 overflow-y-auto">
+      <div className="flex flex-wrap gap-2 max-h-32 overflow-y-auto">
         {examData.questions.map((question, index) => (
           <button
             key={question.id}
@@ -421,32 +418,7 @@ const ExamInterface = () => {
     );
   };
 
-  // Render proctoring info view
-  const renderProctoringInfo = () => {
-    return (
-      <div className="space-y-4">
-        <div className="bg-warning/10 border border-warning/20 rounded-lg p-4">
-          <h3 className="font-semibold text-warning mb-2">Proctoring Active</h3>
-          <p className="text-sm text-warning">
-            Your exam is being monitored. Please remain in fullscreen mode throughout the exam.
-          </p>
-        </div>
-        
-        <div className="grid grid-cols-2 gap-4">
-          <div className="bg-muted/30 rounded-lg p-3">
-            <div className="text-xs text-muted-foreground mb-1">Violations</div>
-            <div className="text-lg font-semibold text-foreground">{violations.length}/3</div>
-          </div>
-          <div className="bg-muted/30 rounded-lg p-3">
-            <div className="text-xs text-muted-foreground mb-1">Time Remaining</div>
-            <div className="text-lg font-semibold text-foreground">
-              {Math.floor(timeRemaining / 60)}:{String(timeRemaining % 60).padStart(2, '0')}
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  };
+  // We're removing the proctoring info view to simplify the interface
 
   if (loading) {
     return (
@@ -506,8 +478,7 @@ const ExamInterface = () => {
       <FullscreenMonitor 
         onViolationDetected={handleViolation}
         onSubmitExam={handleSubmitExam}
-        showProctoringInfo={showProctoringInfo}
-        onToggleView={handleToggleView}
+        showProctoringInfo={false}
       />
       
       {/* Header */}
@@ -515,7 +486,7 @@ const ExamInterface = () => {
       
       {/* Main Content */}
       <main className="pt-16 pb-8">
-        <div className="max-w-6xl mx-auto px-4">
+        <div className="max-w-7xl mx-auto px-4">
           {/* Exam Header */}
           <div className="glass-card rounded-2xl p-6 mb-6">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -534,9 +505,9 @@ const ExamInterface = () => {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 gap-8">
             {/* Question Card - Main Content */}
-            <div className="lg:col-span-2">
+            <div>
               <div className="glass-card rounded-2xl p-6 mb-6">
                 <QuestionCard
                   question={currentQuestion}
@@ -554,16 +525,11 @@ const ExamInterface = () => {
               />
             </div>
 
-            {/* Sidebar - Toggle between Proctoring Info and Question Blocks */}
-            <div className="lg:col-span-1">
-              <div className="glass-card rounded-2xl p-6 sticky top-24">
-                <div className="flex items-center justify-between mb-4">
-                  <h2 className="text-lg font-semibold text-foreground">
-                    {showProctoringInfo ? 'Proctoring Info' : 'Question Blocks'}
-                  </h2>
-                </div>
-                
-                {showProctoringInfo ? renderProctoringInfo() : renderQuestionBlocks()}
+            {/* Question Palette - Fixed at Bottom */}
+            <div className="glass-card rounded-2xl p-3 sticky bottom-4">
+              <h2 className="text-md font-semibold text-foreground mb-2">Question Palette</h2>
+              <div className="max-h-24 overflow-y-auto">
+                {renderQuestionBlocks()}
               </div>
             </div>
           </div>
